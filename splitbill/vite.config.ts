@@ -9,14 +9,21 @@ export default defineConfig({
 		VitePWA({
 			devOptions: {
 				enabled: true,
+				type: "module",
 			},
 			registerType: "autoUpdate",
+			injectRegister: "auto",
 			manifest: {
 				name: "Split Bill",
 				short_name: "Split Bill",
 				description: "Save your time splitting bills with your friends",
 				theme_color: "#000000",
 				start_url: "/",
+				display: "standalone",
+				prefer_related_applications: false,
+				orientation: "portrait",
+				background_color: "#000000",
+
 				icons: [
 					{
 						src: "/pwa-192x192.png",
@@ -58,6 +65,7 @@ export default defineConfig({
 						label: "Split Bill",
 					},
 				],
+				display_override: ["standalone"],
 			},
 		}),
 	],
