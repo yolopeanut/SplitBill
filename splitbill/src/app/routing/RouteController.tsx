@@ -4,6 +4,7 @@ import { ProtectedRoutes } from "./ProtectedRouting/ProtectedRoutes";
 import GroupsPage from "../../modules/features/groups/GroupsPage";
 import ProfilePage from "../../modules/features/profile/ProfilePage";
 import FriendsPage from "../../modules/features/friends/FriendsPage";
+import CreateProfilePage from "../../modules/features/login/create-profile/CreateProfilePage";
 
 export const RouteController = () => {
 	return (
@@ -11,6 +12,14 @@ export const RouteController = () => {
 			<Route
 				path='/'
 				element={<LoginPage />}
+			/>
+			<Route
+				path='/create-profile'
+				element={
+					<ProtectedRoutes>
+						<CreateProfilePage />
+					</ProtectedRoutes>
+				}
 			/>
 			<Route
 				path='/groups'
