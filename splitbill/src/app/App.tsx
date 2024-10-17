@@ -1,10 +1,16 @@
-import LoginPage from "../modules/features/login/LoginPage";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
+import ProviderController from "./ProviderController";
+import { RouteController } from "./routing/RouteController";
 
 function App() {
 	return (
 		<>
-			<LoginPage />
+			<Router>
+				<ProviderController>
+					<RouteController />
+				</ProviderController>
+			</Router>
 		</>
 	);
 }
