@@ -17,7 +17,7 @@ const CreateProfilePage = () => {
 	const navigate = useNavigate();
 	return (
 		<>
-			<div className='flex flex-col w-full h-screen justify-between items-center pb-10'>
+			<div className='flex flex-col w-full h-full justify-between items-center pb-10'>
 				{/* div to space items */}
 				<div></div>
 				<div className='flex flex-col w-[80%] justify-center items-center gap-10'>

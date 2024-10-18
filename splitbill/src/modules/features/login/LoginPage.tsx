@@ -2,6 +2,7 @@ import useAuthContext from "../../core/auth/hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { GiCoinflip } from "react-icons/gi";
 import { FcGoogle } from "react-icons/fc";
+import Loading from "../../core/common/Loading";
 
 function LoginPage() {
 	const { session, isLoading, googleLogin } = useAuthContext();
@@ -9,7 +10,7 @@ function LoginPage() {
 
 	//Check if process is loading
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return <Loading />;
 	}
 
 	//Check if user is logged in

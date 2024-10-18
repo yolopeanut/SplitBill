@@ -1,6 +1,9 @@
 #root {
-	text-align: center;
+	text-align: start;
 	width: 100vw;
+	height: 100vh;
+	overflow: auto;
+	padding-bottom: 64px;
 }
 
 .logo {
@@ -29,10 +32,6 @@
 	a:nth-of-type(2) .logo {
 		animation: logo-spin infinite 20s linear;
 	}
-}
-
-.card {
-	padding: 2em;
 }
 
 .read-the-docs {
