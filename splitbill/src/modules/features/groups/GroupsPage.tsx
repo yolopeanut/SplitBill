@@ -6,7 +6,7 @@ import { FaEdit } from "react-icons/fa";
 const GroupsPage = () => {
 	return (
 		<>
-			<div className='flex flex-col gap-4 items-start pt-14 px-9 gap-y-10'>
+			<div className='flex flex-col gap-4 items-start pt-14 px-4 gap-y-10'>
 				<GroupsPageHeader />
 				<GroupsPageBody />
 			</div>
@@ -35,14 +35,14 @@ const GroupsPageBody = () => {
 							image_src={"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
 							groupName={"NuttingGroup"}
 							numMembers={10}
-							numExpenses={3}
+							numExpenses={0}
 							balance={0.0}
 						/>
 						<GroupCard
 							image_src={"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
 							groupName={"NuttingGroup"}
 							numMembers={10}
-							numExpenses={3}
+							numExpenses={0}
 							balance={0.0}
 						/>
 					</div>
@@ -75,15 +75,15 @@ const GroupsPageBody = () => {
 							image_src={null}
 							groupName={"teehee"}
 							numMembers={10}
-							numExpenses={3}
-							balance={1.5}
+							numExpenses={0}
+							balance={0}
 						/>
 						<GroupCard
 							image_src={null}
-							groupName={"NuttingGroup"}
+							groupName={"langkawi babay"}
 							numMembers={10}
 							numExpenses={3}
-							balance={100.3}
+							balance={1000000000.3}
 						/>
 					</div>
 				</div>
@@ -109,21 +109,23 @@ const GroupCard = ({
 
 	const BalanceText = () => {
 		if (balance > 0) {
-			return <span className='text-font-green text-sm font-semibold'>+RM {balance}</span>;
+			return <span className='text-font-green text-sm font-semibold break-all text-clip overflow-hidden'>+RM {balance}</span>;
 		} else if (balance < 0) {
-			return <span className='text-font-red text-sm font-semibold'>-RM {balance.toString().replace("-", "")}</span>;
+			return (
+				<span className='text-font-red text-sm font-semibold break-all text-clip overflow-hidden'>-RM {balance.toString().replace("-", "")}</span>
+			);
 		} else {
-			return <span className='text-font-white text-sm font-semibold'>Settled!</span>;
+			return <span className='text-font-white text-sm font-semibold break-all text-clip overflow-hidden'>Settled!</span>;
 		}
 	};
 
 	return (
 		<>
 			<div
-				className='w-full flex flex-row gap-4 bg-card-gray p-3 px-4 rounded-2xl items-center'
+				className='w-full flex flex-row gap-4 bg-card-gray p-3 rounded-2xl items-center'
 				onClick={handleClick}
 			>
-				<div className='flex flex-row gap-8 w-[70%] items-center'>
+				<div className='flex flex-row gap-4 w-[70%] items-center'>
 					{image_src ? (
 						<img
 							src={image_src}
@@ -134,7 +136,7 @@ const GroupCard = ({
 							{getFirstLetter(groupName)}
 						</div>
 					)}
-					<div className='flex flex-col gap-1 w-full items-start justify-start'>
+					<div className='flex flex-col gap-1 w-full items-start justify-start overflow-hidden'>
 						<span className='text-font-white text-lg font-semibold '>{truncateText(groupName, 25)}</span>
 						<div>
 							<div className='text-font-white text-sm flex flex-row gap-2 items-center'>
@@ -149,8 +151,8 @@ const GroupCard = ({
 					</div>
 				</div>
 
-				<div className='flex flex-col items-end justify-between self-stretch flex-grow'>
-					<FaEdit className='text-font-text-gray text-md ' />
+				<div className='flex flex-col justify-between items-end self-stretch flex-grow w-[20%]'>
+					<FaEdit className='text-font-text-gray text-md' />
 
 					<BalanceText />
 				</div>
