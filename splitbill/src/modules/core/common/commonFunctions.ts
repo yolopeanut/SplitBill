@@ -15,3 +15,10 @@ export function truncateText(text: string, maxLength: number) {
 	}
 	return text;
 }
+
+export function getPlural(num: number, word: string) {
+	if (num === 1) {
+		return `${num} ${word}`;
+	}
+	return `${num} ${word}s`;
+}

@@ -14,8 +14,10 @@ export default {
 			"font-green": "#00FF84",
 			"font-red": "#FF2626",
 
-			"card-gray": "#333333",
+			"input-search-gray": "#333333",
 			"input-box-gray": "#2A2A2A",
+
+			"card-gray": "#333333",
 			"button-gray": "#262626",
 			"outline-gray": "#444343",
 		},

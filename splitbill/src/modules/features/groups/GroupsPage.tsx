@@ -135,7 +135,7 @@ const GroupCard = ({
 						</div>
 					)}
 					<div className='flex flex-col gap-1 w-full items-start justify-start'>
-						<span className='text-font-white text-lg font-semibold '>{truncateText(groupName, 20)}</span>
+						<span className='text-font-white text-lg font-semibold '>{truncateText(groupName, 25)}</span>
 						<div>
 							<div className='text-font-white text-sm flex flex-row gap-2 items-center'>
 								<IoPersonSharp className='text-brand-orange' />
