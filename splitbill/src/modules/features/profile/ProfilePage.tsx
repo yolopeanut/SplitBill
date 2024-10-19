@@ -1,6 +1,7 @@
 import { IoLogOutOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
+import useAuthContext from "../../core/auth/hooks/useAuthContext";
 
 const ProfilePage = () => {
 	return (
@@ -37,29 +38,38 @@ const ProfilePageHeader = ({ name, userName }: { name: string; userName: string 
 };
 
 const ProfilePageBody = () => {
+	const btnClass = "btn border-none bg-card-gray h-16 rounded-xl flex flex-row items-center gap-6 p-4 justify-start";
+	const iconClass = "text-brand-orange";
+	const textClassGeneric = "text-font-white text-lg font-medium";
+
+	const { signOut } = useAuthContext();
 	return (
 		<div className='w-full flex flex-col gap-4'>
-			<div className='w-full h-16 bg-card-gray rounded-xl flex flex-row items-center gap-6 p-4'>
+			<button className={btnClass}>
 				<GoPerson
 					size={30}
-					className='text-brand-orange'
+					className={iconClass}
 				/>
-				<span className='text-font-white text-lg font-medium'>Profile</span>
-			</div>
-			<div className='w-full h-16 bg-card-gray rounded-xl flex flex-row items-center gap-6 p-4'>
+				<span className={textClassGeneric}>Profile</span>
+			</button>
+			<button className={btnClass}>
 				<IoSettingsOutline
 					size={30}
-					className='text-brand-orange'
+					className={iconClass}
 				/>
-				<span className='text-font-white text-lg font-medium'>Settings</span>
-			</div>
-			<div className='w-full h-16 bg-card-gray rounded-xl flex flex-row items-center gap-6 p-4'>
+				<span className={textClassGeneric}>Settings</span>
+			</button>
+
+			<button
+				className={btnClass}
+				onClick={signOut}
+			>
 				<IoLogOutOutline
 					size={30}
 					className='text-font-red-dark'
 				/>
 				<span className='text-font-red-dark text-lg font-medium'>Logout</span>
-			</div>
+			</button>
 		</div>
 	);
 };

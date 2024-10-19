@@ -35,7 +35,7 @@ export default LoginPage;
 const LoginPageBody = ({ handleLogin }: { handleLogin: () => void }) => {
 	return (
 		<>
-			<div className='flex flex-col items-center justify-start h-screen gap-28 pt-32 bg-background-black w-screen'>
+			<div className='flex flex-col items-center justify-start h-full gap-28 pt-32 bg-background-black w-screen'>
 				{CoinFlipIcon}
 
 				<div className='flex flex-col items-center justify-center gap-10'>
@@ -55,7 +55,7 @@ const GoogleLoginButton = ({ handleLogin }: { handleLogin: () => void }) => {
 	return (
 		<div className='h-14'>
 			<button
-				className='btn bg-button-gray text-font-white flex items-center gap-4 rounded-full w-80 h-full outline outline-1 outline-outline-gray'
+				className='btn bg-button-gray text-font-white flex items-center gap-4 rounded-full w-80 h-full border-outline-gray'
 				onClick={handleLogin}
 			>
 				<FcGoogle className='text-3xl' />
