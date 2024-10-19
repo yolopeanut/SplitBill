@@ -26,7 +26,7 @@ const GroupsPageHeader = () => {
 const GroupsPageBody = () => {
 	return (
 		<>
-			<div className='flex flex-col gap-12 items-start w-full overflow-y-scroll h-[calc(100vh-12.5rem)]'>
+			<div className='flex flex-col gap-12 items-start w-full overflow-y-scroll h-[calc(100vh-11rem)]'>
 				<div className='flex flex-col gap-8 w-full items-start'>
 					<div className='text-font-white text-lg font-semibold'>All Groups</div>
 					<div className='flex flex-col gap-6 w-full pb-20'>

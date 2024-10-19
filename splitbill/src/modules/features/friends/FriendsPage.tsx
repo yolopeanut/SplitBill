@@ -47,7 +47,7 @@ const FriendsPageHeader = () => {
 const FriendsPageBody = () => {
 	return (
 		<>
-			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-15.5rem)] pb-20'>
+			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
 				<FriendCard
 					imgSrc={""}
 					name={"John Doe"}
