@@ -1,3 +1,5 @@
+import imageCompression from "browser-image-compression";
+
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -23,4 +25,30 @@ export function getPlural(num: number, word: string) {
 		return `${num} ${word}`;
 	}
 	return `${num} ${word}s`;
+}
+
+export async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+	const imageFile = event.target.files?.[0];
+
+	if (!imageFile) {
+		return;
+	}
+
+	// console.log("originalFile instanceof Blob", imageFile instanceof Blob); // true
+	// console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+	const options = {
+		maxSizeMB: 1,
+		maxWidthOrHeight: 100,
+		useWebWorker: true,
+	};
+	try {
+		const compressedFile = await imageCompression(imageFile, options);
+		// console.log("compressedFile instanceof Blob", compressedFile instanceof Blob); // true
+		// console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+		return compressedFile;
+	} catch (error) {
+		console.log(error);
+	}
 }
