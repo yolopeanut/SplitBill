@@ -19,7 +19,7 @@ export default defineConfig({
 				description: "Save your time splitting bills with your friends",
 				theme_color: "#000000",
 				start_url: "/",
-				display: "standalone",
+				display: "fullscreen",
 				prefer_related_applications: false,
 				orientation: "portrait",
 				background_color: "#000000",
