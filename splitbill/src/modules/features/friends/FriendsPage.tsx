@@ -6,7 +6,7 @@ import { BsStarFill } from "react-icons/bs";
 const FriendsPage = () => {
 	return (
 		<>
-			<div className='flex flex-col gap-4 px-4 pt-14'>
+			<div className='flex flex-col gap-4 px-4 pt-8'>
 				<FriendsPageHeader />
 				<FriendsPageBody />
 			</div>
@@ -19,8 +19,8 @@ export default FriendsPage;
 const FriendsPageHeader = () => {
 	return (
 		<div className='flex flex-col gap-4 h-28'>
-			<div className='flex flex-row justify-between'>
-				<span className='text-font-white text-4xl font-semibold'>Friends</span>
+			<div className='flex flex-row justify-between items-center'>
+				<span className='text-font-white text-3xl font-semibold'>Friends</span>
 				<button className='btn border-none p-0'>
 					<IoPersonAddSharp
 						size={30}

@@ -5,7 +5,7 @@ import { getFirstLetter, truncateText } from "../../core/common/commonFunctions"
 const GroupsPage = () => {
 	return (
 		<>
-			<div className='flex flex-col gap-4 items-start pt-14 px-4 gap-y-10'>
+			<div className='flex flex-col gap-4 items-start pt-8 px-4 gap-y-10'>
 				<GroupsPageHeader />
 				<GroupsPageBody />
 			</div>
@@ -18,7 +18,7 @@ export default GroupsPage;
 const GroupsPageHeader = () => {
 	return (
 		<>
-			<div className='text-font-white text-4xl font-bold'>Groups</div>
+			<div className='text-font-white text-3xl font-bold'>Groups</div>
 		</>
 	);
 };
