@@ -13,6 +13,7 @@ export default {
 			"font-gray-light": "#2C2C2C",
 			"font-green": "#00FF84",
 			"font-red": "#FF2626",
+			"font-red-dark": "#E91515",
 
 			"input-search-gray": "#333333",
 			"input-box-gray": "#2A2A2A",
