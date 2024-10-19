@@ -2,11 +2,13 @@ export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
 
+// Get initials from name for first two letters
 export function getInitials(name: string) {
 	return name
 		.split(" ")
 		.map((n) => n.charAt(0).toUpperCase())
-		.join("");
+		.join("")
+		.slice(0, 2);
 }
 
 export function truncateText(text: string, maxLength: number) {

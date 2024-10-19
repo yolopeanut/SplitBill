@@ -38,9 +38,9 @@ const CreateProfilePage = () => {
 export default CreateProfilePage;
 const LetsGoButton = ({ navigate }: { navigate: NavigateFunction }) => {
 	return (
-		<div className='h-14 w-full'>
+		<div className='flex h-14 w-full justify-center items-center'>
 			<button
-				className='btn bg-brand-orange text-font-black font-black text-base rounded-full w-full max-w-xs h-full'
+				className='btn bg-brand-orange text-font-black font-black text-base rounded-full w-full max-w-xs h-full '
 				onClick={() => {
 					navigate("/groups");
 				}}
