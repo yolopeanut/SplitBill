@@ -3,7 +3,6 @@ import { getInitials } from "../../core/common/commonFunctions";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
 import useFriendsContext from "./hooks/useFriendsContext";
-import getPublicUrl from "../../core/database/getPublicUrl";
 
 const FriendsPage = () => {
 	return (
@@ -56,10 +55,10 @@ const FriendsPageBody = () => {
 					return (
 						<FriendCard
 							key={friend.id}
-							imgSrc={getPublicUrl(friend.profile_img_src)}
+							imgSrc={friend.profile_img_url}
 							name={friend.name}
 							uniqueUsername={friend.unique_username}
-							isFavourite={false}
+							isFavourite={friend.is_favourited}
 						/>
 					);
 				})}
@@ -74,7 +73,7 @@ const FriendCard = ({
 	uniqueUsername,
 	isFavourite,
 }: {
-	imgSrc: string;
+	imgSrc: string | null;
 	name: string;
 	uniqueUsername: string;
 	isFavourite: boolean;
@@ -84,12 +83,17 @@ const FriendCard = ({
 		const initials = getInitials(name);
 
 		if (imgSrc) {
-			return <img src={imgSrc} />;
+			return (
+				<img
+					className='rounded-full w-12'
+					src={imgSrc}
+				/>
+			);
 		}
 
 		return (
 			<div className='avatar placeholder'>
-				<div className='bg-input-search-gray text-font-white w-16 rounded-full'>
+				<div className='bg-input-search-gray text-font-white w-12 rounded-full'>
 					<span className='text-lg'>{initials}</span>
 				</div>
 			</div>
@@ -114,14 +118,16 @@ const FriendCard = ({
 	};
 
 	return (
-		<div className='flex flex-row gap-4'>
-			<div className='avatar'>
-				<ImagePlaceholder />
-			</div>
+		<div className='flex flex-row justify-between gap-4'>
+			<div className='flex flex-row gap-4'>
+				<div className='avatar w-16'>
+					<ImagePlaceholder />
+				</div>
 
-			<div className='flex flex-col gap-1 w-full'>
-				<span className='text-font-white text-lg font-semibold'>{name}</span>
-				<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
+				<div className='flex flex-col gap-1 justify-center'>
+					<span className='text-font-white text-lg font-semibold'>{name}</span>
+					<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
+				</div>
 			</div>
 
 			<div className='flex items-center'>

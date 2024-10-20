@@ -1,11 +1,12 @@
 import { createContext } from "react";
-import { supabase } from "../../../../config/Supabase";
 import { useQuery } from "@tanstack/react-query";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
-import { IAllUsersTable } from "../../../core/interfaces/all_usersTable";
+import getOwnFriendsOnly from "../../../core/database/getOwnFriendsOnly";
+import { IAllFriendsTable } from "../../../core/interfaces/all_friendsTable";
+import getPublicUrl from "../../../core/database/getPublicUrl";
 
 const FriendsContext = createContext({
-	getFriends: [] as IAllUsersTable[],
+	getFriends: [] as IAllFriendsTable[],
 	refetchFriends: () => {},
 	addFriend: () => {},
 	removeFriend: () => {},
@@ -19,11 +20,11 @@ export const FriendsProvider = ({ children }: { children: React.ReactNode }) => 
 		queryFn: async () => {
 			if (!user) return {};
 
-			const { data, error } = await supabase.schema("splitbill").rpc("get_own_friends_only");
+			const data = await getOwnFriendsOnly();
 
-			if (error) {
-				throw error;
-			}
+			data.map((friend: IAllFriendsTable) => {
+				friend.profile_img_url = getPublicUrl(friend.profile_img_src);
+			});
 
 			console.log({ data });
 			return data;
@@ -32,7 +33,7 @@ export const FriendsProvider = ({ children }: { children: React.ReactNode }) => 
 	});
 
 	const value = {
-		getFriends: getAllFriends.data,
+		getFriends: getAllFriends.data as IAllFriendsTable[],
 		refetchFriends: getAllFriends.refetch,
 		addFriend: () => {},
 		removeFriend: () => {},
