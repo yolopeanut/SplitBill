@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useRef } from "react";
+import { createContext, useState, useRef } from "react";
 import { IAllUsersTable } from "../../../core/interfaces/all_usersTable";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { supabase } from "../../../../config/Supabase";
