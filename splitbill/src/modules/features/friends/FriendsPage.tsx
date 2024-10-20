@@ -3,6 +3,16 @@ import { getInitials } from "../../core/common/commonFunctions";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
 import useFriendsContext from "./hooks/useFriendsContext";
+import { Dispatch, SetStateAction, useState } from "react";
+
+//placeholder data for friend requests
+const friendRequests = [
+	{ name: "John Doe", uniqueUsername: "johndoe", img_src: null },
+	{ name: "Jane Doe", uniqueUsername: "janedoe", img_src: null },
+	{ name: "Jim Doe", uniqueUsername: "jimdoe", img_src: null },
+	{ name: "Jim Doe", uniqueUsername: "jimdoe", img_src: null },
+	{ name: "Jim Doe", uniqueUsername: "jimdoe", img_src: null },
+];
 
 const FriendsPage = () => {
 	return (
@@ -47,13 +57,23 @@ const FriendsPageHeader = () => {
 
 const FriendsPageBody = () => {
 	const { getFriends } = useFriendsContext();
-
+	const [showMore, setShowMore] = useState(false);
 	return (
 		<>
 			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
-				<FriendRequestCard
-					name='John Doe'
-					uniqueUsername='johndoe'
+				{friendRequests.slice(0, showMore ? friendRequests.length : 2).map((friendRequest) => {
+					return (
+						<FriendRequestCard
+							key={friendRequest.uniqueUsername}
+							name={friendRequest.name}
+							uniqueUsername={friendRequest.uniqueUsername}
+							img_src={friendRequest.img_src}
+						/>
+					);
+				})}
+				<ShowMoreCard
+					showMore={showMore}
+					setShowMore={setShowMore}
 				/>
 				<hr className='border-b-2 border-input-search-gray' />
 				{getFriends?.map((friend) => {
@@ -157,30 +177,63 @@ const FriendCard = ({
 	);
 };
 
-const FriendRequestCard = ({ name, uniqueUsername }: { name: string; uniqueUsername: string }) => {
+const FriendRequestCard = ({
+	name,
+	uniqueUsername,
+	img_src,
+}: {
+	name: string;
+	uniqueUsername: string;
+	img_src: string | null;
+}) => {
 	return (
-		<div className='bg-input-search-gray rounded-lg flex flex-col items-start gap-4 h-36 p-4'>
+		<div className='bg-input-search-gray rounded-lg flex flex-col items-start gap-4 p-4'>
 			<div className='flex flex-row items-center gap-2 w-full'>
 				<div className='avatar w-14 '>
 					<ImagePlaceholder
-						imgSrc={null}
-						name='John Doe'
+						imgSrc={img_src}
+						name={name}
 						className='bg-background-black'
 					/>
 				</div>
-				<div className='flex flex-col gap-1 justify-center'>
-					<span className='text-font-white text-lg font-semibold'>{name}</span>
-					<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
+				<div className='flex flex-col justify-center gap-2'>
+					<div className='flex flex-col'>
+						<span className='text-font-white text-lg font-semibold'>{name}</span>
+						<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
+					</div>
+					<span className='text-font-white text-sm font-normal'>Has sent you a friend request</span>
 				</div>
 			</div>
 			<div className='flex flex-row items-center gap-2 w-full self-center justify-center'>
-				<button className='btn btn-sm border-none bg-brand-orange p-0 w-44 h-10 text-background-black'>
+				<button className='btn btn-sm border-none bg-brand-orange w-44 h-10 text-font-black text-base font-bold'>
 					Accept
 				</button>
-				<button className='btn btn-sm border-brand-orange p-0 w-44 h-10 bg-background-black'>
+				<button className='btn btn-sm border-brand-orange w-44 h-10 bg-background-black text-font-white text-base font-bold'>
 					Decline
 				</button>
 			</div>
+		</div>
+	);
+};
+
+const ShowMoreCard = ({
+	setShowMore,
+	showMore,
+}: {
+	setShowMore: Dispatch<SetStateAction<boolean>>;
+	showMore: boolean;
+}) => {
+	const handleShowMore = () => {
+		setShowMore(!showMore);
+	};
+	return (
+		<div className='bg-input-search-gray rounded-lg'>
+			<button
+				onClick={handleShowMore}
+				className='btn w-full text-font-white text-lg font-bold'
+			>
+				{showMore ? "Collapse" : "Expand"}
+			</button>
 		</div>
 	);
 };
