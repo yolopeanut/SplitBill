@@ -1,9 +1,10 @@
 import { createContext, useState, useRef } from "react";
 import { IAllUsersTable } from "../../../core/interfaces/all_usersTable";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { supabase } from "../../../../config/Supabase";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import { User } from "@supabase/supabase-js";
+import getPublicUrl from "../../../core/database/getPublicUrl";
+import getAllUsersById from "../../../core/database/getUserArraybyId";
 
 export const UserContext = createContext<{
 	currentUser: IAllUsersTable | null;
@@ -54,13 +55,7 @@ const GetUser = ({
 		queryKey: ["created_profile", "getUserById"],
 		queryFn: async () => {
 			if (user && !isLoading) {
-				const { data, error } = await supabase.schema("splitbill").rpc("get_user_by_id", {
-					p_user_id: user.id,
-				});
-
-				if (error) {
-					throw error;
-				}
+				const data = await getAllUsersById(user.id);
 
 				const currentUserData = data[0] as IAllUsersTable;
 				if (currentUserData) {
@@ -87,8 +82,7 @@ const GetProfileImg = ({
 		queryKey: ["created_profile", "getProfileImg"],
 		queryFn: async () => {
 			if (hasCreatedProfile.current && currentUser?.profile_img_src) {
-				const { data } = supabase.storage.from("images").getPublicUrl(currentUser.profile_img_src);
-				return data.publicUrl;
+				return getPublicUrl(currentUser.profile_img_src);
 			}
 		},
 		enabled: hasCreatedProfile.current,

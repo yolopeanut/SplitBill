@@ -2,6 +2,8 @@ import { IoSearch, IoPersonAddSharp } from "react-icons/io5";
 import { getInitials } from "../../core/common/commonFunctions";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
+import useFriendsContext from "./hooks/useFriendsContext";
+import getPublicUrl from "../../core/database/getPublicUrl";
 
 const FriendsPage = () => {
 	return (
@@ -45,81 +47,22 @@ const FriendsPageHeader = () => {
 };
 
 const FriendsPageBody = () => {
+	const { getFriends } = useFriendsContext();
+
 	return (
 		<>
 			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe"}
-					uniqueUsername={"johndoe"}
-					isFavourite={true}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe a dear"}
-					uniqueUsername={"michaelVsauce"}
-					isFavourite={false}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe"}
-					uniqueUsername={"johndoe"}
-					isFavourite={true}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe a dear"}
-					uniqueUsername={"michaelVsauce"}
-					isFavourite={false}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe"}
-					uniqueUsername={"johndoe"}
-					isFavourite={true}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe a dear"}
-					uniqueUsername={"michaelVsauce"}
-					isFavourite={false}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe"}
-					uniqueUsername={"johndoe"}
-					isFavourite={true}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe a dear"}
-					uniqueUsername={"michaelVsauce"}
-					isFavourite={false}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe"}
-					uniqueUsername={"johndoe"}
-					isFavourite={true}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe a dear"}
-					uniqueUsername={"michaelVsauce"}
-					isFavourite={false}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe"}
-					uniqueUsername={"johndoe"}
-					isFavourite={true}
-				/>
-				<FriendCard
-					imgSrc={""}
-					name={"John Doe a dear"}
-					uniqueUsername={"michaelVsauce"}
-					isFavourite={false}
-				/>
+				{getFriends?.map((friend) => {
+					return (
+						<FriendCard
+							key={friend.id}
+							imgSrc={getPublicUrl(friend.profile_img_src)}
+							name={friend.name}
+							uniqueUsername={friend.unique_username}
+							isFavourite={false}
+						/>
+					);
+				})}
 			</div>
 		</>
 	);
