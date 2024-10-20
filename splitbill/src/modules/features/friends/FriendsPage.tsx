@@ -51,6 +51,11 @@ const FriendsPageBody = () => {
 	return (
 		<>
 			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
+				<FriendRequestCard
+					name='John Doe'
+					uniqueUsername='johndoe'
+				/>
+				<hr className='border-b-2 border-input-search-gray' />
 				{getFriends?.map((friend) => {
 					console.log({ friend });
 					return (
@@ -68,6 +73,38 @@ const FriendsPageBody = () => {
 	);
 };
 
+const ImagePlaceholder = ({
+	imgSrc,
+	name,
+	className,
+}: {
+	imgSrc: string | null;
+	name: string;
+	className?: string;
+}) => {
+	const initials = getInitials(name);
+
+	console.log({ imgSrc });
+	if (imgSrc) {
+		return (
+			<div className='avatar placeholder'>
+				<img
+					className='rounded-full w-14'
+					src={imgSrc}
+				/>
+			</div>
+		);
+	} else {
+		return (
+			<div className='avatar placeholder'>
+				<div className={` text-font-white w-14 rounded-full ${className}`}>
+					<span className='text-lg'>{initials}</span>
+				</div>
+			</div>
+		);
+	}
+};
+
 const FriendCard = ({
 	imgSrc,
 	name,
@@ -79,31 +116,6 @@ const FriendCard = ({
 	uniqueUsername: string;
 	isFavourite: boolean;
 }) => {
-	// ImagePlaceholder
-	const ImagePlaceholder = () => {
-		const initials = getInitials(name);
-
-		console.log({ imgSrc });
-		if (imgSrc) {
-			return (
-				<div className='avatar placeholder'>
-					<img
-						className='rounded-full w-14'
-						src={imgSrc}
-					/>
-				</div>
-			);
-		} else {
-			return (
-				<div className='avatar placeholder'>
-					<div className='bg-input-search-gray text-font-white w-14 rounded-full'>
-						<span className='text-lg'>{initials}</span>
-					</div>
-				</div>
-			);
-		}
-	};
-
 	const FavouriteIcon = () => {
 		if (isFavourite) {
 			return (
@@ -125,7 +137,11 @@ const FriendCard = ({
 		<div className='flex flex-row justify-between gap-4'>
 			<div className='flex flex-row gap-4'>
 				<div className='avatar w-14'>
-					<ImagePlaceholder />
+					<ImagePlaceholder
+						imgSrc={imgSrc}
+						name={name}
+						className='bg-input-search-gray'
+					/>
 				</div>
 
 				<div className='flex flex-col gap-1 justify-center'>
@@ -136,6 +152,34 @@ const FriendCard = ({
 
 			<div className='flex items-center'>
 				<FavouriteIcon />
+			</div>
+		</div>
+	);
+};
+
+const FriendRequestCard = ({ name, uniqueUsername }: { name: string; uniqueUsername: string }) => {
+	return (
+		<div className='bg-input-search-gray rounded-lg flex flex-col items-start gap-4 h-36 p-4'>
+			<div className='flex flex-row items-center gap-2 w-full'>
+				<div className='avatar w-14 '>
+					<ImagePlaceholder
+						imgSrc={null}
+						name='John Doe'
+						className='bg-background-black'
+					/>
+				</div>
+				<div className='flex flex-col gap-1 justify-center'>
+					<span className='text-font-white text-lg font-semibold'>{name}</span>
+					<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
+				</div>
+			</div>
+			<div className='flex flex-row items-center gap-2 w-full self-center justify-center'>
+				<button className='btn btn-sm border-none bg-brand-orange p-0 w-44 h-10 text-background-black'>
+					Accept
+				</button>
+				<button className='btn btn-sm border-brand-orange p-0 w-44 h-10 bg-background-black'>
+					Decline
+				</button>
 			</div>
 		</div>
 	);
