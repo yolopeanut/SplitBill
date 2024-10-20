@@ -23,7 +23,9 @@ export const FriendsProvider = ({ children }: { children: React.ReactNode }) => 
 			const data = await getOwnFriendsOnly();
 
 			data.map((friend: IAllFriendsTable) => {
-				friend.profile_img_url = getPublicUrl(friend.profile_img_src);
+				if (friend.profile_img_src) {
+					friend.profile_img_url = getPublicUrl(friend.profile_img_src);
+				}
 			});
 
 			console.log({ data });

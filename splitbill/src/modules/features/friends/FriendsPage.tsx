@@ -52,6 +52,7 @@ const FriendsPageBody = () => {
 		<>
 			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
 				{getFriends?.map((friend) => {
+					console.log({ friend });
 					return (
 						<FriendCard
 							key={friend.id}
@@ -82,22 +83,25 @@ const FriendCard = ({
 	const ImagePlaceholder = () => {
 		const initials = getInitials(name);
 
+		console.log({ imgSrc });
 		if (imgSrc) {
 			return (
-				<img
-					className='rounded-full w-12'
-					src={imgSrc}
-				/>
+				<div className='avatar placeholder'>
+					<img
+						className='rounded-full w-14'
+						src={imgSrc}
+					/>
+				</div>
+			);
+		} else {
+			return (
+				<div className='avatar placeholder'>
+					<div className='bg-input-search-gray text-font-white w-14 rounded-full'>
+						<span className='text-lg'>{initials}</span>
+					</div>
+				</div>
 			);
 		}
-
-		return (
-			<div className='avatar placeholder'>
-				<div className='bg-input-search-gray text-font-white w-12 rounded-full'>
-					<span className='text-lg'>{initials}</span>
-				</div>
-			</div>
-		);
 	};
 
 	const FavouriteIcon = () => {
@@ -120,7 +124,7 @@ const FriendCard = ({
 	return (
 		<div className='flex flex-row justify-between gap-4'>
 			<div className='flex flex-row gap-4'>
-				<div className='avatar w-16'>
+				<div className='avatar w-14'>
 					<ImagePlaceholder />
 				</div>
 
