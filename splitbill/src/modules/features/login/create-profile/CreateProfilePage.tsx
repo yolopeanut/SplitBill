@@ -7,6 +7,7 @@ import { IFormInput } from "../../../core/interfaces/createProfileForm";
 import update_user_profile from "../../../core/database/createProfilePost";
 import post_image_to_storage_and_ref_table from "../../../core/database/postImageToStorage";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
+import useUserContext from "../hooks/useUserContext";
 
 const CreateProfileText = (
 	<div className='flex flex-col gap-2 items-start w-full'>
@@ -14,20 +15,31 @@ const CreateProfileText = (
 	</div>
 );
 
-const MakeItUniqueText = <span className='text-sm text-font-white'>Remember to make it unique! 😉</span>;
+const MakeItUniqueText = (
+	<span className='text-sm text-font-white'>Remember to make it unique! 😉</span>
+);
 
 const CreateProfilePage = () => {
 	const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
 	const navigate = useNavigate();
 	const { user } = useAuthContext();
+	const { getUserById } = useUserContext();
+	console.log({ user, getUserById });
+
 	const { register, handleSubmit } = useForm<IFormInput>();
 	const onSubmit: SubmitHandler<IFormInput> = async (data) => {
 		// console.log(data);
 
-		//TODO: upload form data to backend
+		// upload form data to backend
 		if (user) {
+			// upload image to storage and get the path, waiting for the image path to be returned
 			const imagePath = await post_image_to_storage_and_ref_table(data.profilePicture, user.id);
+
+			// update user profile, waiting for the user profile to update
 			await update_user_profile(data, imagePath, user.id);
+
+			// refresh user context, waiting for the user context to update
+			await getUserById.refetch();
 		}
 
 		// revoke the picture to prevent memory leaks

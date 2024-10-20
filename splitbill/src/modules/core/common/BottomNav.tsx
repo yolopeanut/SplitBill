@@ -4,6 +4,8 @@ import { BiSolidWallet } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NAV_BAR_PATHS_DISABLED, NAV_BAR_PATHS } from "../../../app/constants";
+import useUserContext from "../../features/login/hooks/useUserContext";
+import { getInitials } from "./commonFunctions";
 
 const BottomNav = () => {
 	const [activeTab, setActiveTab] = useState<number>(-1);
@@ -12,6 +14,9 @@ const BottomNav = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const isDisabled = NAV_BAR_PATHS_DISABLED.includes(location.pathname);
+
+	// Get the current user from the user context
+	const { currentUser } = useUserContext();
 
 	useEffect(() => {
 		// Set the active tab based on the current path
@@ -28,8 +33,21 @@ const BottomNav = () => {
 
 	// Get the tailwind class for the tab based on the active tab index
 	function getTabClass(index: number) {
-		return activeTab === index ? "active text-brand-orange bg-background-black" : "text-brand-orange";
+		return activeTab === index
+			? "active text-brand-orange bg-background-black"
+			: "text-brand-orange";
 	}
+
+	const ProfileImg = () => {
+		if (currentUser?.profile_img_url) {
+			return <img src={currentUser.profile_img_url} />;
+		}
+		return (
+			<div className='w-7 h-7 bg-card-gray rounded-full flex items-center justify-center'>
+				{getInitials(currentUser?.name ?? "")}
+			</div>
+		);
+	};
 
 	return (
 		<>
@@ -58,7 +76,7 @@ const BottomNav = () => {
 				>
 					<div className='avatar'>
 						<div className='ring ring-brand-orange w-7 rounded-full'>
-							<img src='https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp' />
+							<ProfileImg />
 						</div>
 					</div>
 				</button>

@@ -1,5 +1,4 @@
 import imageCompression from "browser-image-compression";
-
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -27,6 +26,7 @@ export function getPlural(num: number, word: string) {
 	return `${num} ${word}s`;
 }
 
+// Function that compresses the image file
 export async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
 	const imageFile = event.target.files?.[0];
 

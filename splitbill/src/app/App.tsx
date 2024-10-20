@@ -3,16 +3,20 @@ import "./App.css";
 import ProviderController from "./ProviderController";
 import { RouteController } from "./routing/RouteController";
 import BottomNav from "../modules/core/common/BottomNav";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "../config/ReactQuery";
 
 function App() {
 	return (
 		<>
-			<Router>
-				<ProviderController>
-					<RouteController />
-				</ProviderController>
-				<BottomNav />
-			</Router>
+			<QueryClientProvider client={queryClient}>
+				<Router>
+					<ProviderController>
+						<RouteController />
+						<BottomNav />
+					</ProviderController>
+				</Router>
+			</QueryClientProvider>
 		</>
 	);
 }
