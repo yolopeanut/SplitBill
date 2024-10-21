@@ -4,8 +4,8 @@ import { handleImageUpload } from "../../../core/common/commonFunctions";
 import { useForm, UseFormRegister } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form";
 import { IFormInput } from "../../../core/interfaces/createProfileForm";
-import update_user_profile from "../../../core/database/createProfilePost";
-import post_image_to_storage_and_ref_table from "../../../core/database/postImageToStorage";
+import update_user_profile from "../../../core/database_functions/createProfilePost";
+import post_image_to_storage_and_ref_table from "../../../core/database_functions/postImageToStorage";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import useUserContext from "../hooks/useUserContext";
 

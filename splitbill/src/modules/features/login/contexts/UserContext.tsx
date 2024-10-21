@@ -3,8 +3,8 @@ import { IAllUsersTable } from "../../../core/interfaces/all_usersTable";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import { User } from "@supabase/supabase-js";
-import getPublicUrl from "../../../core/database/getPublicUrl";
-import getAllUsersById from "../../../core/database/getUserArraybyId";
+import getPublicUrl from "../../../core/database_functions/getPublicUrl";
+import getAllUsersById from "../../../core/database_functions/getUserArraybyId";
 
 export const UserContext = createContext<{
 	currentUser: IAllUsersTable | null;

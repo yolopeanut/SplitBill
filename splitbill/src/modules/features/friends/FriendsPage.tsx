@@ -1,18 +1,13 @@
-import { IoSearch, IoPersonAddSharp } from "react-icons/io5";
+import { IoPersonAddSharp } from "react-icons/io5";
 import { getInitials } from "../../core/common/commonFunctions";
 import { BsStar } from "react-icons/bs";
 import { BsStarFill } from "react-icons/bs";
-import useFriendsContext from "./hooks/useFriendsContext";
 import { Dispatch, SetStateAction, useState } from "react";
-
-//placeholder data for friend requests
-const friendRequests = [
-	{ name: "John Doe", uniqueUsername: "johndoe", img_src: null },
-	{ name: "Jane Doe", uniqueUsername: "janedoe", img_src: null },
-	{ name: "Jim Doe", uniqueUsername: "jimdoe", img_src: null },
-	{ name: "Jim Doe", uniqueUsername: "jimdoe", img_src: null },
-	{ name: "Jim Doe", uniqueUsername: "jimdoe", img_src: null },
-];
+import { useGetAllFriends } from "./hooks/useGetAllFriends";
+import { useGetAllFriendRequests } from "./hooks/useGetFriendRequests";
+import Loading from "../../core/common/Loading";
+import { useAcceptFriendRequest } from "./hooks/useAcceptFriendRequest";
+import { CustomInputField } from "../../core/common/CustomInputField";
 
 const FriendsPage = () => {
 	return (
@@ -40,56 +35,63 @@ const FriendsPageHeader = () => {
 				</button>
 			</div>
 
-			<label className='input  bg-input-search-gray flex items-center gap-2'>
-				<IoSearch
-					className='text-font-text-gray'
-					size={30}
-				/>
-				<input
-					type='text'
-					className='grow font-normal'
-					placeholder='Search'
-				/>
-			</label>
+			<CustomInputField />
 		</div>
 	);
 };
 
 const FriendsPageBody = () => {
-	const { getFriends } = useFriendsContext();
 	const [showMore, setShowMore] = useState(false);
+	const getFriends = useGetAllFriends();
+	const getFriendRequests = useGetAllFriendRequests();
+
+	if (getFriendRequests.isLoading || getFriends.isLoading) {
+		return <Loading />;
+	}
+
+	if (getFriendRequests.isError || getFriends.isError) {
+		return <div className='text-font-white text-lg font-semibold'>Error loading data</div>;
+	}
+
 	return (
-		<>
-			<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
-				{friendRequests.slice(0, showMore ? friendRequests.length : 2).map((friendRequest) => {
-					return (
-						<FriendRequestCard
-							key={friendRequest.uniqueUsername}
-							name={friendRequest.name}
-							uniqueUsername={friendRequest.uniqueUsername}
-							img_src={friendRequest.img_src}
-						/>
-					);
-				})}
-				<ShowMoreCard
-					showMore={showMore}
-					setShowMore={setShowMore}
+		<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
+			{/* Show only 2 friend requests at a time */}
+			{getFriendRequests.data
+				?.slice(0, showMore ? getFriendRequests.data?.length : 2)
+				.map((friendRequest) => (
+					<FriendRequestCard
+						key={friendRequest.unique_username}
+						sender_id={friendRequest.id}
+						name={friendRequest.name}
+						uniqueUsername={friendRequest.unique_username}
+						img_src={friendRequest.profile_img_url}
+					/>
+				))}
+
+			{/* If there are more than 2 friend requests, show the show more card */}
+			{getFriendRequests.data && getFriendRequests.data?.length > 2 && (
+				<>
+					<ShowMoreCard
+						showMore={showMore}
+						setShowMore={setShowMore}
+					/>
+				</>
+			)}
+
+			{/* Horizontal line */}
+			<hr className='border-b-2 border-input-search-gray' />
+
+			{/* Show all friends */}
+			{getFriends.data?.map((friend) => (
+				<FriendCard
+					key={friend.id}
+					imgSrc={friend.profile_img_url}
+					name={friend.name}
+					uniqueUsername={friend.unique_username}
+					isFavourite={friend.is_favourited}
 				/>
-				<hr className='border-b-2 border-input-search-gray' />
-				{getFriends?.map((friend) => {
-					console.log({ friend });
-					return (
-						<FriendCard
-							key={friend.id}
-							imgSrc={friend.profile_img_url}
-							name={friend.name}
-							uniqueUsername={friend.unique_username}
-							isFavourite={friend.is_favourited}
-						/>
-					);
-				})}
-			</div>
-		</>
+			))}
+		</div>
 	);
 };
 
@@ -104,7 +106,6 @@ const ImagePlaceholder = ({
 }) => {
 	const initials = getInitials(name);
 
-	console.log({ imgSrc });
 	if (imgSrc) {
 		return (
 			<div className='avatar placeholder'>
@@ -181,11 +182,18 @@ const FriendRequestCard = ({
 	name,
 	uniqueUsername,
 	img_src,
+	sender_id,
 }: {
 	name: string;
 	uniqueUsername: string;
 	img_src: string | null;
+	sender_id: string;
 }) => {
+	const acceptFriendRequest = useAcceptFriendRequest();
+
+	const handleAcceptFriendRequest = () => {
+		acceptFriendRequest(sender_id);
+	};
 	return (
 		<div className='bg-input-search-gray rounded-lg flex flex-col items-start gap-4 p-4'>
 			<div className='flex flex-row items-center gap-2 w-full'>
@@ -205,10 +213,13 @@ const FriendRequestCard = ({
 				</div>
 			</div>
 			<div className='flex flex-row items-center gap-2 w-full self-center justify-center'>
-				<button className='btn btn-sm border-none bg-brand-orange w-44 h-10 text-font-black text-base font-bold'>
+				<button
+					onClick={handleAcceptFriendRequest}
+					className='btn btn-sm border-none bg-brand-orange w-[48%] text-font-black text-base font-bold'
+				>
 					Accept
 				</button>
-				<button className='btn btn-sm border-brand-orange w-44 h-10 bg-background-black text-font-white text-base font-bold'>
+				<button className='btn btn-sm border-brand-orange w-[48%] bg-background-black text-font-white text-base font-bold'>
 					Decline
 				</button>
 			</div>
