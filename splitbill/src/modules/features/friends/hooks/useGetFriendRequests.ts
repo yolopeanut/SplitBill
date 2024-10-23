@@ -3,7 +3,7 @@ import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import getPublicUrl from "../../../core/database_functions/getPublicUrl";
 import { supabase } from "../../../../config/Supabase";
 import { IAllUsersTable } from "../../../core/interfaces/all_usersTable";
-import getOwnFriendRequests from "../../../core/database_functions/getOwnFriendRequests";
+import getOwnFriendRequests from "../../../core/database_functions/get_own_friend_requests";
 
 export const useGetAllFriendRequests = () => {
 	const { user, session, isLoading } = useAuthContext();

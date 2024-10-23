@@ -1,6 +1,9 @@
 import { IoPersonSharp } from "react-icons/io5";
 import { PiCurrencyCircleDollarFill } from "react-icons/pi";
 import { getFirstLetter, truncateText } from "../../core/common/commonFunctions";
+import { useNavigate } from "react-router-dom";
+import { useGetOwnGroups } from "./selected-group/hooks/useGetOwnGroups";
+import Loading from "../../core/common/Loading";
 
 const GroupsPage = () => {
 	return (
@@ -24,78 +27,28 @@ const GroupsPageHeader = () => {
 };
 
 const GroupsPageBody = () => {
+	const { data: ownGroups, isLoading: isLoadingOwnGroups } = useGetOwnGroups();
+
+	if (isLoadingOwnGroups) {
+		return <Loading />;
+	}
+
 	return (
 		<>
 			<div className='flex flex-col gap-12 items-start w-full overflow-y-scroll h-[calc(100vh-11rem)]'>
 				<div className='flex flex-col gap-8 w-full items-start'>
 					<div className='text-font-white text-lg font-semibold'>All Groups</div>
 					<div className='flex flex-col gap-6 w-full pb-20'>
-						<GroupCard
-							image_src={"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
-							groupName={"yeetus"}
-							numMembers={10}
-							balance={-20.0}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"yo momma"}
-							numMembers={10}
-							balance={-15.25}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"Nutting Group plat Nutting Group plat Nutting Group plat"}
-							numMembers={10}
-							balance={23.6}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"teehee"}
-							numMembers={10}
-							balance={0}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"langkawi babay"}
-							numMembers={10}
-							balance={1000000000.3}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"Nutting Group plat Nutting Group plat Nutting Group plat"}
-							numMembers={10}
-							balance={23.6}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"teehee"}
-							numMembers={10}
-							balance={0}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"langkawi babay"}
-							numMembers={10}
-							balance={1000000000.3}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"Nutting Group plat Nutting Group plat Nutting Group plat"}
-							numMembers={10}
-							balance={23.6}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"teehee"}
-							numMembers={10}
-							balance={0}
-						/>
-						<GroupCard
-							image_src={null}
-							groupName={"langkawi babay"}
-							numMembers={10}
-							balance={1000000000.3}
-						/>
+						{ownGroups?.map((group) => (
+							<GroupCard
+								key={group.id}
+								groupId={group.id}
+								image_src={group.img_url}
+								groupName={group.name}
+								numMembers={group.num_members ?? 0}
+								balance={group.balance ?? 0}
+							/>
+						))}
 					</div>
 				</div>
 			</div>
@@ -104,27 +57,43 @@ const GroupsPageBody = () => {
 };
 
 const GroupCard = ({
+	groupId,
 	image_src,
 	groupName,
 	numMembers,
 	balance,
 }: {
+	groupId: string;
 	image_src: string | null;
 	groupName: string;
 	numMembers: number;
 	balance: number;
 }) => {
-	const handleClick = () => {};
+	const navigate = useNavigate();
+
+	const handleClick = () => {
+		navigate(`/groups/${groupId}`);
+	};
 
 	const BalanceText = () => {
 		if (balance > 0) {
-			return <span className='text-font-green text-sm font-semibold break-all text-clip overflow-hidden'>+RM {balance}</span>;
+			return (
+				<span className='text-font-green text-sm font-semibold break-all text-clip overflow-hidden'>
+					+RM {balance}
+				</span>
+			);
 		} else if (balance < 0) {
 			return (
-				<span className='text-font-red text-sm font-semibold break-all text-clip overflow-hidden'>-RM {balance.toString().replace("-", "")}</span>
+				<span className='text-font-red text-sm font-semibold break-all text-clip overflow-hidden'>
+					-RM {balance.toString().replace("-", "")}
+				</span>
 			);
 		} else {
-			return <span className='text-font-white text-sm font-semibold break-all text-clip overflow-hidden'>Settled!</span>;
+			return (
+				<span className='text-font-white text-sm font-semibold break-all text-clip overflow-hidden'>
+					Settled!
+				</span>
+			);
 		}
 	};
 
@@ -146,7 +115,9 @@ const GroupCard = ({
 						</div>
 					)}
 					<div className='flex flex-col gap-1 w-full items-start justify-start overflow-hidden'>
-						<span className='text-font-white text-lg font-semibold '>{truncateText(groupName, 25)}</span>
+						<span className='text-font-white text-lg font-semibold '>
+							{truncateText(groupName, 25)}
+						</span>
 						<div>
 							<div className='text-font-white text-sm flex flex-row gap-2 items-center'>
 								<IoPersonSharp className='text-brand-orange' />

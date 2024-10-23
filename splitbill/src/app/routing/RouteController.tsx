@@ -6,10 +6,12 @@ import ProfilePage from "../../modules/features/profile/ProfilePage";
 import FriendsPage from "../../modules/features/friends/FriendsPage";
 import CreateProfilePage from "../../modules/features/login/create-profile/CreateProfilePage";
 import AddFriendPage from "../../modules/features/friends/add-friends/AddFriendPage";
+import SelectedGroupPage from "../../modules/features/groups/selected-group/SelectedGroupPage";
 
 export const RouteController = () => {
 	return (
 		<Routes>
+			{/* Login */}
 			<Route
 				path='/'
 				element={<LoginPage />}
@@ -22,6 +24,8 @@ export const RouteController = () => {
 					</ProtectedRoutes>
 				}
 			/>
+
+			{/* Groups */}
 			<Route
 				path='/groups'
 				element={
@@ -31,6 +35,16 @@ export const RouteController = () => {
 				}
 			/>
 			<Route
+				path='/groups/:groupId'
+				element={
+					<ProtectedRoutes>
+						<SelectedGroupPage />
+					</ProtectedRoutes>
+				}
+			/>
+
+			{/* Profile */}
+			<Route
 				path='/profile'
 				element={
 					<ProtectedRoutes>
@@ -38,6 +52,8 @@ export const RouteController = () => {
 					</ProtectedRoutes>
 				}
 			/>
+
+			{/* Friends */}
 			<Route
 				path='/friends'
 				element={
