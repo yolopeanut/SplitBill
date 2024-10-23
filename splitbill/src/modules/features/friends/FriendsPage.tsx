@@ -65,6 +65,8 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 		return <div className='text-font-white text-lg font-semibold'>Error loading data</div>;
 	}
 
+	console.log(searchQuery);
+
 	return (
 		<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
 			{/* Show only 2 friend requests at a time */}
