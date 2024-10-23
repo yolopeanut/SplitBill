@@ -14,6 +14,7 @@ const useSearchFriends = (searchQuery: string) => {
 			if (isLoading || !user || !session || !supabase) {
 				return [];
 			}
+			searchQuery = searchQuery.trim().toLowerCase();
 			const data = await searchNewFriends(searchQuery);
 
 			data.map((friend: IAllUsersTable) => {

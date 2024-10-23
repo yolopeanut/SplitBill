@@ -176,6 +176,7 @@ const FriendCard = ({
 	const sendFriendRequest = useSendFriendRequest();
 	const deleteFriendRequest = useDeleteFriendRequest();
 	const isRequested = useGetAllSentFriendRequests();
+	console.log("helloo");
 
 	const FriendRequestButton = () => {
 		if (isRequested.data?.some((request) => request.id === id)) {
@@ -190,18 +191,19 @@ const FriendCard = ({
 					<FaUserCheck size={30} />
 				</button>
 			);
+		} else {
+			return (
+				<button
+					className='btn btn-primary text-brand-orange border-none'
+					onClick={() => {
+						sendFriendRequest({ p_receiver_id: id });
+						isRequested.refetch();
+					}}
+				>
+					<IoMdPersonAdd size={30} />
+				</button>
+			);
 		}
-		return (
-			<button
-				className='btn btn-primary text-brand-orange border-none'
-				onClick={() => {
-					sendFriendRequest({ p_receiver_id: id });
-					isRequested.refetch();
-				}}
-			>
-				<IoMdPersonAdd size={30} />
-			</button>
-		);
 	};
 
 	return (

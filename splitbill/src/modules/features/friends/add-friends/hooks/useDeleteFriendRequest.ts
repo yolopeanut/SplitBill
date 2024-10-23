@@ -10,6 +10,7 @@ const useDeleteFriendRequest = () => {
 
 			await deleteFriendRequestDB(user.id, p_receiver_id);
 		},
+		retryDelay: 1000,
 	});
 	return deleteFriendRequest;
 };
