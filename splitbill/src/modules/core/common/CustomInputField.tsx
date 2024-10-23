@@ -1,11 +1,20 @@
-export const CustomInputField = () => {
+import { DebounceInput } from "react-debounce-input";
+import { Dispatch, SetStateAction } from "react";
+export const CustomInputField = ({
+	setSearchQuery,
+}: {
+	setSearchQuery: Dispatch<SetStateAction<string>>;
+}) => {
 	return (
 		<div className='relative'>
-			<input
-				type='text'
-				id='floating_outlined'
+			<DebounceInput
+				element='input'
+				debounceTimeout={500}
 				className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-input-search-gray appearance-auto dark:text-white dark:border-input-search-gray dark:focus:border-input-search-gray focus:outline-none focus:ring-0 focus:border-input-search-gray peer'
 				placeholder=' '
+				onChange={(e) => {
+					setSearchQuery(e.target.value);
+				}}
 			/>
 			<label
 				htmlFor='floating_outlined'

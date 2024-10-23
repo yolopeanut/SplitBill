@@ -8,13 +8,15 @@ import { useGetAllFriendRequests } from "./hooks/useGetFriendRequests";
 import Loading from "../../core/common/Loading";
 import { useAcceptFriendRequest } from "./hooks/useAcceptFriendRequest";
 import { CustomInputField } from "../../core/common/CustomInputField";
+import { useNavigate } from "react-router-dom";
 
 const FriendsPage = () => {
+	const [searchQuery, setSearchQuery] = useState("");
 	return (
 		<>
 			<div className='flex flex-col gap-4 px-4 pt-8'>
-				<FriendsPageHeader />
-				<FriendsPageBody />
+				<FriendsPageHeader setSearchQuery={setSearchQuery} />
+				<FriendsPageBody searchQuery={searchQuery} />
 			</div>
 		</>
 	);
@@ -22,12 +24,22 @@ const FriendsPage = () => {
 
 export default FriendsPage;
 
-const FriendsPageHeader = () => {
+const FriendsPageHeader = ({
+	setSearchQuery,
+}: {
+	setSearchQuery: Dispatch<SetStateAction<string>>;
+}) => {
+	const navigate = useNavigate();
 	return (
 		<div className='flex flex-col gap-4 h-28'>
 			<div className='flex flex-row justify-between items-center'>
 				<span className='text-font-white text-3xl font-semibold'>Friends</span>
-				<button className='btn border-none p-0'>
+				<button
+					className='btn border-none p-0'
+					onClick={() => {
+						navigate("/friends/add-friends");
+					}}
+				>
 					<IoPersonAddSharp
 						size={30}
 						className='text-brand-orange'
@@ -35,12 +47,12 @@ const FriendsPageHeader = () => {
 				</button>
 			</div>
 
-			<CustomInputField />
+			<CustomInputField setSearchQuery={setSearchQuery} />
 		</div>
 	);
 };
 
-const FriendsPageBody = () => {
+const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 	const [showMore, setShowMore] = useState(false);
 	const getFriends = useGetAllFriends();
 	const getFriendRequests = useGetAllFriendRequests();
@@ -165,7 +177,7 @@ const FriendCard = ({
 					/>
 				</div>
 
-				<div className='flex flex-col gap-1 justify-center'>
+				<div className='flex flex-col gap-1 justify-top'>
 					<span className='text-font-white text-lg font-semibold'>{name}</span>
 					<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
 				</div>
