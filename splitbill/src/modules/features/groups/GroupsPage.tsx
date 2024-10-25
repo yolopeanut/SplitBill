@@ -2,7 +2,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { PiCurrencyCircleDollarFill } from "react-icons/pi";
 import { getFirstLetter, truncateText } from "../../core/common/commonFunctions";
 import { useNavigate } from "react-router-dom";
-import { useGetOwnGroups } from "./selected-group/hooks/useGetOwnGroups";
+import { useGetOwnGroups } from "./hooks/useGetOwnGroups";
 import Loading from "../../core/common/Loading";
 
 const GroupsPage = () => {

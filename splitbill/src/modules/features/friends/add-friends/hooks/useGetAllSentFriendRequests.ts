@@ -23,3 +23,5 @@ export const useGetAllSentFriendRequests = () => {
 
 	return getFriendRequests as UseQueryResult<IAllUsersTable[]>;
 };
+
+export default useGetAllSentFriendRequests;

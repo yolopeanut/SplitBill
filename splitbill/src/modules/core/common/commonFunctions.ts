@@ -52,3 +52,11 @@ export async function handleImageUpload(event: React.ChangeEvent<HTMLInputElemen
 		console.log(error);
 	}
 }
+
+export function formatCurrency(amount: number, currency: string) {
+	return `${currency} ${amount.toFixed(2)}`;
+}
+
+export const numberWithLeadingZeros = (num: number, totalLength: number): string => {
+	return num.toString().padStart(totalLength, "0");
+};

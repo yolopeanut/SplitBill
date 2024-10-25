@@ -1,4 +1,4 @@
-import { IAllUsersTable } from "./all_usersTable";
+import { IAllFriendsTable, IAllUsersTable } from "./all_usersTable";
 
 interface IAllGroupsTable {
 	id: string;
@@ -8,12 +8,13 @@ interface IAllGroupsTable {
 	img_url: string | null;
 	currency: string;
 	invite_link: string | null;
-	balance: number | null;
+	to_pay: number | null;
+	to_receive: number | null;
 	num_members: number | null;
 
 	members:
 		| {
-				user: IAllUsersTable;
+				user: IAllFriendsTable;
 				joined_at: string | null;
 		  }[]
 		| null;

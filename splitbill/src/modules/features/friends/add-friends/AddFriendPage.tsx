@@ -1,19 +1,26 @@
+// react
 import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CustomInputField } from "../../../core/common/CustomInputField";
-import { IoArrowBack } from "react-icons/io5";
-import { FaPeoplePulling } from "react-icons/fa6";
-import useSearchFriends from "./hooks/useSearchFriends";
+
+// common
 import Loading from "../../../core/common/Loading";
 import { getInitials } from "../../../core/common/commonFunctions";
+import { CustomInputField } from "../../../core/common/CustomInputField";
+
+// custom hooks
 import useUserContext from "../../login/hooks/useUserContext";
-import { IoMdPersonAdd } from "react-icons/io";
 import useSendFriendRequest from "./hooks/useSendFriendRequest";
-import { useGetAllSentFriendRequests } from "./hooks/useGetAllSentFriendRequests";
-import { FaUserCheck } from "react-icons/fa6";
+import useSearchFriends from "./hooks/useSearchFriends";
 import useDeleteFriendRequest from "./hooks/useDeleteFriendRequest";
-import { useGetAllFriends } from "../hooks/useGetAllFriends";
+import useGetAllSentFriendRequests from "./hooks/useGetAllSentFriendRequests";
+import useGetAllFriends from "../hooks/useGetAllFriends";
+
+// icons
 import { FaPersonCircleQuestion } from "react-icons/fa6";
+import { IoMdPersonAdd } from "react-icons/io";
+import { FaUserCheck } from "react-icons/fa6";
+import { IoArrowBack } from "react-icons/io5";
+import { FaPeoplePulling } from "react-icons/fa6";
 
 const AddFriendPage = () => {
 	const [searchQuery, setSearchQuery] = useState("");

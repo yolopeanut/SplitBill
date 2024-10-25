@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { IAllFriendsTable } from "../../../core/interfaces/all_friendsTable";
+import { IAllFriendsTable } from "../../../core/interfaces/all_usersTable";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import getOwnFriendsOnly from "../../../core/database_functions/getOwnFriendsOnly";
 import getPublicUrl from "../../../core/database_functions/getPublicUrl";
@@ -30,3 +30,5 @@ export const useGetAllFriends = () => {
 
 	return getAllFriends as UseQueryResult<IAllFriendsTable[]>;
 };
+
+export default useGetAllFriends;

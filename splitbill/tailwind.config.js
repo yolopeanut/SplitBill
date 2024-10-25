@@ -19,6 +19,8 @@ export default {
 			"input-box-gray": "#2A2A2A",
 
 			"card-gray": "#333333",
+			"card-gray-dark": "#2A2A2A",
+
 			"button-gray": "#262626",
 			"outline-gray": "#444343",
 		},

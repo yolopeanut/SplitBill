@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { IAllGroupsTable } from "../../../../core/interfaces/all_GroupsTable";
-import getOwnGroupsDB from "../../../../core/database_functions/get_own_groups_only";
-import useAuthContext from "../../../../core/auth/hooks/useAuthContext";
-import { supabase } from "../../../../../config/Supabase";
-import getPublicUrl from "../../../../core/database_functions/getPublicUrl";
+import { IAllGroupsTable } from "../../../core/interfaces/all_GroupsTable";
+import getOwnGroupsDB from "../../../core/database_functions/get_own_groups_only";
+import useAuthContext from "../../../core/auth/hooks/useAuthContext";
+import { supabase } from "../../../../config/Supabase";
+import getPublicUrl from "../../../core/database_functions/getPublicUrl";
 
 export const useGetOwnGroups = () => {
 	const { user, session, isLoading } = useAuthContext();
