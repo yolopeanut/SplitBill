@@ -46,7 +46,7 @@ const GroupsPageBody = () => {
 								image_src={group.img_url}
 								groupName={group.name}
 								numMembers={group.num_members ?? 0}
-								balance={group.balance ?? 0}
+								balance={group.to_pay ?? 0 + (group.to_receive ?? 0)}
 							/>
 						))}
 					</div>

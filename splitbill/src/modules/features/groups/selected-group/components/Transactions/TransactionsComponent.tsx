@@ -60,6 +60,8 @@ const Transactions = () => {
 	const handleAddTransactionOnClick = () => {
 		console.log("Add transaction button clicked");
 	};
+
+	console.log(MockData);
 	return (
 		<div className='flex flex-col justify-center items-center gap-4 w-full h-full relative'>
 			<TransactionCard />
