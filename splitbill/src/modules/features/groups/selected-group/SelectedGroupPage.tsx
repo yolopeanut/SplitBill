@@ -70,7 +70,7 @@ const SelectedGroupPage = () => {
 
 	return (
 		<>
-			<div className='flex flex-col gap-4 relative p-1 h-full'>
+			<div className='flex flex-col gap-4 relative p-1 h-full overflow-y-auto'>
 				<SelectedGroupHeader groupName={mockData.name} />
 				<SelectedGroupBody />
 			</div>

@@ -3,9 +3,10 @@ import { BiSolidWallet } from "react-icons/bi";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { NAV_BAR_PATHS_DISABLED, NAV_BAR_PATHS } from "../../../app/constants";
-import useUserContext from "../../features/login/hooks/useUserContext";
-import { getInitials } from "./commonFunctions";
+
+import useUserContext from "../../../../modules/features/login/hooks/useUserContext";
+import { getInitials } from "../commonFunctions";
+import { NAV_BAR_PATHS, NAV_BAR_PATHS_DISABLED } from "../../constants/NavBarSettings";
 
 const BottomNav = () => {
 	const [activeTab, setActiveTab] = useState<number>(-1);

@@ -1,6 +1,6 @@
 import useAuthContext from "../../../modules/core/auth/hooks/useAuthContext";
 import { Navigate, useLocation } from "react-router-dom";
-import Loading from "../../../modules/core/common/Loading";
+import Loading from "../../../modules/core/common/components/Loading";
 import useUserContext from "../../../modules/features/login/hooks/useUserContext";
 
 export const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {

@@ -3,7 +3,7 @@ import { PiCurrencyCircleDollarFill } from "react-icons/pi";
 import { getFirstLetter, truncateText } from "../../core/common/commonFunctions";
 import { useNavigate } from "react-router-dom";
 import { useGetOwnGroups } from "./hooks/useGetOwnGroups";
-import Loading from "../../core/common/Loading";
+import Loading from "../../core/common/components/Loading";
 
 const GroupsPage = () => {
 	return (

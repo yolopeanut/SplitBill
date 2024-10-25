@@ -5,9 +5,9 @@ import { BsStarFill } from "react-icons/bs";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useGetAllFriends } from "./hooks/useGetAllFriends";
 import { useGetAllFriendRequests } from "./hooks/useGetFriendRequests";
-import Loading from "../../core/common/Loading";
+import Loading from "../../core/common/components/Loading";
 import { useAcceptFriendRequest } from "./hooks/useAcceptFriendRequest";
-import { CustomInputField } from "../../core/common/CustomInputField";
+import { CustomInputField } from "../../core/common/components/CustomInputField";
 import { useNavigate } from "react-router-dom";
 
 const FriendsPage = () => {

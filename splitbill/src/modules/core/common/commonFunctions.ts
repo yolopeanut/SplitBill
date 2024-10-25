@@ -1,4 +1,6 @@
 import imageCompression from "browser-image-compression";
+import ExpenseCategory from "../enums/ExpenseCategoryEnum";
+import { expenseCategories } from "../constants/ExpenseCategories";
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -59,4 +61,8 @@ export function formatCurrency(amount: number, currency: string) {
 
 export const numberWithLeadingZeros = (num: number, totalLength: number): string => {
 	return num.toString().padStart(totalLength, "0");
+};
+
+export const getCategoryTailwindColor = (category: ExpenseCategory) => {
+	return expenseCategories.find((categories) => categories.label === category)?.color;
 };

@@ -2,7 +2,7 @@ import useAuthContext from "../../core/auth/hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { GiCoinflip } from "react-icons/gi";
 import { FcGoogle } from "react-icons/fc";
-import Loading from "../../core/common/Loading";
+import Loading from "../../core/common/components/Loading";
 import useUserContext from "./hooks/useUserContext";
 import { useEffect } from "react";
 

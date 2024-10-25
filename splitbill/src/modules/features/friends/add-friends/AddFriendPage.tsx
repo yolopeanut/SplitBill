@@ -3,9 +3,9 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // common
-import Loading from "../../../core/common/Loading";
+import Loading from "../../../core/common/components/Loading";
 import { getInitials } from "../../../core/common/commonFunctions";
-import { CustomInputField } from "../../../core/common/CustomInputField";
+import { CustomInputField } from "../../../core/common/components/CustomInputField";
 
 // custom hooks
 import useUserContext from "../../login/hooks/useUserContext";

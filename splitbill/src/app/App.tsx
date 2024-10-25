@@ -2,7 +2,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import ProviderController from "./ProviderController";
 import { RouteController } from "./routing/RouteController";
-import BottomNav from "../modules/core/common/BottomNav";
+import BottomNav from "../modules/core/common/components/BottomNav";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "../config/ReactQuery";
 
