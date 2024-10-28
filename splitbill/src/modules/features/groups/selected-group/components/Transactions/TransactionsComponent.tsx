@@ -2,6 +2,7 @@ import { PiReceiptFill } from "react-icons/pi";
 import ExpenseCategory from "../../../../../core/enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../../../../../core/constants/ExpenseCategories";
 import { formatCurrency } from "../../../../../core/common/commonFunctions";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MockData = {
 	transactions: [
@@ -190,8 +191,11 @@ const FloatingButton = ({
 };
 
 const Transactions = () => {
+	const navigate = useNavigate();
+	const { groupId } = useParams();
+
 	const handleAddTransactionOnClick = () => {
-		console.log("Add transaction button clicked");
+		navigate(`/groups/${groupId}/create-transaction`);
 	};
 
 	console.log(MockData);
