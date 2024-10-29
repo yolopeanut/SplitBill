@@ -54,7 +54,7 @@ export const AmountInput = ({ register }: { register: UseFormRegister<FormValues
 	return (
 		<>
 			{/* Amount */}
-			<div className='flex flex-col gap-2'>
+			<div className='flex flex-col gap-2 pb-4'>
 				<span className='text-font-white text-sm font-semibold'>Amount</span>
 				<div className='flex flex-row gap-2'>
 					<select

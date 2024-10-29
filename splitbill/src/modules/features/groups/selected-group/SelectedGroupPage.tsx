@@ -12,11 +12,12 @@ import { IAllFriendsTable, IAllUsersTable } from "../../../core/interfaces/all_u
 import { formatCurrency, getInitials } from "../../../core/common/commonFunctions";
 
 // components
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Badges from "./components/BadgesComponent";
 import Transactions from "./components/Transactions/TransactionsComponent";
 import Balances from "./components/Balances/BalancesComponent";
 import Analytics from "./components/Analytics/AnalyticsComponent";
+import { useGroupsContext } from "../hooks/useGroupsContext";
 
 const mockData = {
 	id: "1",
@@ -63,6 +64,11 @@ const mockData = {
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
 	const { groupId } = useParams();
+	const { setSelectedGroupId } = useGroupsContext();
+	useEffect(() => {
+		setSelectedGroupId(groupId || "");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [groupId]);
 
 	if (!groupId) {
 		return <div>No group ID</div>;

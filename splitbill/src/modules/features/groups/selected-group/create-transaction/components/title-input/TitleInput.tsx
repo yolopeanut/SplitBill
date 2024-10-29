@@ -5,7 +5,7 @@ export const TitleInput = ({ register }: { register: UseFormRegister<FormValues>
 	return (
 		<>
 			{/* Title */}
-			<div className='flex flex-col gap-2'>
+			<div className='flex flex-col gap-2 pb-4'>
 				<span className='text-font-white text-sm font-semibold'>Title</span>
 				<input
 					type='text'

@@ -54,7 +54,7 @@ const CreateTransactionHeader = () => {
 };
 
 const CreateTransactionBody = () => {
-	const { register, handleSubmit } = useForm<FormValues>({
+	const { register, handleSubmit, control } = useForm<FormValues>({
 		defaultValues: {
 			currency: "MYR",
 		},
@@ -71,11 +71,11 @@ const CreateTransactionBody = () => {
 				className='h-full'
 			>
 				<div className='flex flex-col gap-8 w-full h-full'>
-					<div className='flex flex-col gap-8 h-full pb-80 overflow-y-auto'>
+					<div className='flex flex-col h-full pb-80 overflow-y-auto'>
 						<TitleInput register={register} />
 						<AmountInput register={register} />
-						<CategoryInput register={register} />
-						<PaidByInput register={register} />
+						<CategoryInput control={control} />
+						<PaidByInput control={control} />
 						<SplitByInput register={register} />
 
 						<button

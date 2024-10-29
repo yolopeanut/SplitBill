@@ -6,7 +6,7 @@ export const SplitByInput = ({ register }: { register: UseFormRegister<FormValue
 	return (
 		<>
 			{/* Split By */}
-			<div className='flex flex-col gap-2 w-full'>
+			<div className='flex flex-col gap-2 w-full pb-8'>
 				<span className='text-font-white text-sm font-semibold'>Split By</span>
 				<select
 					className='select select-ghost w-full outline-none border-none bg-input-box-gray'
