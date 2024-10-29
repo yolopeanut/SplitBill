@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 // react-icons
 import { IoArrowBack } from "react-icons/io5";
 import { FaShareSquare } from "react-icons/fa";
-import { SlOptions } from "react-icons/sl";
 
 // interfaces
 import { IAllGroupsTable } from "../../../core/interfaces/all_GroupsTable";
@@ -18,6 +17,7 @@ import Transactions from "./components/Transactions/TransactionsComponent";
 import Balances from "./components/Balances/BalancesComponent";
 import Analytics from "./components/Analytics/AnalyticsComponent";
 import { useGroupsContext } from "../hooks/useGroupsContext";
+import DropdownComponent from "./components/DropdownComponent";
 
 const mockData = {
 	id: "1",
@@ -60,6 +60,14 @@ const mockData = {
 		},
 	] as IAllUsersTable[],
 } as IAllGroupsTable;
+
+const editGroup = () => {
+	console.log("edit group");
+};
+
+const leaveGroup = () => {
+	console.log("leave group");
+};
 
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
@@ -127,14 +135,14 @@ const SelectedGroupHeader = ({ groupName }: { groupName: string }) => {
 						{groupName}
 					</span>
 
-					<div className='flex flex-row gap-4'>
+					<div className='flex flex-row items-center'>
 						<FaShareSquare
 							size={20}
 							className='text-brand-orange'
 						/>
-						<SlOptions
-							size={20}
-							className='text-brand-orange'
+						<DropdownComponent
+							editGroup={editGroup}
+							leaveGroup={leaveGroup}
 						/>
 					</div>
 				</div>
