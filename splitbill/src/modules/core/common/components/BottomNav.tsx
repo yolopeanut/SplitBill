@@ -21,7 +21,12 @@ const BottomNav = () => {
 
 	useEffect(() => {
 		// Set the active tab based on the current path
-		setActiveTab(NAV_BAR_PATHS.indexOf(location.pathname));
+		const currentPath = location.pathname;
+
+		// Check if the current path starts with any of the base paths
+		const activeTabIndex = NAV_BAR_PATHS.findIndex((path) => currentPath.startsWith(path));
+
+		setActiveTab(activeTabIndex);
 	}, [location.pathname]);
 
 	if (isDisabled) return null;
