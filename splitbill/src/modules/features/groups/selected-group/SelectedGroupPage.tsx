@@ -39,6 +39,8 @@ const handleLeaveGroupDropDown = () => {
 
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
+	const { setGroupUsers, setSelectedGroupId, setSelectedGroup } = useGroupsContext();
+
 	const { groupId } = useParams();
 	const { data: selectedGroup, isLoading } = useGetSelectedGroup(groupId || "");
 	const { data: allTransactions, isLoading: isLoadingAllTransactions } = useGetAllTransactions(
@@ -48,7 +50,6 @@ const SelectedGroupPage = () => {
 		group_id: groupId || "",
 	});
 
-	const { setGroupUsers, setSelectedGroupId } = useGroupsContext();
 	useEffect(() => {
 		if (groupUsers) {
 			setGroupUsers(groupUsers);
@@ -56,7 +57,10 @@ const SelectedGroupPage = () => {
 		if (groupId) {
 			setSelectedGroupId(groupId);
 		}
-	}, [groupUsers, setGroupUsers, groupId, setSelectedGroupId]);
+		if (selectedGroup) {
+			setSelectedGroup(selectedGroup);
+		}
+	}, [groupUsers, setGroupUsers, groupId, setSelectedGroupId, selectedGroup, setSelectedGroup]);
 
 	// If loading, show loading screen
 	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers) {

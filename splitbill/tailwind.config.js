@@ -22,7 +22,9 @@ export default {
 			"card-gray-dark": "#2A2A2A",
 
 			"button-gray": "#262626",
+
 			"outline-gray": "#444343",
+			"outline-red": "#F12020",
 		},
 		fontFamily: {
 			sans: ["DM Sans"],

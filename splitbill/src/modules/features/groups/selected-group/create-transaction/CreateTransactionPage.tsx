@@ -1,6 +1,6 @@
 // React
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 // Icons
 import { IoArrowBack } from "react-icons/io5";
@@ -11,8 +11,19 @@ import CategoryInput from "./components/category-input/CategoryInput";
 import PaidByInput from "./components/paid-by-input/PaidByInput";
 import SplitByInput from "./components/split-by-input/SplitByInput";
 import TitleInput from "./components/title-input/TitleInput";
+import { useEffect } from "react";
 
 const CreateTransactionPage = () => {
+	const navigate = useNavigate();
+	const { groupId } = useParams();
+
+	// Handling if the groupId is not found
+	useEffect(() => {
+		if (!groupId) {
+			navigate(`/groups/${groupId}`);
+		}
+	}, [groupId, navigate]);
+
 	return (
 		<>
 			<div className='flex flex-col gap-4 p-4 h-full'>
