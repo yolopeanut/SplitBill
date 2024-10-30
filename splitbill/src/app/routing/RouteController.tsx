@@ -7,8 +7,8 @@ import FriendsPage from "../../modules/features/friends/FriendsPage";
 import CreateProfilePage from "../../modules/features/login/create-profile/CreateProfilePage";
 import AddFriendPage from "../../modules/features/friends/add-friends/AddFriendPage";
 import SelectedGroupPage from "../../modules/features/groups/selected-group/SelectedGroupPage";
-import CreateTransactionPage from "../../modules/features/groups/selected-group/create-transaction/CreateTransactionPage";
 import EditGroupPage from "../../modules/features/groups/selected-group/edit-group/EditGroupPage";
+import CreateTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/create-transaction/CreateTransactionPage";
 
 export const RouteController = () => {
 	return (

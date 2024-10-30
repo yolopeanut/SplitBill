@@ -5,13 +5,13 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 // Icons
 import { IoArrowBack } from "react-icons/io5";
 
-import FormValues from "../../../../core/interfaces/createTransactionForm";
+import { useEffect } from "react";
+import FormValues from "../../../../../../core/interfaces/createTransactionForm";
+import TitleInput from "./components/title-input/TitleInput";
 import AmountInput from "./components/amount-input/AmountInput";
 import CategoryInput from "./components/category-input/CategoryInput";
 import PaidByInput from "./components/paid-by-input/PaidByInput";
 import SplitByInput from "./components/split-by-input/SplitByInput";
-import TitleInput from "./components/title-input/TitleInput";
-import { useEffect } from "react";
 
 const CreateTransactionPage = () => {
 	const navigate = useNavigate();

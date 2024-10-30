@@ -30,7 +30,7 @@ export default {
 			sans: ["DM Sans"],
 		},
 	},
-	plugins: [require("daisyui")],
+	plugins: [require("daisyui"), require("@tailwindcss/forms")],
 
 	daisyui: {
 		themes: [],

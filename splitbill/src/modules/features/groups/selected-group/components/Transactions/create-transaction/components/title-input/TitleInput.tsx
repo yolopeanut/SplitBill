@@ -1,6 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import FormValues from "../../../../../../core/interfaces/createTransactionForm";
-
+import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
 export const TitleInput = ({ register }: { register: UseFormRegister<FormValues> }) => {
 	return (
 		<>

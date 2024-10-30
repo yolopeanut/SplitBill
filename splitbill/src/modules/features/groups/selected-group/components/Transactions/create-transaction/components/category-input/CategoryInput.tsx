@@ -1,18 +1,13 @@
-import { Controller, ControllerRenderProps, Control } from "react-hook-form";
-import FormValues from "../../../../../../core/interfaces/createTransactionForm";
-import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
-import { useGroupsContext } from "../../../../hooks/useGroupsContext";
+import { Controller, Control, ControllerRenderProps } from "react-hook-form";
+import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
+import ExpenseCategory from "../../../../../../../../core/enums/ExpenseCategoryEnum";
 import Drawer from "react-modern-drawer";
-import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useState } from "react";
+import { expenseCategories } from "../../../../../../../../core/constants/ExpenseCategories";
 
-export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
+export const CategoryInput = ({ control }: { control: Control<FormValues> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const [selectedUser, setSelectedUser] = useState<IAllUsersTable | null>(null);
-
-	const { selectedGroupId } = useGroupsContext();
-
-	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
+	const [selectedCategory, setSelectedCategory] = useState<ExpenseCategory | null>(null);
 
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
@@ -20,29 +15,29 @@ export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
 
 	return (
 		<>
-			{/* Paid By Input Box */}
+			{/* Category Input Box */}
 			<div
 				className='flex flex-col gap-2 w-full pb-4'
 				onClick={handleDrawerOpen}
 			>
-				<span className='text-font-white text-sm font-semibold'>Paid By</span>
+				<span className='text-font-white text-sm font-semibold'>Category</span>
 				<div className='w-full h-20 bg-card-gray-dark rounded-lg flex items-center px-4'>
-					{selectedUser ? (
-						<UserCard
-							user={selectedUser}
+					{selectedCategory ? (
+						<CategoryCard
+							category={selectedCategory}
 							field={undefined}
-							setSelectedUser={undefined}
+							setSelectedCategory={undefined}
 							setIsDrawerOpen={undefined}
 						/>
 					) : (
-						"Select User"
+						"Select Category"
 					)}
 				</div>
 			</div>
 
-			{/* Paid By Drawer Controller */}
+			{/* Category Drawer Controller */}
 			<Controller
-				name='paidBy'
+				name='category'
 				control={control}
 				render={({ field }) => (
 					<Drawer
@@ -71,17 +66,17 @@ export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
 									htmlFor='floating_outlined'
 									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
-									Search User
+									Search Category
 								</label>
 							</div>
 
-							{/* User Cards */}
-							{groupUsers?.map((user) => (
-								<UserCard
-									user={user}
-									key={user.id}
+							{/* Category Cards */}
+							{Object.values(ExpenseCategory).map((category) => (
+								<CategoryCard
+									category={category}
+									key={category}
 									field={field}
-									setSelectedUser={setSelectedUser}
+									setSelectedCategory={setSelectedCategory}
 									setIsDrawerOpen={setIsDrawerOpen}
 								/>
 							))}
@@ -93,40 +88,40 @@ export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
 	);
 };
 
-export default PaidByInput;
+export default CategoryInput;
 
-const UserCard = ({
-	user,
+const CategoryCard = ({
+	category,
 	field,
-	setSelectedUser,
+	setSelectedCategory,
 	setIsDrawerOpen,
 }: {
-	user: IAllUsersTable;
-	field: ControllerRenderProps<FormValues, "paidBy"> | undefined;
-	setSelectedUser: Dispatch<SetStateAction<IAllUsersTable | null>> | undefined;
+	category: ExpenseCategory;
+	field: ControllerRenderProps<FormValues, "category"> | undefined;
+	setSelectedCategory: Dispatch<SetStateAction<ExpenseCategory | null>> | undefined;
 	setIsDrawerOpen: Dispatch<SetStateAction<boolean>> | undefined;
 }) => {
+	const categoryData = expenseCategories.find((categories) => categories.label === category);
+	const categoryIcon = categoryData?.icon;
+	const categoryColor = categoryData?.color;
 	return (
 		<>
 			<div
 				className='flex flex-row justify-between items-center w-full gap-4 cursor-pointer'
 				onClick={() => {
-					field?.onChange(user.id);
-					setSelectedUser?.(user);
+					field?.onChange(category);
+					setSelectedCategory?.(category);
 					setIsDrawerOpen?.(false);
 				}}
 			>
 				<div className='flex flex-row items-center gap-6'>
-					{user.profile_img_src ? (
-						<img
-							src={user.profile_img_url || ""}
-							alt='user profile'
-							className='w-12 h-12 rounded-full'
-						/>
-					) : (
-						<span className='text-font-black text-lg font-semibold'>{user.name.charAt(0)}</span>
-					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+					<div
+						className='flex justify-center items-center rounded-full w-12 h-12 text-font-black'
+						style={{ backgroundColor: categoryColor }}
+					>
+						{categoryIcon}
+					</div>
+					<span className='text-font-white text-lg font-semibold'>{category}</span>
 				</div>
 			</div>
 		</>

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { UseFormRegister } from "react-hook-form";
-import FormValues from "../../../../../../core/interfaces/createTransactionForm";
-import Currencies from "../../../../../../core/enums/CurrenciesEnum";
+
 import { IoIosCalculator } from "react-icons/io";
+import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
+import Currencies from "../../../../../../../../core/enums/CurrenciesEnum";
 
 const NumericInput = ({
 	register,

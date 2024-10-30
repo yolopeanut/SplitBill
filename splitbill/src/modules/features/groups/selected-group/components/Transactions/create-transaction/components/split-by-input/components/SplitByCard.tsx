@@ -1,5 +1,5 @@
 import { ControllerRenderProps } from "react-hook-form";
-import FormValues from "../../../../../../../core/interfaces/createTransactionForm";
+import FormValues from "../../../../../../../../../core/interfaces/createTransactionForm";
 
 const SplitByCard = ({
 	type,
