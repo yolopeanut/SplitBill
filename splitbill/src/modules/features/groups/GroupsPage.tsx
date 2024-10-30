@@ -107,10 +107,10 @@ const GroupCard = ({
 					{image_src ? (
 						<img
 							src={image_src}
-							className='w-16 h-16 rounded-full'
+							className='min-w-16 min-h-16 max-w-16 max-h-16 rounded-full'
 						/>
 					) : (
-						<div className='text-font-white text-2xl font-base flex items-center justify-center min-w-16 min-h-16 max-h-16 max-w-16 rounded-full bg-font-gray-light'>
+						<div className='text-font-white text-2xl font-base flex items-center justify-center min-w-16 min-h-16 max-w-16 max-h-16 rounded-full bg-font-gray-light'>
 							{getFirstLetter(groupName)}
 						</div>
 					)}

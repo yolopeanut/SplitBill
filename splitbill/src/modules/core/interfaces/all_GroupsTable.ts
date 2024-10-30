@@ -1,3 +1,4 @@
+import { IAllTransactionsTable } from "./all_transactionsTable";
 import { IAllFriendsTable, IAllUsersTable } from "./all_usersTable";
 
 interface IAllGroupsTable {
@@ -19,7 +20,7 @@ interface IAllGroupsTable {
 		  }[]
 		| null;
 	admins: IAllUsersTable[] | null;
-	// transaction_history: ITransactionTable[] | null;
+	transaction_history: IAllTransactionsTable[] | null;
 }
 
 export type { IAllGroupsTable };

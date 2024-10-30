@@ -76,7 +76,7 @@ const CreateTransactionBody = () => {
 						<AmountInput register={register} />
 						<CategoryInput control={control} />
 						<PaidByInput control={control} />
-						<SplitByInput register={register} />
+						<SplitByInput control={control} />
 
 						<button
 							type='submit'

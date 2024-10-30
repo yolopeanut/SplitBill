@@ -8,6 +8,7 @@ import CreateProfilePage from "../../modules/features/login/create-profile/Creat
 import AddFriendPage from "../../modules/features/friends/add-friends/AddFriendPage";
 import SelectedGroupPage from "../../modules/features/groups/selected-group/SelectedGroupPage";
 import CreateTransactionPage from "../../modules/features/groups/selected-group/create-transaction/CreateTransactionPage";
+import EditGroupPage from "../../modules/features/groups/selected-group/edit-group/EditGroupPage";
 
 export const RouteController = () => {
 	return (
@@ -41,6 +42,14 @@ export const RouteController = () => {
 				element={
 					<ProtectedRoutes>
 						<SelectedGroupPage />
+					</ProtectedRoutes>
+				}
+			/>
+			<Route
+				path='/groups/:groupId/edit-group'
+				element={
+					<ProtectedRoutes>
+						<EditGroupPage />
 					</ProtectedRoutes>
 				}
 			/>

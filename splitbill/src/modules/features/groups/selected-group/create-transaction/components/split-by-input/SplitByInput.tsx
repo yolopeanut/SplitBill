@@ -1,27 +1,126 @@
-import { UseFormRegister } from "react-hook-form";
+import { Controller, ControllerRenderProps, Control } from "react-hook-form";
 import FormValues from "../../../../../../core/interfaces/createTransactionForm";
-import ExpenseCategory from "../../../../../../core/enums/ExpenseCategoryEnum";
+import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
+import { useGroupsContext } from "../../../../hooks/useGroupsContext";
+import Drawer from "react-modern-drawer";
+import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
+import { useState } from "react";
+import SplitByCard from "./components/SplitByCard";
+import UserCard from "./components/user-card/UserCard";
 
-export const SplitByInput = ({ register }: { register: UseFormRegister<FormValues> }) => {
+export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [selectedUser, setSelectedUser] = useState<IAllUsersTable[]>([]);
+	const [selectedSplitType, setSelectedSplitType] = useState<string>("Equal");
+	const { selectedGroupId } = useGroupsContext();
+	console.log({ SplitByInput: selectedGroupId });
+
+	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
+
+	const handleDrawerOpen = () => {
+		setIsDrawerOpen(!isDrawerOpen);
+	};
+	const handleSplitTypeChange = (
+		type: string,
+		field: ControllerRenderProps<FormValues, "splitBy">
+	) => {
+		setSelectedSplitType(type);
+		field.onChange({ value: type });
+	};
+
 	return (
 		<>
-			{/* Split By */}
-			<div className='flex flex-col gap-2 w-full pb-8'>
+			{/* Split By Input Box */}
+			<div
+				className='flex flex-col gap-2 w-full pb-4'
+				onClick={handleDrawerOpen}
+			>
 				<span className='text-font-white text-sm font-semibold'>Split By</span>
-				<select
-					className='select select-ghost w-full outline-none border-none bg-input-box-gray'
-					{...register("splitBy")}
-				>
-					{Object.values(ExpenseCategory).map((category) => (
-						<option
-							key={category}
-							value={category}
-						>
-							{category}
-						</option>
-					))}
-				</select>
+				<div className='w-full h-20 bg-card-gray-dark rounded-lg flex flex-col items-center px-4'>
+					<div className='text-font-white text-sm font-semibold'>{selectedSplitType}</div>
+					{selectedUser.length > 0
+						? selectedUser.map((user) => (
+								<UserCard
+									user={user}
+									field={undefined}
+									selectedSplitType={undefined}
+									setSelectedUser={undefined}
+								/>
+						  ))
+						: "Select User"}
+				</div>
 			</div>
+
+			{/* Split By Drawer Controller */}
+			<Controller
+				name='splitBy'
+				control={control}
+				render={({ field }) => (
+					<Drawer
+						open={isDrawerOpen}
+						onClose={handleDrawerOpen}
+						direction='bottom'
+						className='rounded-t-lg h-full w-full'
+						size='80%'
+						lockBackgroundScroll={true}
+						style={{ backgroundColor: "#1F1F1F" }}
+						duration={400}
+					>
+						<div className='flex flex-col gap-4 p-8 pt-4 h-full overflow-y-auto pb-20'>
+							{/* Swipe to close */}
+							<div className='border-brand-orange border-2 rounded-lg w-14 self-center'></div>
+
+							{/* Search Input */}
+							<div className='relative'>
+								<input
+									type='text'
+									id='floating_outlined'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									placeholder=' '
+								/>
+								<label
+									htmlFor='floating_outlined'
+									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+								>
+									Search User
+								</label>
+							</div>
+
+							<div className='flex flex-row gap-4'>
+								<SplitByCard
+									type='Equal'
+									field={field}
+									selectedSplitType={selectedSplitType}
+									handleSplitTypeChange={handleSplitTypeChange}
+								/>
+								<SplitByCard
+									type='Custom'
+									field={field}
+									selectedSplitType={selectedSplitType}
+									handleSplitTypeChange={handleSplitTypeChange}
+								/>
+								<SplitByCard
+									type='Percentage'
+									field={field}
+									selectedSplitType={selectedSplitType}
+									handleSplitTypeChange={handleSplitTypeChange}
+								/>
+							</div>
+
+							{/* User Cards */}
+							{groupUsers?.map((user) => (
+								<UserCard
+									key={user.id}
+									user={user}
+									field={field}
+									selectedSplitType={selectedSplitType}
+									setSelectedUser={setSelectedUser}
+								/>
+							))}
+						</div>
+					</Drawer>
+				)}
+			/>
 		</>
 	);
 };

@@ -1,5 +1,5 @@
 // react
-import { useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 
 // react-icons
 import { IoArrowBack } from "react-icons/io5";
@@ -7,7 +7,6 @@ import { FaShareSquare } from "react-icons/fa";
 
 // interfaces
 import { IAllGroupsTable } from "../../../core/interfaces/all_GroupsTable";
-import { IAllFriendsTable, IAllUsersTable } from "../../../core/interfaces/all_usersTable";
 import { formatCurrency, getInitials } from "../../../core/common/commonFunctions";
 
 // components
@@ -16,77 +15,59 @@ import Badges from "./components/BadgesComponent";
 import Transactions from "./components/Transactions/TransactionsComponent";
 import Balances from "./components/Balances/BalancesComponent";
 import Analytics from "./components/Analytics/AnalyticsComponent";
-import { useGroupsContext } from "../hooks/useGroupsContext";
 import DropdownComponent from "./components/DropdownComponent";
+import { useGetSelectedGroup } from "./hooks/useGetSelectedGroup";
+import Loading from "../../../core/common/components/Loading";
+import { useGetAllTransactions } from "./hooks/useGetAllTransactions";
+import { IAllTransactionsTable } from "../../../core/interfaces/all_transactionsTable";
+import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
+import { useGroupsContext } from "../hooks/useGroupsContext";
 
-const mockData = {
-	id: "1",
-	created_at: "2021-01-01",
-	name: "yomama",
-	img_src: "1729435490604-ccdr 2024-04-29 173202.387.jpeg",
-	img_url:
-		"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzndTVBnZT77MkpzCBozPmVf-1SJtu5DNsug&s",
-	currency: "RM",
-	invite_link: null,
-	to_pay: 100,
-	to_receive: 100,
-	num_members: 1,
-	members: [
-		{
-			user: {
-				id: "1",
-				created_at: "2021-01-01",
-				name: "John Doe",
-				unique_username: "johndoe",
-				profile_img_src: "1729435490604-ccdr 2024-04-29 173202.387.jpeg",
-				profile_img_url:
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzndTVBnZT77MkpzCBozPmVf-1SJtu5DNsug&s",
-				owes_curr_user: 100,
-				friend_nickname: "John",
-				is_favourited: false,
-			} as IAllFriendsTable,
-			joined_at: "2021-01-01",
-		},
-	] as { user: IAllFriendsTable; joined_at: string }[],
-	admins: [
-		{
-			id: "1",
-			created_at: "2021-01-01",
-			name: "John Doe",
-			unique_username: "johndoe",
-			profile_img_src: "1729435490604-ccdr 2024-04-29 173202.387.jpeg",
-			profile_img_url:
-				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzndTVBnZT77MkpzCBozPmVf-1SJtu5DNsug&s",
-		},
-	] as IAllUsersTable[],
-} as IAllGroupsTable;
-
-const editGroup = () => {
-	console.log("edit group");
+const handleEditGroupDropDown = ({
+	navigate,
+	groupId,
+}: {
+	navigate: NavigateFunction;
+	groupId: string;
+}) => {
+	navigate(`/groups/${groupId}/edit-group`);
 };
 
-const leaveGroup = () => {
+const handleLeaveGroupDropDown = () => {
 	console.log("leave group");
 };
 
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
 	const { groupId } = useParams();
-	const { setSelectedGroupId } = useGroupsContext();
-	useEffect(() => {
-		setSelectedGroupId(groupId || "");
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [groupId]);
+	const { data: selectedGroup, isLoading } = useGetSelectedGroup(groupId || "");
+	const { data: allTransactions, isLoading: isLoadingAllTransactions } = useGetAllTransactions(
+		groupId || ""
+	);
+	const { data: groupUsers, isLoading: isLoadingGroupUsers } = useGetGroupUsers({
+		group_id: groupId || "",
+	});
 
-	if (!groupId) {
-		return <div>No group ID</div>;
+	const { setGroupUsers, setSelectedGroupId } = useGroupsContext();
+	useEffect(() => {
+		if (groupUsers) {
+			setGroupUsers(groupUsers);
+		}
+		if (groupId) {
+			setSelectedGroupId(groupId);
+		}
+	}, [groupUsers, setGroupUsers, groupId, setSelectedGroupId]);
+
+	// If loading, show loading screen
+	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers) {
+		return <Loading />;
 	}
 
 	return (
 		<>
 			<div className='flex flex-col gap-4 relative p-1 h-full overflow-y-auto'>
-				<SelectedGroupHeader groupName={mockData.name} />
-				<SelectedGroupBody />
+				<SelectedGroupHeader selectedGroup={selectedGroup} />
+				<SelectedGroupBody allTransactions={allTransactions} />
 			</div>
 		</>
 	);
@@ -95,20 +76,24 @@ export default SelectedGroupPage;
 //=========== Selected Group Page ============//
 
 //=========== Selected Group Header ============//
-const SelectedGroupHeader = ({ groupName }: { groupName: string }) => {
+const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable | undefined }) => {
 	const navigate = useNavigate();
 
 	const GroupImg = ({ className }: { className: string }) => {
-		if (mockData.img_url) {
+		if (selectedGroup?.img_url) {
 			return (
 				<img
-					src={mockData.img_url}
+					src={selectedGroup.img_url}
 					alt='group'
 					className={className}
 				/>
 			);
 		}
-		return <div className='w-10 h-10 rounded-full bg-brand-orange'>{getInitials(groupName)}</div>;
+		return (
+			<div className='w-10 h-10 rounded-full bg-brand-orange'>
+				{getInitials(selectedGroup?.name || "")}
+			</div>
+		);
 	};
 
 	// Styling classes for to pay, to receive, and total amounts
@@ -118,6 +103,7 @@ const SelectedGroupHeader = ({ groupName }: { groupName: string }) => {
 	return (
 		<>
 			<div className='min-h-48 flex flex-col justify-between'>
+				{/* Header and bg image */}
 				<div className='flex flex-row justify-between items-center relative px-4 py-2'>
 					<GroupImg className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]' />
 					<button
@@ -132,7 +118,7 @@ const SelectedGroupHeader = ({ groupName }: { groupName: string }) => {
 						/>
 					</button>
 					<span className='text-font-white text-xl font-semibold absolute left-1/2 -translate-x-1/2'>
-						{groupName}
+						{selectedGroup?.name}
 					</span>
 
 					<div className='flex flex-row items-center'>
@@ -141,33 +127,42 @@ const SelectedGroupHeader = ({ groupName }: { groupName: string }) => {
 							className='text-brand-orange'
 						/>
 						<DropdownComponent
-							editGroup={editGroup}
-							leaveGroup={leaveGroup}
+							editGroup={() =>
+								handleEditGroupDropDown({ navigate, groupId: selectedGroup?.id || "" })
+							}
+							leaveGroup={handleLeaveGroupDropDown}
 						/>
 					</div>
 				</div>
 
+				{/* Amounts Bar */}
 				<div className='px-4 pt-4'>
 					<div className='flex flex-row justify-between items-center py-2 bg-card-gray-dark px-4 h-16 rounded-xl'>
 						<div className='flex flex-col gap-2 items-center'>
 							<span className={amountTitleClass}>To pay</span>
 							<span className={amountClass}>
-								{formatCurrency(mockData.to_pay ? mockData.to_pay : 0, mockData.currency)}
+								{formatCurrency(
+									selectedGroup?.to_pay ? selectedGroup.to_pay : 0,
+									selectedGroup?.currency || ""
+								)}
 							</span>
 						</div>
 						<div className='flex flex-col gap-2 items-center'>
 							<span className={amountTitleClass}>To receive</span>
 							<span className={amountClass}>
-								{formatCurrency(mockData.to_receive ? mockData.to_receive : 0, mockData.currency)}
+								{formatCurrency(
+									selectedGroup?.to_receive ? selectedGroup.to_receive : 0,
+									selectedGroup?.currency || ""
+								)}
 							</span>
 						</div>
 						<div className='flex flex-col gap-2 items-center'>
 							<span className={amountTitleClass}>Total</span>
 							<span className={amountClass}>
 								{formatCurrency(
-									(mockData.to_pay ? mockData.to_pay : 0) +
-										(mockData.to_receive ? mockData.to_receive : 0),
-									mockData.currency
+									(selectedGroup?.to_pay ? selectedGroup.to_pay : 0) +
+										(selectedGroup?.to_receive ? selectedGroup.to_receive : 0),
+									selectedGroup?.currency || ""
 								)}
 							</span>
 						</div>
@@ -180,15 +175,20 @@ const SelectedGroupHeader = ({ groupName }: { groupName: string }) => {
 //=========== Selected Group Header ============//
 
 //=========== Selected Group Body ============//
-const SelectedGroupBody = () => {
+const SelectedGroupBody = ({
+	allTransactions,
+}: {
+	allTransactions: IAllTransactionsTable[] | undefined;
+}) => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
+	console.log(allTransactions);
 	return (
 		<div className='flex flex-col gap-4 px-4 w-full h-full'>
 			<Badges
 				selectedBadge={selectedBadge}
 				setSelectedBadge={setSelectedBadge}
 			/>
-			{selectedBadge === "Transactions" && <Transactions />}
+			{selectedBadge === "Transactions" && <Transactions allTransactions={allTransactions} />}
 			{selectedBadge === "Balances" && <Balances />}
 			{selectedBadge === "Analytics" && <Analytics />}
 		</div>

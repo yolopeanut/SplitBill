@@ -5,19 +5,25 @@ import { useGroupsContext } from "../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
 import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
+	const navigate = useNavigate();
+	const { groupId } = useParams();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedUser, setSelectedUser] = useState<IAllUsersTable | null>(null);
 
 	const { selectedGroupId } = useGroupsContext();
-	console.log({ PaidByInput: selectedGroupId });
 
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
 
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
 	};
+
+	if (!selectedGroupId) {
+		navigate(`/groups/${groupId}`);
+	}
 
 	return (
 		<>

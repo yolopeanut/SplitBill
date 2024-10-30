@@ -3,139 +3,8 @@ import ExpenseCategory from "../../../../../core/enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../../../../../core/constants/ExpenseCategories";
 import { formatCurrency } from "../../../../../core/common/commonFunctions";
 import { useNavigate, useParams } from "react-router-dom";
-
-const MockData = {
-	transactions: [
-		{
-			id: 1,
-			paidAt: new Date("2024-01-02"),
-			amount: 100,
-			title: "Groceries",
-			category: ExpenseCategory.Food,
-			paidBy: "John Doe",
-		},
-		{
-			id: 2,
-			paidAt: new Date("2024-01-02"),
-			amount: 200,
-			title: "Rent",
-			category: ExpenseCategory.Housing,
-			paidBy: "Jane Doe",
-		},
-		{
-			id: 3,
-			paidAt: new Date("2024-01-04"),
-			amount: 300,
-			title: "Uber",
-			category: ExpenseCategory.Transportation,
-			paidBy: "John Doe",
-		},
-		{
-			id: 4,
-			paidAt: new Date("2024-01-04"),
-			amount: 400,
-			title: "Electricity",
-			category: ExpenseCategory.Utilities,
-			paidBy: "Jane Doe",
-		},
-		{
-			id: 5,
-			paidAt: new Date("2024-01-05"),
-			amount: 500,
-			title: "Health",
-			category: ExpenseCategory.Health,
-			paidBy: "John Doe",
-		},
-		{
-			id: 6,
-			paidAt: new Date("2024-01-04"),
-			amount: 300,
-			title: "Uber",
-			category: ExpenseCategory.Transportation,
-			paidBy: "John Doe",
-		},
-		{
-			id: 7,
-			paidAt: new Date("2024-01-04"),
-			amount: 400,
-			title: "Electricity",
-			category: ExpenseCategory.Utilities,
-			paidBy: "Jane Doe",
-		},
-		{
-			id: 8,
-			paidAt: new Date("2024-01-05"),
-			amount: 500,
-			title: "Health",
-			category: ExpenseCategory.Health,
-			paidBy: "John Doe",
-		},
-		{
-			id: 9,
-			paidAt: new Date("2024-01-02"),
-			amount: 100,
-			title: "Groceries",
-			category: ExpenseCategory.Food,
-			paidBy: "John Doe",
-		},
-		{
-			id: 10,
-			paidAt: new Date("2024-01-02"),
-			amount: 200,
-			title: "Rent",
-			category: ExpenseCategory.Housing,
-			paidBy: "Jane Doe",
-		},
-		{
-			id: 11,
-			paidAt: new Date("2024-01-04"),
-			amount: 300,
-			title: "Uber",
-			category: ExpenseCategory.Transportation,
-			paidBy: "John Doe",
-		},
-		{
-			id: 12,
-			paidAt: new Date("2024-01-04"),
-			amount: 400,
-			title: "Electricity",
-			category: ExpenseCategory.Utilities,
-			paidBy: "Jane Doe",
-		},
-		{
-			id: 13,
-			paidAt: new Date("2024-01-05"),
-			amount: 500,
-			title: "Health",
-			category: ExpenseCategory.Health,
-			paidBy: "John Doe",
-		},
-		{
-			id: 14,
-			paidAt: new Date("2024-01-04"),
-			amount: 300,
-			title: "Uber",
-			category: ExpenseCategory.Transportation,
-			paidBy: "John Doe",
-		},
-		{
-			id: 15,
-			paidAt: new Date("2024-01-04"),
-			amount: 400,
-			title: "Electricity",
-			category: ExpenseCategory.Utilities,
-			paidBy: "Jane Doe",
-		},
-		{
-			id: 16,
-			paidAt: new Date("2024-01-05"),
-			amount: 500,
-			title: "Health",
-			category: ExpenseCategory.Health,
-			paidBy: "John Doe",
-		},
-	],
-};
+import { IAllTransactionsTable } from "../../../../../core/interfaces/all_transactionsTable";
+import { useGroupsContext } from "../../../hooks/useGroupsContext";
 
 const TransactionCard = ({
 	amount,
@@ -156,7 +25,7 @@ const TransactionCard = ({
 			<div className='flex flex-row justify-between items-center w-full gap-4'>
 				<div className='flex flex-row items-center gap-4'>
 					<div
-						className='flex justify-center items-center rounded-full w-10 h-10 text-font-black'
+						className='flex justify-center items-center rounded-full min-w-10 min-h-10 text-font-black'
 						style={{ backgroundColor: categoryColor }}
 					>
 						{categoryIcon}
@@ -190,7 +59,11 @@ const FloatingButton = ({
 	);
 };
 
-const Transactions = () => {
+const Transactions = ({
+	allTransactions,
+}: {
+	allTransactions: IAllTransactionsTable[] | undefined;
+}) => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
 
@@ -198,21 +71,31 @@ const Transactions = () => {
 		navigate(`/groups/${groupId}/create-transaction`);
 	};
 
-	console.log(MockData);
+	const { groupUsers } = useGroupsContext();
 	return (
 		<div className='flex flex-col justify-start items-center gap-4 w-full'>
-			{MockData.transactions.map((transaction) => (
-				<TransactionCard
-					key={transaction.id}
-					amount={transaction.amount}
-					category={transaction.category}
-					paidBy={transaction.paidBy}
-					title={transaction.title}
-				/>
-			))}
+			{sortedTransaction(allTransactions)?.map((transaction) => {
+				const paidBy = groupUsers?.find((user) => user.id === transaction.paid_by);
+				return (
+					<TransactionCard
+						key={transaction.transaction_id}
+						amount={transaction.total_amount}
+						category={transaction.category as ExpenseCategory}
+						paidBy={paidBy?.name || ""}
+						title={transaction.trans_title || ""}
+					/>
+				);
+			})}
 			<FloatingButton handleAddTransactionOnClick={handleAddTransactionOnClick} />
 		</div>
 	);
 };
 
 export default Transactions;
+
+const sortedTransaction = (allTransactions: IAllTransactionsTable[] | undefined) => {
+	const sortedTransactions = allTransactions?.sort((a, b) => {
+		return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+	});
+	return sortedTransactions;
+};

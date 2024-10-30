@@ -66,3 +66,13 @@ export const numberWithLeadingZeros = (num: number, totalLength: number): string
 export const getCategoryTailwindColor = (category: ExpenseCategory) => {
 	return expenseCategories.find((categories) => categories.label === category)?.color;
 };
+
+export const getNumericLeadingValue = (value: string[]) => {
+	if (value.length === 0) return "0.00";
+	if (value.length <= 2) return `0.${value.join("").padStart(2, "0")}`;
+	if (value.length > 2) {
+		const wholePart = value.slice(0, -2).join("") || "0"; // Get the whole part
+		const decimalPart = value.slice(-2).join(""); // Get the last two digits as decimal
+		return `${wholePart}.${decimalPart}`; // Combine them
+	}
+};
