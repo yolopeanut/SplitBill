@@ -28,13 +28,11 @@ export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
 		// Set Selected Split Type
 		setSelectedSplitType(type);
 
-		// Reset Selected Users
-		setSelectedUser([]);
-
 		// Set Selected Users in Field
 		field.onChange({ value: { type: type, users: [] } });
 	};
 
+	// Reset Selected Users on Split Type Change
 	useEffect(() => {
 		setSelectedUser([]);
 	}, [selectedSplitType]);
