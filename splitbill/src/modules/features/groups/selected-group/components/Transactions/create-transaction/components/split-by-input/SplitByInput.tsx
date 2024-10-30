@@ -4,7 +4,7 @@ import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
 
@@ -34,6 +34,10 @@ export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
 		// Set Selected Users in Field
 		field.onChange({ value: { type: type, users: [] } });
 	};
+
+	useEffect(() => {
+		setSelectedUser([]);
+	}, [selectedSplitType]);
 
 	return (
 		<>
