@@ -183,7 +183,6 @@ const FriendCard = ({
 	const sendFriendRequest = useSendFriendRequest();
 	const deleteFriendRequest = useDeleteFriendRequest();
 	const isRequested = useGetAllSentFriendRequests();
-	console.log("helloo");
 
 	const FriendRequestButton = () => {
 		if (isRequested.data?.some((request) => request.id === id)) {

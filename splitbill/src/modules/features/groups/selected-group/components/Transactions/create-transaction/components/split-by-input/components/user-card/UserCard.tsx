@@ -1,6 +1,6 @@
-import { ControllerRenderProps } from "react-hook-form";
+import { ControllerRenderProps, UseFormGetValues } from "react-hook-form";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import FormValues from "../../../../../../../../../../core/interfaces/createTransactionForm";
 import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
 import { getInitials } from "../../../../../../../../../../core/common/commonFunctions";
@@ -10,14 +10,12 @@ const UserCard = ({
 	user,
 	field,
 	selectedSplitType,
-	setSelectedUser,
-	selectedUsers,
+	getValues,
 }: {
 	user: IAllUsersTable;
 	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
 	selectedSplitType: string | undefined;
-	setSelectedUser: Dispatch<SetStateAction<IAllUsersTable[]>> | undefined;
-	selectedUsers: IAllUsersTable[] | undefined;
+	getValues: UseFormGetValues<FormValues>;
 }) => {
 	if (!field) return <UserCardDefault user={user} />;
 	if (selectedSplitType?.toLowerCase() === "equal")
@@ -26,7 +24,7 @@ const UserCard = ({
 				key={user.id}
 				user={user}
 				field={field}
-				setSelectedUser={setSelectedUser}
+				getValues={getValues}
 			/>
 		);
 	else if (selectedSplitType?.toLowerCase() === "custom")
@@ -35,8 +33,7 @@ const UserCard = ({
 				key={user.id}
 				user={user}
 				field={field}
-				selectedUsers={selectedUsers}
-				setSelectedUsers={setSelectedUser}
+				getValues={getValues}
 			/>
 		);
 	else if (selectedSplitType?.toLowerCase() === "percentage")
@@ -45,7 +42,7 @@ const UserCard = ({
 				key={user.id}
 				user={user}
 				field={field}
-				selectedUsers={selectedUsers}
+				getValues={getValues}
 			/>
 		);
 };
@@ -60,7 +57,7 @@ const NumericInput = ({
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const event = e.nativeEvent as InputEvent;
-		console.log(event);
+		// console.log(event);
 
 		if (event.inputType === "deleteContentBackward") {
 			setDigits(digits.slice(0, -1));
@@ -122,11 +119,11 @@ const UserCardDefault = ({ user }: { user: IAllUsersTable }) => {
 const UserCardEqualSplit = ({
 	user,
 	field,
-	setSelectedUser,
+	getValues,
 }: {
 	user: IAllUsersTable;
 	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
-	setSelectedUser: Dispatch<SetStateAction<IAllUsersTable[]>> | undefined;
+	getValues: UseFormGetValues<FormValues>;
 }) => {
 	return (
 		<>
@@ -148,16 +145,21 @@ const UserCardEqualSplit = ({
 					divClassName='w-5 h-5 text-brand-orange outline outline-1 outline-brand-orange rounded flex items-center justify-center'
 					iconClassName='text-font-black text-xl'
 					onClick={() => {
-						setSelectedUser?.((prev) => {
-							const isUserSelected = prev.some((u) => u.id === user.id);
-							const updatedUsers = isUserSelected
-								? prev.filter((u) => u.id !== user.id) // Remove user if already selected
-								: [...prev, user]; // Add user if not selected
+						const selectedUsersArray = getValues().splitBy?.value.users || [];
+						const isUserSelected = selectedUsersArray.some(
+							(selectedUsers) => selectedUsers.id === user.id
+						);
 
-							field?.onChange({
-								value: { type: "Equal", users: updatedUsers },
-							});
-							return updatedUsers;
+						const newUsers = isUserSelected
+							? selectedUsersArray.filter((selectedUsers) => selectedUsers.id !== user.id) // Remove user if already selected
+							: [...selectedUsersArray, user]; // Add user if not selected
+
+						// Update the field value with the new list of users
+						field?.onChange({
+							value: {
+								type: "Equal",
+								users: newUsers,
+							},
 						});
 					}}
 				/>
@@ -169,13 +171,11 @@ const UserCardEqualSplit = ({
 const UserCardCustomSplit = ({
 	user,
 	field,
-	selectedUsers,
-	setSelectedUsers,
+	getValues,
 }: {
 	user: IAllUsersTable;
 	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
-	selectedUsers: IAllUsersTable[] | undefined;
-	setSelectedUsers: Dispatch<SetStateAction<IAllUsersTable[]>> | undefined;
+	getValues: UseFormGetValues<FormValues>;
 }) => {
 	return (
 		<>
@@ -198,18 +198,10 @@ const UserCardCustomSplit = ({
 					<NumericInput
 						field={field}
 						onChange={(e) => {
-							setSelectedUsers?.((prev) => {
-								return prev.map((user) => {
-									if (user.id === user.id) {
-										return { ...user, amount: e.target.value };
-									}
-									return user;
-								});
-							});
 							field?.onChange({
 								value: {
 									type: "Custom",
-									users: selectedUsers,
+									users: getValues().splitBy?.value.users || [],
 									unequal_split_amount: e.target.value,
 								},
 							});
@@ -224,11 +216,11 @@ const UserCardCustomSplit = ({
 const UserCardPercentageSplit = ({
 	user,
 	field,
-	selectedUsers,
+	getValues,
 }: {
 	user: IAllUsersTable;
 	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
-	selectedUsers: IAllUsersTable[] | undefined;
+	getValues: UseFormGetValues<FormValues>;
 }) => {
 	return (
 		<>
@@ -251,7 +243,7 @@ const UserCardPercentageSplit = ({
 						field?.onChange({
 							value: {
 								type: "Percentage",
-								users: selectedUsers,
+								users: getValues().splitBy?.value.users || [],
 								percentage_split_amount: e.target.value,
 							},
 						});

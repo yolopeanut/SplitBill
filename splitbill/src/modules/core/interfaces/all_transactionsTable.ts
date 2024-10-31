@@ -6,7 +6,6 @@ interface IAllTransactionsTable {
 	trans_creator_user_id: string;
 	created_at: string;
 	total_amount: number;
-	currency: string;
 	remarks: string | null;
 	paid_by: string;
 	trans_title: string;

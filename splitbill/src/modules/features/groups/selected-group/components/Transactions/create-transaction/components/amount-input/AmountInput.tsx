@@ -3,7 +3,7 @@ import { UseFormRegister } from "react-hook-form";
 
 import { IoIosCalculator } from "react-icons/io";
 import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
-import Currencies from "../../../../../../../../core/enums/CurrenciesEnum";
+import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 
 const NumericInput = ({
 	register,
@@ -52,25 +52,16 @@ const NumericInput = ({
 };
 
 export const AmountInput = ({ register }: { register: UseFormRegister<FormValues> }) => {
+	const { selectedGroup } = useGroupsContext();
 	return (
 		<>
 			{/* Amount */}
 			<div className='flex flex-col gap-2 pb-4'>
 				<span className='text-font-white text-sm font-semibold'>Amount</span>
 				<div className='flex flex-row gap-2'>
-					<select
-						className='select select-ghost w-[30%] max-w-xs outline-none border-none bg-input-box-gray'
-						{...register("currency")}
-					>
-						{Object.values(Currencies).map((currency) => (
-							<option
-								key={currency}
-								value={currency}
-							>
-								{currency}
-							</option>
-						))}
-					</select>
+					<div className='flex flex-col justify-center pl-4 w-[35%] max-w-xs outline-none border-none bg-input-box-gray rounded-lg'>
+						<span className='text-font-white'>{selectedGroup?.currency}</span>
+					</div>
 					<NumericInput
 						register={register}
 						inputKey='amount'

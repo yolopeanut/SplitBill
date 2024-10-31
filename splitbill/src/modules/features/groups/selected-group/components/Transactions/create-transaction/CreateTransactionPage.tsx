@@ -12,17 +12,22 @@ import AmountInput from "./components/amount-input/AmountInput";
 import CategoryInput from "./components/category-input/CategoryInput";
 import PaidByInput from "./components/paid-by-input/PaidByInput";
 import SplitByInput from "./components/split-by-input/SplitByInput";
+import RemarksInput from "./components/remarks-input/RemarksInput";
+import { useGroupsContext } from "../../../../hooks/useGroupsContext";
+import { useAddExpense } from "./hooks/useAddExpense";
 
 const CreateTransactionPage = () => {
 	const navigate = useNavigate();
+	const { selectedGroupId } = useGroupsContext();
 	const { groupId } = useParams();
 
-	// Handling if the groupId is not found
+	// Handling if the groupId is not found,
+	// because other components are dependent on selectedGroupId from context
 	useEffect(() => {
-		if (!groupId) {
+		if (!selectedGroupId) {
 			navigate(`/groups/${groupId}`);
 		}
-	}, [groupId, navigate]);
+	}, [selectedGroupId, navigate, groupId]);
 
 	return (
 		<>
@@ -65,14 +70,37 @@ const CreateTransactionHeader = () => {
 };
 
 const CreateTransactionBody = () => {
-	const { register, handleSubmit, control } = useForm<FormValues>({
+	const { addExpense } = useAddExpense();
+	const { selectedGroupId } = useGroupsContext();
+	const { register, handleSubmit, control, getValues } = useForm<FormValues>({
 		defaultValues: {
-			currency: "MYR",
+			splitBy: {
+				value: {
+					type: "equal",
+					users: [],
+				},
+			},
 		},
 	});
 
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
-		console.log(data);
+		// Check if all required fields are filled
+		if (!selectedGroupId) return;
+		if (!data.paidBy) return;
+		if (!data.title) return;
+		if (!data.category) return;
+		if (!data.amount) return;
+		if (!data.splitBy) return;
+
+		addExpense({
+			group_id: selectedGroupId,
+			paid_by: data.paidBy,
+			expense_title: data.title,
+			category: data.category,
+			amount: data.amount,
+			remarks: data.remarks || null,
+			split_by: data.splitBy,
+		});
 	};
 
 	return (
@@ -87,8 +115,11 @@ const CreateTransactionBody = () => {
 						<AmountInput register={register} />
 						<CategoryInput control={control} />
 						<PaidByInput control={control} />
-						<SplitByInput control={control} />
-
+						<SplitByInput
+							control={control}
+							getValues={getValues}
+						/>
+						<RemarksInput register={register} />
 						<button
 							type='submit'
 							className='btn bg-brand-orange text-font-black w-full'

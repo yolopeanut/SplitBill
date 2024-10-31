@@ -1,21 +1,32 @@
-import { Controller, ControllerRenderProps, Control } from "react-hook-form";
+import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
 import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
-import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
 
-export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
+export const SplitByInput = ({
+	control,
+	getValues,
+}: {
+	control: Control<FormValues>;
+	getValues: UseFormGetValues<FormValues>;
+}) => {
+	// Drawer State
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const [selectedUser, setSelectedUser] = useState<IAllUsersTable[]>([]);
+
+	// Split By State
 	const [selectedSplitType, setSelectedSplitType] = useState<string>("Equal");
+
+	// Get Group Users
 	const { selectedGroupId } = useGroupsContext();
 
+	// Get Group Users from Database
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
 
+	// Handle Drawer Open
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
 	};
@@ -32,11 +43,6 @@ export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
 		field.onChange({ value: { type: type, users: [] } });
 	};
 
-	// Reset Selected Users on Split Type Change
-	useEffect(() => {
-		setSelectedUser([]);
-	}, [selectedSplitType]);
-
 	return (
 		<>
 			{/* Split By Input Box */}
@@ -47,15 +53,14 @@ export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
 				<span className='text-font-white text-sm font-semibold'>Split By</span>
 				<div className='w-full bg-card-gray-dark rounded-lg flex flex-col items-start p-4 gap-2'>
 					<div className='text-font-white text-sm font-semibold'>{selectedSplitType}</div>
-					{selectedUser.length > 0
-						? selectedUser.map((user, index) => (
+					{getValues().splitBy?.value.users !== undefined
+						? getValues().splitBy?.value.users.map((user, index) => (
 								<UserCard
 									key={`selected-user-${user.id}-${index}`}
 									user={user}
 									field={undefined}
 									selectedSplitType={undefined}
-									setSelectedUser={undefined}
-									selectedUsers={undefined}
+									getValues={getValues}
 								/>
 						  ))
 						: "Select User"}
@@ -125,8 +130,7 @@ export const SplitByInput = ({ control }: { control: Control<FormValues> }) => {
 									user={user}
 									field={field}
 									selectedSplitType={selectedSplitType}
-									setSelectedUser={setSelectedUser}
-									selectedUsers={selectedUser}
+									getValues={getValues}
 								/>
 							))}
 						</div>

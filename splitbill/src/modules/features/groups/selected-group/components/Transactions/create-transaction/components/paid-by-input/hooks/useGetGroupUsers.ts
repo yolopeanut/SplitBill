@@ -15,6 +15,10 @@ export const useGetGroupUsers = ({ group_id }: { group_id: string }) => {
 				return [];
 			}
 
+			if (group_id === "") {
+				return [];
+			}
+
 			const data = await getGroupUsersById(group_id);
 
 			data.map((user) => {
