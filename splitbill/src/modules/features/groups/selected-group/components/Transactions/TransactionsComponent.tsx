@@ -57,14 +57,19 @@ const TransactionCard = ({
 
 const FloatingButton = ({
 	handleAddTransactionOnClick,
+	refetch,
 }: {
 	handleAddTransactionOnClick: () => void;
+	refetch: () => void;
 }) => {
 	return (
 		<div className='fixed bottom-28 right-7'>
 			<button
 				className='btn btn-sm bg-brand-orange rounded-full h-14 flex justify-center items-center text-font-black border-none'
-				onClick={handleAddTransactionOnClick}
+				onClick={() => {
+					handleAddTransactionOnClick();
+					refetch();
+				}}
 			>
 				<PiReceiptFill size={30} />
 			</button>
@@ -72,20 +77,17 @@ const FloatingButton = ({
 	);
 };
 
-const Transactions = ({
-	allTransactions,
-}: {
-	allTransactions: IAllTransactionsTable[] | undefined;
-}) => {
+const Transactions = ({ refetch }: { refetch: () => void }) => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
-	const { groupUsers } = useGroupsContext();
+	const { groupUsers, allTransactions } = useGroupsContext();
 
 	const handleAddTransactionOnClick = () => {
 		navigate(`/groups/${groupId}/create-transaction`);
 	};
 
 	const sortedTransaction = (allTransactions: IAllTransactionsTable[] | undefined) => {
+		if (!allTransactions) return [];
 		const sortedTransactions = allTransactions?.sort((a, b) => {
 			return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
 		});
@@ -94,7 +96,6 @@ const Transactions = ({
 
 	const groupTransactionsByDate = (transactions: IAllTransactionsTable[] | undefined) => {
 		if (!transactions) return {};
-
 		return transactions.reduce((groups: GroupedTransactions, transaction) => {
 			const date = new Date(transaction.created_at).toLocaleDateString();
 			if (!groups[date]) {
@@ -132,7 +133,10 @@ const Transactions = ({
 					</div>
 				);
 			})}
-			<FloatingButton handleAddTransactionOnClick={handleAddTransactionOnClick} />
+			<FloatingButton
+				handleAddTransactionOnClick={handleAddTransactionOnClick}
+				refetch={refetch}
+			/>
 		</div>
 	);
 };

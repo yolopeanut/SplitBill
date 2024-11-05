@@ -6,6 +6,7 @@ interface IAllUsersTable {
 	profile_img_src: string;
 	profile_img_url: string | null;
 	owes_curr_user: number | null;
+	owes_users: IAllUsersTable[] | null;
 }
 
 export type { IAllUsersTable };

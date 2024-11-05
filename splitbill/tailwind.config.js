@@ -6,13 +6,16 @@ export default {
 		colors: {
 			"brand-orange": "#FF9A34",
 			"background-black": "#1F1F1F",
+			"background-gray": "#2A2A2A",
 
 			"font-white": "#FFFFFF",
 			"font-black": "#000000",
 			"font-text-gray": "#969696",
 			"font-gray-light": "#2C2C2C",
 			"font-green": "#00FF84",
+			"font-green-is-owed": "#1DFA00",
 			"font-red": "#FF2626",
+			"font-red-owes": "#F12525",
 			"font-red-dark": "#E91515",
 
 			"input-search-gray": "#333333",

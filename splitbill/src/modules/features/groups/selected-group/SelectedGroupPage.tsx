@@ -16,12 +16,11 @@ import Transactions from "./components/Transactions/TransactionsComponent";
 import Balances from "./components/Balances/BalancesComponent";
 import Analytics from "./components/Analytics/AnalyticsComponent";
 import DropdownComponent from "./components/DropdownComponent";
-import { useGetSelectedGroup } from "./hooks/useGetSelectedGroup";
 import Loading from "../../../core/common/components/Loading";
-import { useGetAllTransactions } from "./hooks/useGetAllTransactions";
-import { IAllTransactionsTable } from "../../../core/interfaces/all_transactionsTable";
-import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 import { useGroupsContext } from "../hooks/useGroupsContext";
+import { useGetSelectedGroup } from "./hooks/useGetSelectedGroup";
+import { useGetAllTransactions } from "./components/Transactions/hooks/useGetAllTransactions";
+import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 
 const handleEditGroupDropDown = ({
 	navigate,
@@ -39,13 +38,16 @@ const handleLeaveGroupDropDown = () => {
 
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
-	const { setGroupUsers, setSelectedGroupId, setSelectedGroup } = useGroupsContext();
+	const { setGroupUsers, setSelectedGroupId, setSelectedGroup, setAllTransactions } =
+		useGroupsContext();
 
 	const { groupId } = useParams();
 	const { data: selectedGroup, isLoading } = useGetSelectedGroup(groupId || "");
-	const { data: allTransactions, isLoading: isLoadingAllTransactions } = useGetAllTransactions(
-		groupId || ""
-	);
+	const {
+		data: allTransactions,
+		isLoading: isLoadingAllTransactions,
+		refetch,
+	} = useGetAllTransactions(groupId || "");
 	const { data: groupUsers, isLoading: isLoadingGroupUsers } = useGetGroupUsers({
 		group_id: groupId || "",
 	});
@@ -60,7 +62,19 @@ const SelectedGroupPage = () => {
 		if (selectedGroup) {
 			setSelectedGroup(selectedGroup);
 		}
-	}, [groupUsers, setGroupUsers, groupId, setSelectedGroupId, selectedGroup, setSelectedGroup]);
+		if (allTransactions) {
+			setAllTransactions(allTransactions);
+		}
+	}, [
+		groupUsers,
+		setGroupUsers,
+		groupId,
+		setSelectedGroupId,
+		selectedGroup,
+		setSelectedGroup,
+		allTransactions,
+		setAllTransactions,
+	]);
 
 	// If loading, show loading screen
 	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers) {
@@ -71,7 +85,7 @@ const SelectedGroupPage = () => {
 		<>
 			<div className='flex flex-col gap-4 relative p-1 h-full overflow-y-auto'>
 				<SelectedGroupHeader selectedGroup={selectedGroup} />
-				<SelectedGroupBody allTransactions={allTransactions} />
+				<SelectedGroupBody refetch={refetch} />
 			</div>
 		</>
 	);
@@ -179,23 +193,22 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 //=========== Selected Group Header ============//
 
 //=========== Selected Group Body ============//
-const SelectedGroupBody = ({
-	allTransactions,
-}: {
-	allTransactions: IAllTransactionsTable[] | undefined;
-}) => {
+const SelectedGroupBody = ({ refetch }: { refetch: () => void }) => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
-	console.log(allTransactions);
 	return (
-		<div className='flex flex-col gap-4 px-4 w-full h-full'>
-			<Badges
-				selectedBadge={selectedBadge}
-				setSelectedBadge={setSelectedBadge}
-			/>
-			{selectedBadge === "Transactions" && <Transactions allTransactions={allTransactions} />}
-			{selectedBadge === "Balances" && <Balances />}
-			{selectedBadge === "Analytics" && <Analytics />}
-		</div>
+		<>
+			<div className='flex flex-row justify-between items-center px-4'>
+				<Badges
+					selectedBadge={selectedBadge}
+					setSelectedBadge={setSelectedBadge}
+				/>
+			</div>
+			<div className='flex flex-col gap-4 px-4 w-full h-full overflow-auto'>
+				{selectedBadge === "Transactions" && <Transactions refetch={refetch} />}
+				{selectedBadge === "Balances" && <Balances refetch={refetch} />}
+				{selectedBadge === "Analytics" && <Analytics />}
+			</div>
+		</>
 	);
 };
 //=========== Selected Group Body ============//

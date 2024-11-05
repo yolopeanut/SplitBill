@@ -1,6 +1,7 @@
 import imageCompression from "browser-image-compression";
 import ExpenseCategory from "../enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../constants/ExpenseCategories";
+import { IBalances, IUserBalance } from "../interfaces/user_balances";
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -76,3 +77,9 @@ export const getNumericLeadingValue = (value: string[]) => {
 		return `${wholePart}.${decimalPart}`; // Combine them
 	}
 };
+
+export function getTotalOwed(owes_users: IUserBalance["owes_users"]) {
+	return Object.values(owes_users).reduce((acc, curr) => {
+		return acc + curr;
+	}, 0);
+}
