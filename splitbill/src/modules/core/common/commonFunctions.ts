@@ -1,7 +1,7 @@
 import imageCompression from "browser-image-compression";
 import ExpenseCategory from "../enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../constants/ExpenseCategories";
-import { IBalances, IUserBalance } from "../interfaces/user_balances";
+import { IUserBalance } from "../interfaces/user_balances";
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
