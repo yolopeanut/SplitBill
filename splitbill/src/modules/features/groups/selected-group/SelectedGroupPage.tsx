@@ -21,6 +21,9 @@ import { useGroupsContext } from "../hooks/useGroupsContext";
 import { useGetSelectedGroup } from "./hooks/useGetSelectedGroup";
 import { useGetAllTransactions } from "./components/Transactions/hooks/useGetAllTransactions";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
+import { IBalances } from "../../../core/interfaces/user_balances";
+import useGetBalances from "./components/Balances/hooks/useGetBalances";
+import useGetHeaderBalances from "./hooks/useGetHeaderBalances";
 
 const handleEditGroupDropDown = ({
 	navigate,
@@ -38,18 +41,39 @@ const handleLeaveGroupDropDown = () => {
 
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
-	const { setGroupUsers, setSelectedGroupId, setSelectedGroup, setAllTransactions } =
-		useGroupsContext();
+	const {
+		setGroupUsers,
+		setSelectedGroupId,
+		setSelectedGroup,
+		setAllTransactions,
+		setUserBalances,
+	} = useGroupsContext();
 
+	// Get group id
 	const { groupId } = useParams();
+
+	// Get selected group
 	const { data: selectedGroup, isLoading } = useGetSelectedGroup(groupId || "");
+
+	// Get all transactions
 	const {
 		data: allTransactions,
 		isLoading: isLoadingAllTransactions,
 		refetch,
 	} = useGetAllTransactions(groupId || "");
+
+	// Get group users
 	const { data: groupUsers, isLoading: isLoadingGroupUsers } = useGetGroupUsers({
 		group_id: groupId || "",
+	});
+
+	// Get user balances
+	const {
+		userBalances,
+		isLoading: isLoadingBalances,
+	}: { userBalances: IBalances["userBalances"]; isLoading: boolean } = useGetBalances({
+		allTransactions,
+		groupUsers,
 	});
 
 	useEffect(() => {
@@ -65,6 +89,9 @@ const SelectedGroupPage = () => {
 		if (allTransactions) {
 			setAllTransactions(allTransactions);
 		}
+		if (userBalances) {
+			setUserBalances(userBalances);
+		}
 	}, [
 		groupUsers,
 		setGroupUsers,
@@ -74,10 +101,12 @@ const SelectedGroupPage = () => {
 		setSelectedGroup,
 		allTransactions,
 		setAllTransactions,
+		userBalances,
+		setUserBalances,
 	]);
 
 	// If loading, show loading screen
-	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers) {
+	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers || isLoadingBalances) {
 		return <Loading />;
 	}
 
@@ -117,6 +146,8 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 	// Styling classes for to pay, to receive, and total amounts
 	const amountClass = "text-font-white text-sm font-bold";
 	const amountTitleClass = "text-font-white text-xs font-light";
+
+	const { totalToPay, totalToReceive } = useGetHeaderBalances();
 
 	return (
 		<>
@@ -159,29 +190,19 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 						<div className='flex flex-col gap-2 items-center'>
 							<span className={amountTitleClass}>To pay</span>
 							<span className={amountClass}>
-								{formatCurrency(
-									selectedGroup?.to_pay ? selectedGroup.to_pay : 0,
-									selectedGroup?.currency || ""
-								)}
+								{formatCurrency(Math.abs(totalToPay), selectedGroup?.currency || "")}
 							</span>
 						</div>
 						<div className='flex flex-col gap-2 items-center'>
 							<span className={amountTitleClass}>To receive</span>
 							<span className={amountClass}>
-								{formatCurrency(
-									selectedGroup?.to_receive ? selectedGroup.to_receive : 0,
-									selectedGroup?.currency || ""
-								)}
+								{formatCurrency(totalToReceive, selectedGroup?.currency || "")}
 							</span>
 						</div>
 						<div className='flex flex-col gap-2 items-center'>
 							<span className={amountTitleClass}>Total</span>
 							<span className={amountClass}>
-								{formatCurrency(
-									(selectedGroup?.to_pay ? selectedGroup.to_pay : 0) +
-										(selectedGroup?.to_receive ? selectedGroup.to_receive : 0),
-									selectedGroup?.currency || ""
-								)}
+								{formatCurrency(totalToPay + totalToReceive, selectedGroup?.currency || "")}
 							</span>
 						</div>
 					</div>
@@ -195,6 +216,7 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 //=========== Selected Group Body ============//
 const SelectedGroupBody = ({ refetch }: { refetch: () => void }) => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
+
 	return (
 		<>
 			<div className='flex flex-row justify-between items-center px-4'>

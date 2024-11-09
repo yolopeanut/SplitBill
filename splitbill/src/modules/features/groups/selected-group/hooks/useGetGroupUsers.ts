@@ -5,7 +5,11 @@ import getGroupUsersById from "../../../../core/database_functions/get_group_use
 import { IAllUsersTable } from "../../../../core/interfaces/all_usersTable";
 import { supabase } from "../../../../../config/Supabase";
 
-export const useGetGroupUsers = ({ group_id }: { group_id: string }) => {
+export const useGetGroupUsers = ({
+	group_id,
+}: {
+	group_id: string;
+}): UseQueryResult<IAllUsersTable[]> => {
 	const { user, session, isLoading } = useAuthContext();
 
 	const getOwnGroupsQuery = useQuery({

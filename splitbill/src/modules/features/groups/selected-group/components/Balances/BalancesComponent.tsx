@@ -52,7 +52,7 @@ const BalanceCard = ({
 }: {
 	userId: string;
 	owes_users: IUserBalance["owes_users"];
-	groupUsers: IAllUsersTable[] | null;
+	groupUsers: IAllUsersTable[] | undefined;
 	selectedGroup: IAllGroupsTable | null;
 }) => {
 	const [isExpanded, setIsExpanded] = useState(false);

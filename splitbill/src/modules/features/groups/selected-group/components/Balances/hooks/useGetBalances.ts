@@ -11,7 +11,7 @@ const useGetBalances = ({
 	groupUsers,
 }: {
 	allTransactions: IAllTransactionsTable[] | undefined;
-	groupUsers: IAllUsersTable[] | null;
+	groupUsers: IAllUsersTable[] | undefined;
 }): { userBalances: IBalances["userBalances"]; isLoading: boolean } => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [userBalances, setUserBalances] = useState<IBalances["userBalances"]>({});
@@ -55,8 +55,10 @@ function analyzeGroupExpenses(
 
 	// Process each user's transactions
 	groupUsers.forEach((user) => {
-		const userTransactions = transactions.filter((transaction) =>
-			transaction.transaction_splits.some((split) => split.split_user_id === user.id)
+		const userTransactions = transactions.filter(
+			(transaction) =>
+				transaction.paid_by === user.id ||
+				transaction.transaction_splits.some((split) => split.split_user_id === user.id)
 		);
 
 		userTransactions.forEach((transaction) => {

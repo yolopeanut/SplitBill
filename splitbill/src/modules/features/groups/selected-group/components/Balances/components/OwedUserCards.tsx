@@ -9,7 +9,7 @@ const OwedUserCards = ({
 	userId,
 }: {
 	owes_users: Record<string, number>;
-	groupUsers: IAllUsersTable[] | null;
+	groupUsers: IAllUsersTable[] | undefined;
 	selectedGroup: IAllGroupsTable | null;
 	userId: string;
 }) => {

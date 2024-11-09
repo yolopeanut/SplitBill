@@ -8,7 +8,7 @@ const UserCard = ({
 	totalOwed,
 }: {
 	userId: string;
-	groupUsers: IAllUsersTable[] | null;
+	groupUsers: IAllUsersTable[] | undefined;
 	totalOwed: number;
 }) => {
 	const { selectedGroup } = useGroupsContext();
