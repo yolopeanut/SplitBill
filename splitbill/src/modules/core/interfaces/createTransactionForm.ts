@@ -10,10 +10,7 @@ interface FormValues {
 	splitBy?: {
 		value: {
 			type: string;
-			users: IAllUsersTable[];
-			equal_split_amount?: number | null;
-			unequal_split_amount?: number | null;
-			percentage_split_amount?: number | null;
+			users: { user: IAllUsersTable; amount: number }[];
 		};
 	};
 }

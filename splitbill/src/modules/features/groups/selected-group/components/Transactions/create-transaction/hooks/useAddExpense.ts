@@ -27,10 +27,7 @@ export const useAddExpense = () => {
 			split_by: {
 				value: {
 					type: string;
-					users: IAllUsersTable[];
-					equal_split_amount?: number | null;
-					unequal_split_amount?: number | null;
-					percentage_split_amount?: number | null;
+					users: { user: IAllUsersTable; amount: number }[];
 				};
 			};
 		}) => {
@@ -55,12 +52,12 @@ export const useAddExpense = () => {
 				split_by_values.users.map(async (user) => {
 					//If split by is equal, then we need to calculate the equal split amount
 					if (split_by_values.type === "Equal") {
-						split_by_values.equal_split_amount = amount / split_by_values.users.length;
+						const equal_split_amount = amount / split_by_values.users.length; // Calculate the equal split amount
 						await postCreateNewTransactionSplitDB(
 							response,
-							user.id,
+							user.user.id,
 							split_by_values.type,
-							split_by_values.equal_split_amount,
+							equal_split_amount,
 							null,
 							null
 						);
@@ -68,28 +65,25 @@ export const useAddExpense = () => {
 					// TODO: Implement unequal split
 					//If split by is unequal, then we need to calculate the unequal split amount
 					else if (split_by_values.type === "Unequal") {
-						split_by_values.unequal_split_amount = amount / split_by_values.users.length;
 						await postCreateNewTransactionSplitDB(
 							response,
-							user.id,
+							user.user.id,
 							split_by_values.type,
 							null,
-							split_by_values.unequal_split_amount,
+							user.amount,
 							null
 						);
 					}
 					// TODO: Implement percentage split
 					//If split by is percentage, then we need to calculate the percentage of the amount
 					else if (split_by_values.type === "Percentage") {
-						split_by_values.percentage_split_amount =
-							split_by_values.percentage_split_amount || null;
 						await postCreateNewTransactionSplitDB(
 							response,
-							user.id,
+							user.user.id,
 							split_by_values.type,
 							null,
 							null,
-							split_by_values.percentage_split_amount
+							user.amount
 						);
 					}
 				});

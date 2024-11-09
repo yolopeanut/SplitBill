@@ -56,8 +56,8 @@ export const SplitByInput = ({
 					{getValues().splitBy?.value.users !== undefined
 						? getValues().splitBy?.value.users.map((user, index) => (
 								<UserCard
-									key={`selected-user-${user.id}-${index}`}
-									user={user}
+									key={`selected-user-${user.user.id}-${index}`}
+									user={user.user}
 									field={undefined}
 									selectedSplitType={undefined}
 									getValues={getValues}
@@ -102,6 +102,7 @@ export const SplitByInput = ({
 								</label>
 							</div>
 
+							{/* Split By Cards */}
 							<div className='flex flex-row gap-4'>
 								<SplitByCard
 									type='Equal'

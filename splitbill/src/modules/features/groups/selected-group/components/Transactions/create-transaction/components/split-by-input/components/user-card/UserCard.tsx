@@ -147,12 +147,12 @@ const UserCardEqualSplit = ({
 					onClick={() => {
 						const selectedUsersArray = getValues().splitBy?.value.users || [];
 						const isUserSelected = selectedUsersArray.some(
-							(selectedUsers) => selectedUsers.id === user.id
+							(selectedUsers) => selectedUsers.user.id === user.id
 						);
 
 						const newUsers = isUserSelected
-							? selectedUsersArray.filter((selectedUsers) => selectedUsers.id !== user.id) // Remove user if already selected
-							: [...selectedUsersArray, user]; // Add user if not selected
+							? selectedUsersArray.filter((selectedUsers) => selectedUsers.user.id !== user.id) // Remove user if already selected
+							: [...selectedUsersArray, { user: user, amount: 0 }]; // Add user if not selected
 
 						// Update the field value with the new list of users
 						field?.onChange({
