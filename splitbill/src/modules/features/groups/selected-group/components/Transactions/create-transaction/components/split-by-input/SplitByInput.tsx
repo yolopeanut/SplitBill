@@ -6,14 +6,14 @@ import Drawer from "react-modern-drawer";
 import { useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
+import TotalComponent from "./components/TotalComponent";
 
-export const SplitByInput = ({
-	control,
-	getValues,
-}: {
+type SplitByInputProps = {
 	control: Control<FormValues>;
 	getValues: UseFormGetValues<FormValues>;
-}) => {
+};
+
+export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 	// Drawer State
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -134,6 +134,11 @@ export const SplitByInput = ({
 									getValues={getValues}
 								/>
 							))}
+
+							<hr className='border-[0.1px] border-brand-orange rounded-lg w-full' />
+
+							{/* Total Component */}
+							{selectedSplitType === "Custom" ? <TotalComponent getValues={getValues} /> : null}
 						</div>
 					</Drawer>
 				)}

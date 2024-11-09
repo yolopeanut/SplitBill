@@ -100,6 +100,7 @@ const CreateTransactionBody = () => {
 			amount: data.amount,
 			remarks: data.remarks || null,
 			split_by: data.splitBy,
+			tax: data.tax || 0,
 		});
 	};
 

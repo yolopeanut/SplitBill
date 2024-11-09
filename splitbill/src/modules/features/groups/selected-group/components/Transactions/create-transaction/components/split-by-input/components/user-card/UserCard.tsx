@@ -53,43 +53,26 @@ const NumericInput = ({
 	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
-	const [digits, setDigits] = useState([] as string[]);
+	const [value, setValue] = useState("0.00");
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const event = e.nativeEvent as InputEvent;
-		// console.log(event);
+		const numericValue = e.target.value.replace(/[^\d]/g, "");
+		const floatValue = parseInt(numericValue) / 100;
+		const formattedValue = floatValue.toFixed(2);
 
-		if (event.inputType === "deleteContentBackward") {
-			setDigits(digits.slice(0, -1));
-		}
-
-		if (event.data?.match(/\d/)) {
-			setDigits([...digits, event.data]);
-		}
+		setValue(formattedValue);
+		e.target.value = formattedValue;
+		onChange(e);
 	};
-
-	// Format the display value
-	const displayValue = (() => {
-		if (digits.length === 0) return "0.00";
-		if (digits.length <= 2) return `0.${digits.join("").padStart(2, "0")}`;
-		if (digits.length > 2) {
-			const wholePart = digits.slice(0, -2).join("") || "0"; // Get the whole part
-			const decimalPart = digits.slice(-2).join(""); // Get the last two digits as decimal
-			return `${wholePart}.${decimalPart}`; // Combine them
-		}
-	})();
 
 	return (
 		<div className='w-full'>
 			<input
 				type='text'
-				value={displayValue}
+				value={value}
 				className='w-full h-full px-1 text-center font-semibold text-sm border-none outline-none rounded-lg bg-input-box-gray'
 				inputMode='numeric'
-				onChange={(e) => {
-					onChange(e);
-					handleChange(e);
-				}}
+				onChange={handleChange}
 			/>
 		</div>
 	);
@@ -198,11 +181,31 @@ const UserCardCustomSplit = ({
 					<NumericInput
 						field={field}
 						onChange={(e) => {
+							const usersArray = getValues().splitBy?.value.users || [];
+							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id);
+
+							let newUsersArray = null;
+							const newAmount = e.target.value;
+
+							if (newAmount === "0.00") {
+								// Remove user if amount is 0.00
+								newUsersArray = usersArray.filter((addedUsers) => addedUsers.user.id !== user.id);
+							} else if (isUserInArray) {
+								// Update existing user's amount
+								newUsersArray = usersArray.map((addedUsers) =>
+									addedUsers.user.id === user.id ? { ...addedUsers, amount: newAmount } : addedUsers
+								);
+							} else {
+								// Add new user
+								newUsersArray = [...usersArray, { user: user, amount: newAmount }];
+							}
+
+							console.log({ newUsersArray });
+
 							field?.onChange({
 								value: {
-									type: "Custom",
-									users: getValues().splitBy?.value.users || [],
-									unequal_split_amount: e.target.value,
+									type: "Unequal",
+									users: newUsersArray,
 								},
 							});
 						}}
@@ -224,31 +227,57 @@ const UserCardPercentageSplit = ({
 }) => {
 	return (
 		<>
-			<div className='flex flex-row items-center gap-6'>
-				{user.profile_img_src ? (
-					<img
-						src={user.profile_img_url || ""}
-						alt='user profile'
-						className='w-12 h-12 rounded-full'
+			<div className='flex flex-row items-center gap-6 justify-between'>
+				<div className='flex flex-row items-center gap-6'>
+					{user.profile_img_src ? (
+						<img
+							src={user.profile_img_url || ""}
+							alt='user profile'
+							className='w-12 h-12 rounded-full'
+						/>
+					) : (
+						<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
+					)}
+					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+				</div>
+
+				<div className='flex flex-row items-center gap-2 min-w-[40%] max-w-[40%] justify-end'>
+					<span>%</span>
+					<input
+						type='number'
+						className='input w-[79%] max-w-xs outline-none border-none bg-input-box-gray rounded-lg text-center font-semibold text-sm focus:outline-none focus:border-none focus:ring-0 h-full'
+						onChange={(e) => {
+							const usersArray = getValues().splitBy?.value.users || [];
+							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id);
+
+							let newUsersArray = null;
+							const newAmount = e.target.value;
+							console.log({ newAmount });
+
+							if (newAmount === "") {
+								// Remove user if amount is 0.00
+								newUsersArray = usersArray.filter((addedUsers) => addedUsers.user.id !== user.id);
+							} else if (isUserInArray) {
+								// Update existing user's amount
+								newUsersArray = usersArray.map((addedUsers) =>
+									addedUsers.user.id === user.id ? { ...addedUsers, amount: newAmount } : addedUsers
+								);
+							} else {
+								// Add new user
+								newUsersArray = [...usersArray, { user: user, amount: newAmount }];
+							}
+
+							console.log({ newUsersArray });
+
+							field?.onChange({
+								value: {
+									type: "Percentage",
+									users: newUsersArray,
+								},
+							});
+						}}
 					/>
-				) : (
-					<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
-				)}
-				<span className='text-font-white text-lg font-semibold'>{user.name}</span>
-				%
-				<input
-					type='number'
-					className='input input-bordered input-primary w-full max-w-xs'
-					onChange={(e) => {
-						field?.onChange({
-							value: {
-								type: "Percentage",
-								users: getValues().splitBy?.value.users || [],
-								percentage_split_amount: e.target.value,
-							},
-						});
-					}}
-				/>
+				</div>
 			</div>
 		</>
 	);

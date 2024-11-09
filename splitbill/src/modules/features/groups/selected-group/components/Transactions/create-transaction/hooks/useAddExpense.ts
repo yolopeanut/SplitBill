@@ -5,6 +5,22 @@ import postCreateNewTransactionDB from "../../../../../../../core/database_funct
 import postCreateNewTransactionSplitDB from "../../../../../../../core/database_functions/post_create_new_transaction_split";
 import { IAllUsersTable } from "../../../../../../../core/interfaces/all_usersTable";
 
+type MutationProps = {
+	group_id: string;
+	paid_by: string;
+	expense_title: string;
+	category: string;
+	amount: number;
+	remarks: string | null;
+	split_by: {
+		value: {
+			type: string;
+			users: { user: IAllUsersTable; amount: number }[];
+		};
+	};
+	tax: number | 0;
+};
+
 export const useAddExpense = () => {
 	const { user, session, isLoading } = useAuthContext();
 
@@ -17,20 +33,8 @@ export const useAddExpense = () => {
 			amount,
 			remarks,
 			split_by,
-		}: {
-			group_id: string;
-			paid_by: string;
-			expense_title: string;
-			category: string;
-			amount: number;
-			remarks: string | null;
-			split_by: {
-				value: {
-					type: string;
-					users: { user: IAllUsersTable; amount: number }[];
-				};
-			};
-		}) => {
+			tax,
+		}: MutationProps) => {
 			if (!user || !session || !supabase || isLoading) return;
 
 			const response = await postCreateNewTransactionDB(
@@ -49,10 +53,21 @@ export const useAddExpense = () => {
 
 			if (response) {
 				const split_by_values = split_by.value;
+
+				// Equal split by
+				const equal_split_amount = amount / split_by_values.users.length + tax;
+
+				// Unequal split by
+				const number_of_users = split_by_values.users.length;
+				const unequal_split_by = split_by_values.users.map((user) => ({
+					...user,
+					amount: user.amount + tax / number_of_users,
+				}));
+				split_by_values.users = unequal_split_by;
+
 				split_by_values.users.map(async (user) => {
 					//If split by is equal, then we need to calculate the equal split amount
 					if (split_by_values.type === "Equal") {
-						const equal_split_amount = amount / split_by_values.users.length; // Calculate the equal split amount
 						await postCreateNewTransactionSplitDB(
 							response,
 							user.user.id,
@@ -62,7 +77,6 @@ export const useAddExpense = () => {
 							null
 						);
 					}
-					// TODO: Implement unequal split
 					//If split by is unequal, then we need to calculate the unequal split amount
 					else if (split_by_values.type === "Unequal") {
 						await postCreateNewTransactionSplitDB(
