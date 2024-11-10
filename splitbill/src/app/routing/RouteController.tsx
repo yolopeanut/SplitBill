@@ -9,6 +9,7 @@ import AddFriendPage from "../../modules/features/friends/add-friends/AddFriendP
 import SelectedGroupPage from "../../modules/features/groups/selected-group/SelectedGroupPage";
 import EditGroupPage from "../../modules/features/groups/selected-group/edit-group/EditGroupPage";
 import CreateTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/create-transaction/CreateTransactionPage";
+import CreateGroupPage from "../../modules/features/groups/create-group/CreateGroupPage";
 
 export const RouteController = () => {
 	return (
@@ -34,6 +35,14 @@ export const RouteController = () => {
 				element={
 					<ProtectedRoutes>
 						<GroupsPage />
+					</ProtectedRoutes>
+				}
+			/>
+			<Route
+				path='/groups/create'
+				element={
+					<ProtectedRoutes>
+						<CreateGroupPage />
 					</ProtectedRoutes>
 				}
 			/>
