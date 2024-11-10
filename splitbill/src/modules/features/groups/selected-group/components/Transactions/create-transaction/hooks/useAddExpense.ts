@@ -88,7 +88,6 @@ export const useAddExpense = () => {
 							null
 						);
 					}
-					// TODO: Implement percentage split
 					//If split by is percentage, then we need to calculate the percentage of the amount
 					else if (split_by_values.type === "Percentage") {
 						await postCreateNewTransactionSplitDB(

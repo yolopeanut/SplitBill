@@ -52,9 +52,10 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 				className='flex flex-col gap-2 w-full pb-4'
 				onClick={handleDrawerOpen}
 			>
-				<span className='text-font-white text-sm font-semibold'>Split By</span>
-				<div className='w-full bg-card-gray-dark rounded-lg flex flex-col items-start p-4 gap-2'>
-					<div className='text-font-white text-sm font-semibold'>{selectedSplitType}</div>
+				<span className='text-font-white text-sm font-semibold'>
+					Split By <span className='text-brand-orange'> [{selectedSplitType}]</span>
+				</span>
+				<div className='w-full bg-card-gray-dark rounded-lg flex flex-col items-start p-4 gap-2 min-h-16 '>
 					{getValues().splitBy?.value.users !== undefined
 						? getValues().splitBy?.value.users.map((user, index) => (
 								<UserCard
@@ -144,6 +145,14 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 								type={selectedSplitType}
 								getValues={getValues}
 							/>
+
+							<button
+								type='button'
+								className='btn bg-brand-orange text-font-black rounded-lg p-2 w-full'
+								onClick={handleDrawerOpen}
+							>
+								<span className='text-font-black text-lg font-semibold'>Done</span>
+							</button>
 						</div>
 					</Drawer>
 				)}
