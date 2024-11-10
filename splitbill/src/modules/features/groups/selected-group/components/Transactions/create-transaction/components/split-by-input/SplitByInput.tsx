@@ -13,12 +13,14 @@ type SplitByInputProps = {
 	getValues: UseFormGetValues<FormValues>;
 };
 
+type SelectedSplitType = "Equal" | "Custom" | "Percentage";
+
 export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 	// Drawer State
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
 	// Split By State
-	const [selectedSplitType, setSelectedSplitType] = useState<string>("Equal");
+	const [selectedSplitType, setSelectedSplitType] = useState<SelectedSplitType>("Equal");
 
 	// Get Group Users
 	const { selectedGroupId } = useGroupsContext();
@@ -37,7 +39,7 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 		field: ControllerRenderProps<FormValues, "splitBy">
 	) => {
 		// Set Selected Split Type
-		setSelectedSplitType(type);
+		setSelectedSplitType(type as SelectedSplitType);
 
 		// Set Selected Users in Field
 		field.onChange({ value: { type: type, users: [] } });
@@ -138,7 +140,10 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 							<hr className='border-[0.1px] border-brand-orange rounded-lg w-full' />
 
 							{/* Total Component */}
-							{selectedSplitType === "Custom" ? <TotalComponent getValues={getValues} /> : null}
+							<TotalComponent
+								type={selectedSplitType}
+								getValues={getValues}
+							/>
 						</div>
 					</Drawer>
 				)}

@@ -16,7 +16,6 @@ const NumericInput = ({
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const event = e.nativeEvent as InputEvent;
-		console.log(event);
 
 		if (event.inputType === "deleteContentBackward") {
 			setDigits(digits.slice(0, -1));

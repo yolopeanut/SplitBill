@@ -241,7 +241,6 @@ const UserCardPercentageSplit = ({
 				</div>
 
 				<div className='flex flex-row items-center gap-2 min-w-[40%] max-w-[40%] justify-end'>
-					<span>%</span>
 					<input
 						type='number'
 						className='input w-[79%] max-w-xs outline-none border-none bg-input-box-gray rounded-lg text-center font-semibold text-sm focus:outline-none focus:border-none focus:ring-0 h-full'
@@ -251,7 +250,6 @@ const UserCardPercentageSplit = ({
 
 							let newUsersArray = null;
 							const newAmount = e.target.value;
-							console.log({ newAmount });
 
 							if (newAmount === "") {
 								// Remove user if amount is 0.00
@@ -266,8 +264,6 @@ const UserCardPercentageSplit = ({
 								newUsersArray = [...usersArray, { user: user, amount: newAmount }];
 							}
 
-							console.log({ newUsersArray });
-
 							field?.onChange({
 								value: {
 									type: "Percentage",
@@ -276,6 +272,7 @@ const UserCardPercentageSplit = ({
 							});
 						}}
 					/>
+					<span>%</span>
 				</div>
 			</div>
 		</>
