@@ -26,16 +26,18 @@ export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
 				onClick={handleDrawerOpen}
 			>
 				<span className='text-font-white text-sm font-semibold'>Paid By</span>
-				<div className='w-full h-20 bg-card-gray-dark rounded-lg flex items-center px-4'>
+				<div className='w-full min-h-16 bg-card-gray-dark rounded-lg flex items-center px-4 text-font-text-gray'>
 					{selectedUser ? (
-						<UserCard
-							user={selectedUser}
-							field={undefined}
-							setSelectedUser={undefined}
-							setIsDrawerOpen={undefined}
-						/>
+						<div className='py-4'>
+							<UserCard
+								user={selectedUser}
+								field={undefined}
+								setSelectedUser={undefined}
+								setIsDrawerOpen={undefined}
+							/>
+						</div>
 					) : (
-						"Select User"
+						"Select who paid"
 					)}
 				</div>
 			</div>

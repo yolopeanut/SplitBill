@@ -21,14 +21,16 @@ export const CategoryInput = ({ control }: { control: Control<FormValues> }) => 
 				onClick={handleDrawerOpen}
 			>
 				<span className='text-font-white text-sm font-semibold'>Category</span>
-				<div className='w-full h-20 bg-card-gray-dark rounded-lg flex items-center px-4'>
+				<div className='w-full min-h-16 bg-card-gray-dark rounded-lg flex items-center px-4 text-font-text-gray'>
 					{selectedCategory ? (
-						<CategoryCard
-							category={selectedCategory}
-							field={undefined}
-							setSelectedCategory={undefined}
-							setIsDrawerOpen={undefined}
-						/>
+						<div className='py-4'>
+							<CategoryCard
+								category={selectedCategory}
+								field={undefined}
+								setSelectedCategory={undefined}
+								setIsDrawerOpen={undefined}
+							/>
+						</div>
 					) : (
 						"Select Category"
 					)}

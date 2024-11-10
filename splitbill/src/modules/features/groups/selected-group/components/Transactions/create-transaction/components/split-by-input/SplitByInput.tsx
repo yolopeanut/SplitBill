@@ -45,6 +45,8 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 		field.onChange({ value: { type: type, users: [] } });
 	};
 
+	const splitByUsers = getValues().splitBy?.value.users;
+
 	return (
 		<>
 			{/* Split By Input Box */}
@@ -55,9 +57,9 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 				<span className='text-font-white text-sm font-semibold'>
 					Split By <span className='text-brand-orange'> [{selectedSplitType}]</span>
 				</span>
-				<div className='w-full bg-card-gray-dark rounded-lg flex flex-col items-start p-4 gap-2 min-h-16 '>
-					{getValues().splitBy?.value.users !== undefined
-						? getValues().splitBy?.value.users.map((user, index) => (
+				<div className='w-full bg-card-gray-dark rounded-lg flex flex-col items-start p-4 gap-2 min-h-16 text-font-text-gray justify-center'>
+					{splitByUsers !== undefined && splitByUsers.length > 0
+						? splitByUsers.map((user, index) => (
 								<UserCard
 									key={`selected-user-${user.user.id}-${index}`}
 									user={user.user}
@@ -66,7 +68,7 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 									getValues={getValues}
 								/>
 						  ))
-						: "Select User"}
+						: "Select friends"}
 				</div>
 			</div>
 

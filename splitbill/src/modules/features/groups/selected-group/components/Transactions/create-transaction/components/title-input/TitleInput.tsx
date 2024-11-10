@@ -8,7 +8,7 @@ export const TitleInput = ({ register }: { register: UseFormRegister<FormValues>
 				<span className='text-font-white text-sm font-semibold'>Title</span>
 				<input
 					type='text'
-					className='input w-full bg-input-box-gray outline-none border-none'
+					className='input w-full bg-input-box-gray outline-none border-none placeholder:text-font-text-gray'
 					placeholder='Expense Title'
 					{...register("title")}
 				/>
