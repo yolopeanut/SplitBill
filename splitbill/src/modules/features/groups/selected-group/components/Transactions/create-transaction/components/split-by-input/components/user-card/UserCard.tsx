@@ -57,7 +57,7 @@ const NumericInput = ({
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const numericValue = e.target.value.replace(/[^\d]/g, "");
-		const floatValue = parseInt(numericValue) / 100;
+		const floatValue = parseFloat(numericValue) / 100;
 		const formattedValue = floatValue.toFixed(2);
 
 		setValue(formattedValue);
@@ -181,26 +181,25 @@ const UserCardCustomSplit = ({
 					<NumericInput
 						field={field}
 						onChange={(e) => {
-							const usersArray = getValues().splitBy?.value.users || [];
-							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id);
+							const usersArray = getValues().splitBy?.value.users || []; // Get all users
+							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id); // Check if user is already in array
+							const newAmount = e.target.value; // Get new amount
+							let newUsersArray = null; // Initialize new users array
 
-							let newUsersArray = null;
-							const newAmount = e.target.value;
-
+							// Remove user if amount is 0.00
 							if (newAmount === "0.00") {
-								// Remove user if amount is 0.00
 								newUsersArray = usersArray.filter((addedUsers) => addedUsers.user.id !== user.id);
-							} else if (isUserInArray) {
-								// Update existing user's amount
+							}
+							// Update existing user's amount
+							else if (isUserInArray) {
 								newUsersArray = usersArray.map((addedUsers) =>
 									addedUsers.user.id === user.id ? { ...addedUsers, amount: newAmount } : addedUsers
 								);
-							} else {
-								// Add new user
+							}
+							// Add new user
+							else {
 								newUsersArray = [...usersArray, { user: user, amount: newAmount }];
 							}
-
-							console.log({ newUsersArray });
 
 							field?.onChange({
 								value: {

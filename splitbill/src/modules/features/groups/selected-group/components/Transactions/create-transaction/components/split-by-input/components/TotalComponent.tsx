@@ -16,7 +16,7 @@ const TotalComponent = ({ getValues }: TotalComponentProps) => {
 	if (!total)
 		return <span className='text-font-red-dark text-lg font-semibold'>Enter Amount First</span>;
 
-	const missing = Math.abs(total - (totalAmount ? totalAmount : 0)).toFixed(2);
+	const missing = (total - (totalAmount ? totalAmount : 0)).toFixed(2);
 
 	return (
 		<>

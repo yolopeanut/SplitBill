@@ -11,6 +11,7 @@ interface IAllTransactionsTable {
 	trans_title: string;
 	category: ExpenseCategory;
 	transaction_splits: ITransactionSplitsTable[];
+	tax: number;
 }
 
 export type { IAllTransactionsTable };

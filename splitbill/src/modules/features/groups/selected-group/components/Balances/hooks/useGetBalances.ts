@@ -68,7 +68,12 @@ function analyzeGroupExpenses(
 				transaction.transaction_splits.forEach((split) => {
 					if (split.split_user_id === user.id) return; // Skip user's own split
 
-					const splitAmount = getSplitAmount(split, transaction.total_amount);
+					const splitAmount = getSplitAmount({
+						split,
+						total_amount: transaction.total_amount,
+						tax: transaction.tax,
+						numberOfSplits: transaction.transaction_splits.length,
+					});
 					const currentUserBalance = balances.get(user.id)!;
 					const otherUserOwes = currentUserBalance.owes_users.get(split.split_user_id) || 0;
 					currentUserBalance.owes_users.set(split.split_user_id, otherUserOwes + splitAmount);
@@ -80,7 +85,12 @@ function analyzeGroupExpenses(
 				);
 				if (!userSplit) return;
 
-				const splitAmount = getSplitAmount(userSplit, transaction.total_amount);
+				const splitAmount = getSplitAmount({
+					split: userSplit,
+					total_amount: transaction.total_amount,
+					tax: transaction.tax,
+					numberOfSplits: transaction.transaction_splits.length,
+				});
 				const currentUserBalance = balances.get(user.id)!;
 				const currentOwed = currentUserBalance.owes_users.get(transaction.paid_by) || 0;
 				currentUserBalance.owes_users.set(transaction.paid_by, currentOwed - splitAmount);
@@ -100,19 +110,28 @@ function analyzeGroupExpenses(
 
 	return { userBalances };
 }
+type SplitType = "equal" | "unequal" | "percentage";
+type GetSplitAmountProps = {
+	split: ITransactionSplitsTable;
+	total_amount: number;
+	tax: number;
+	numberOfSplits: number;
+};
 
-function getSplitAmount(split: ITransactionSplitsTable, total_amount: number) {
-	switch (split.split_type.toLowerCase()) {
+function getSplitAmount({ split, total_amount, tax, numberOfSplits }: GetSplitAmountProps) {
+	// Calculate tax per person (split tax equally)
+	const taxPerPerson = tax / numberOfSplits;
+
+	switch (split.split_type.toLowerCase() as SplitType) {
 		case "equal":
 			if (!split.equal_split_amount) return 0;
-			// console.log({ equal_split_amount: split.equal_split_amount });
-			return split.equal_split_amount;
+			return split.equal_split_amount + taxPerPerson;
 		case "unequal":
 			if (!split.unequal_split_amount) return 0;
-			return split.unequal_split_amount;
+			return split.unequal_split_amount + taxPerPerson;
 		case "percentage":
 			if (!split.percentage_split_amount) return 0;
-			return (split.percentage_split_amount / 100) * total_amount;
+			return (split.percentage_split_amount / 100) * total_amount + taxPerPerson;
 		default:
 			return 0;
 	}

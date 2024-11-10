@@ -133,6 +133,7 @@ const Transactions = ({ refetch }: { refetch: () => void }) => {
 					</div>
 				);
 			})}
+			{/* Add Transaction Floating Button */}
 			<FloatingButton
 				handleAddTransactionOnClick={handleAddTransactionOnClick}
 				refetch={refetch}

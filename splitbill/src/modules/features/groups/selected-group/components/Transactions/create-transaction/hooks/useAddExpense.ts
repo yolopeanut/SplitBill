@@ -44,7 +44,8 @@ export const useAddExpense = () => {
 				expense_title,
 				category,
 				amount,
-				remarks
+				remarks,
+				tax
 			);
 
 			if (response.error) {
@@ -55,13 +56,12 @@ export const useAddExpense = () => {
 				const split_by_values = split_by.value;
 
 				// Equal split by
-				const equal_split_amount = amount / split_by_values.users.length + tax;
+				const equal_split_amount = amount / split_by_values.users.length;
 
 				// Unequal split by
-				const number_of_users = split_by_values.users.length;
 				const unequal_split_by = split_by_values.users.map((user) => ({
 					...user,
-					amount: user.amount + tax / number_of_users,
+					amount: user.amount,
 				}));
 				split_by_values.users = unequal_split_by;
 

@@ -102,6 +102,8 @@ const CreateTransactionBody = () => {
 			split_by: data.splitBy,
 			tax: data.tax || 0,
 		});
+
+		console.log({ data });
 	};
 
 	return (

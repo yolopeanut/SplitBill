@@ -7,7 +7,8 @@ const postCreateNewTransactionDB = async (
 	expense_title: string,
 	category: string,
 	amount: number,
-	remarks: string | null
+	remarks: string | null,
+	tax: number | 0
 ) => {
 	const { data, error } = await supabase.schema("splitbill").rpc("post_create_new_transaction", {
 		p_group_id: group_id,
@@ -17,6 +18,7 @@ const postCreateNewTransactionDB = async (
 		p_category: category,
 		p_amount: amount,
 		p_remarks: remarks,
+		p_tax: tax,
 	});
 
 	if (error) {
