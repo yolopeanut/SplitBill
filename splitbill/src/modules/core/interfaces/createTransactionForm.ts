@@ -1,6 +1,6 @@
 import { IAllUsersTable } from "./all_usersTable";
 
-interface FormValues {
+export interface ICreateTransactionForm {
 	title?: string;
 	amount?: number;
 	tax?: number;
@@ -14,5 +14,3 @@ interface FormValues {
 		};
 	};
 }
-
-export default FormValues;

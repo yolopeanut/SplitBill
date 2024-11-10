@@ -17,7 +17,7 @@ const CreateGroupPageHeader = () => {
 				>
 					<IoArrowBack size={20} />
 				</button>
-				<div className='text-font-white text-3xl font-bold pr-6'>Create Group</div>
+				<div className='text-font-white text-2xl font-bold pr-6'>Create Group</div>
 				<div></div>
 			</div>
 		</>

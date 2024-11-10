@@ -57,10 +57,8 @@ const TransactionCard = ({
 
 const FloatingButton = ({
 	handleAddTransactionOnClick,
-	refetch,
 }: {
 	handleAddTransactionOnClick: () => void;
-	refetch: () => void;
 }) => {
 	return (
 		<div className='fixed bottom-28 right-7'>
@@ -68,7 +66,6 @@ const FloatingButton = ({
 				className='btn btn-sm bg-brand-orange rounded-full h-14 flex justify-center items-center text-font-black border-none'
 				onClick={() => {
 					handleAddTransactionOnClick();
-					refetch();
 				}}
 			>
 				<PiReceiptFill size={30} />
@@ -77,7 +74,7 @@ const FloatingButton = ({
 	);
 };
 
-const Transactions = ({ refetch }: { refetch: () => void }) => {
+const Transactions = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
 	const { groupUsers, allTransactions } = useGroupsContext();
@@ -134,10 +131,7 @@ const Transactions = ({ refetch }: { refetch: () => void }) => {
 				);
 			})}
 			{/* Add Transaction Floating Button */}
-			<FloatingButton
-				handleAddTransactionOnClick={handleAddTransactionOnClick}
-				refetch={refetch}
-			/>
+			<FloatingButton handleAddTransactionOnClick={handleAddTransactionOnClick} />
 		</div>
 	);
 };

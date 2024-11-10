@@ -1,12 +1,12 @@
 import { Controller, ControllerRenderProps, Control } from "react-hook-form";
-import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useState } from "react";
 
-export const PaidByInput = ({ control }: { control: Control<FormValues> }) => {
+export const PaidByInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedUser, setSelectedUser] = useState<IAllUsersTable | null>(null);
 
@@ -104,7 +104,7 @@ const UserCard = ({
 	setIsDrawerOpen,
 }: {
 	user: IAllUsersTable;
-	field: ControllerRenderProps<FormValues, "paidBy"> | undefined;
+	field: ControllerRenderProps<ICreateTransactionForm, "paidBy"> | undefined;
 	setSelectedUser: Dispatch<SetStateAction<IAllUsersTable | null>> | undefined;
 	setIsDrawerOpen: Dispatch<SetStateAction<boolean>> | undefined;
 }) => {

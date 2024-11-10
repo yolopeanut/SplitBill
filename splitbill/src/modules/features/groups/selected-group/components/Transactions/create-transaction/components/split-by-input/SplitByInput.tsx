@@ -1,5 +1,5 @@
 import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
-import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
@@ -9,8 +9,8 @@ import UserCard from "./components/user-card/UserCard";
 import TotalComponent from "./components/TotalComponent";
 
 type SplitByInputProps = {
-	control: Control<FormValues>;
-	getValues: UseFormGetValues<FormValues>;
+	control: Control<ICreateTransactionForm>;
+	getValues: UseFormGetValues<ICreateTransactionForm>;
 };
 
 type SelectedSplitType = "Equal" | "Custom" | "Percentage";
@@ -36,7 +36,7 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 	// On Split Type Change
 	const handleSplitTypeChange = (
 		type: string,
-		field: ControllerRenderProps<FormValues, "splitBy">
+		field: ControllerRenderProps<ICreateTransactionForm, "splitBy">
 	) => {
 		// Set Selected Split Type
 		setSelectedSplitType(type as SelectedSplitType);

@@ -56,11 +56,9 @@ const SelectedGroupPage = () => {
 	const { data: selectedGroup, isLoading } = useGetSelectedGroup(groupId || "");
 
 	// Get all transactions
-	const {
-		data: allTransactions,
-		isLoading: isLoadingAllTransactions,
-		refetch,
-	} = useGetAllTransactions(groupId || "");
+	const { data: allTransactions, isLoading: isLoadingAllTransactions } = useGetAllTransactions(
+		groupId || ""
+	);
 
 	// Get group users
 	const { data: groupUsers, isLoading: isLoadingGroupUsers } = useGetGroupUsers({
@@ -114,7 +112,7 @@ const SelectedGroupPage = () => {
 		<>
 			<div className='flex flex-col gap-4 relative p-1 h-full overflow-y-auto'>
 				<SelectedGroupHeader selectedGroup={selectedGroup} />
-				<SelectedGroupBody refetch={refetch} />
+				<SelectedGroupBody />
 			</div>
 		</>
 	);
@@ -214,7 +212,7 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 //=========== Selected Group Header ============//
 
 //=========== Selected Group Body ============//
-const SelectedGroupBody = ({ refetch }: { refetch: () => void }) => {
+const SelectedGroupBody = () => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
 
 	return (
@@ -226,8 +224,8 @@ const SelectedGroupBody = ({ refetch }: { refetch: () => void }) => {
 				/>
 			</div>
 			<div className='flex flex-col gap-4 px-4 w-full h-full overflow-auto'>
-				{selectedBadge === "Transactions" && <Transactions refetch={refetch} />}
-				{selectedBadge === "Balances" && <Balances refetch={refetch} />}
+				{selectedBadge === "Transactions" && <Transactions />}
+				{selectedBadge === "Balances" && <Balances />}
 				{selectedBadge === "Analytics" && <Analytics />}
 			</div>
 		</>

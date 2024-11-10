@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { UseFormRegister } from "react-hook-form";
 
 import { IoIosCalculator } from "react-icons/io";
-import FormValues from "../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 
 const NumericInput = ({
 	register,
 	inputKey,
 }: {
-	register: UseFormRegister<FormValues>;
-	inputKey: keyof FormValues;
+	register: UseFormRegister<ICreateTransactionForm>;
+	inputKey: keyof ICreateTransactionForm;
 }) => {
 	const [digits, setDigits] = useState([] as string[]);
 
@@ -50,7 +50,11 @@ const NumericInput = ({
 	);
 };
 
-export const AmountInput = ({ register }: { register: UseFormRegister<FormValues> }) => {
+export const AmountInput = ({
+	register,
+}: {
+	register: UseFormRegister<ICreateTransactionForm>;
+}) => {
 	const { selectedGroup } = useGroupsContext();
 	return (
 		<>

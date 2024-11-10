@@ -1,10 +1,10 @@
 import { UseFormGetValues } from "react-hook-form";
-import FormValues from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
 import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
 
 type TotalComponentProps = {
 	type: "Equal" | "Custom" | "Percentage";
-	getValues: UseFormGetValues<FormValues>;
+	getValues: UseFormGetValues<ICreateTransactionForm>;
 };
 
 const TotalComponent = ({ type, getValues }: TotalComponentProps) => {

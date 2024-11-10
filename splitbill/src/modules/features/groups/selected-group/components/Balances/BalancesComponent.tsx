@@ -10,8 +10,7 @@ import useGetBalances from "./hooks/useGetBalances";
 import OwedUserCards from "./components/OwedUserCards";
 import { RiArrowUpSLine } from "react-icons/ri";
 
-const Balances = ({ refetch }: { refetch: () => void }) => {
-	refetch();
+const Balances = () => {
 	const { selectedGroup, allTransactions, groupUsers } = useGroupsContext();
 	const {
 		userBalances,

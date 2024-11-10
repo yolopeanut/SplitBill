@@ -1,5 +1,5 @@
 import { ControllerRenderProps } from "react-hook-form";
-import FormValues from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
 
 const SplitByCard = ({
 	type,
@@ -8,11 +8,11 @@ const SplitByCard = ({
 	handleSplitTypeChange,
 }: {
 	type: string;
-	field: ControllerRenderProps<FormValues, "splitBy">;
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy">;
 	selectedSplitType: string;
 	handleSplitTypeChange: (
 		type: string,
-		field: ControllerRenderProps<FormValues, "splitBy">
+		field: ControllerRenderProps<ICreateTransactionForm, "splitBy">
 	) => void;
 }) => {
 	return (

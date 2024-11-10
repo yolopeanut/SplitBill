@@ -24,7 +24,7 @@ type MutationProps = {
 export const useAddExpense = () => {
 	const { user, session, isLoading } = useAuthContext();
 
-	const { mutate: addExpense } = useMutation({
+	const { mutate: addExpense, isPending } = useMutation({
 		mutationFn: async ({
 			group_id,
 			paid_by,
@@ -111,5 +111,5 @@ export const useAddExpense = () => {
 		},
 	});
 
-	return { addExpense };
+	return { addExpense, isPending };
 };

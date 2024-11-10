@@ -6,7 +6,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
 import { useEffect } from "react";
-import FormValues from "../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../core/interfaces/createTransactionForm";
 import TitleInput from "./components/title-input/TitleInput";
 import AmountInput from "./components/amount-input/AmountInput";
 import CategoryInput from "./components/category-input/CategoryInput";
@@ -15,6 +15,7 @@ import SplitByInput from "./components/split-by-input/SplitByInput";
 import RemarksInput from "./components/remarks-input/RemarksInput";
 import { useGroupsContext } from "../../../../hooks/useGroupsContext";
 import { useAddExpense } from "./hooks/useAddExpense";
+import { queryClient } from "../../../../../../../config/ReactQuery";
 
 const CreateTransactionPage = () => {
 	const navigate = useNavigate();
@@ -70,9 +71,12 @@ const CreateTransactionHeader = () => {
 };
 
 const CreateTransactionBody = () => {
-	const { addExpense } = useAddExpense();
+	const navigate = useNavigate();
+	const { groupId } = useParams();
+
+	const { addExpense, isPending } = useAddExpense();
 	const { selectedGroupId } = useGroupsContext();
-	const { register, handleSubmit, control, getValues } = useForm<FormValues>({
+	const { register, handleSubmit, control, getValues } = useForm<ICreateTransactionForm>({
 		defaultValues: {
 			splitBy: {
 				value: {
@@ -83,7 +87,7 @@ const CreateTransactionBody = () => {
 		},
 	});
 
-	const onSubmit: SubmitHandler<FormValues> = (data) => {
+	const onSubmit: SubmitHandler<ICreateTransactionForm> = (data) => {
 		// Check if all required fields are filled
 		if (!selectedGroupId) return;
 		if (!data.paidBy) return;
@@ -102,8 +106,14 @@ const CreateTransactionBody = () => {
 			split_by: data.splitBy,
 			tax: data.tax || 0,
 		});
+		if (isPending) {
+			console.log("isPending");
+			return;
+		}
 
-		console.log({ data });
+		queryClient.invalidateQueries({ queryKey: ["groups", "fetchAllTransactions"] });
+
+		navigate(`/groups/${groupId}`);
 	};
 
 	return (
@@ -126,8 +136,9 @@ const CreateTransactionBody = () => {
 						<button
 							type='submit'
 							className='btn bg-brand-orange text-font-black w-full'
+							disabled={isPending}
 						>
-							Add Expense
+							{isPending ? "Adding..." : "Add Expense"}
 						</button>
 					</div>
 				</div>

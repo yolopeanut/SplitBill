@@ -1,7 +1,7 @@
 import { ControllerRenderProps, UseFormGetValues } from "react-hook-form";
 
 import { useState } from "react";
-import FormValues from "../../../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../../../core/interfaces/createTransactionForm";
 import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
 import { getInitials } from "../../../../../../../../../../core/common/commonFunctions";
 import CheckBox from "../../../../../../../../../../core/common/components/CheckBox";
@@ -13,9 +13,9 @@ const UserCard = ({
 	getValues,
 }: {
 	user: IAllUsersTable;
-	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
 	selectedSplitType: string | undefined;
-	getValues: UseFormGetValues<FormValues>;
+	getValues: UseFormGetValues<ICreateTransactionForm>;
 }) => {
 	if (!field) return <UserCardDefault user={user} />;
 	if (selectedSplitType?.toLowerCase() === "equal")
@@ -50,7 +50,7 @@ const UserCard = ({
 const NumericInput = ({
 	onChange,
 }: {
-	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
 	const [value, setValue] = useState("0.00");
@@ -105,8 +105,8 @@ const UserCardEqualSplit = ({
 	getValues,
 }: {
 	user: IAllUsersTable;
-	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
-	getValues: UseFormGetValues<FormValues>;
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
+	getValues: UseFormGetValues<ICreateTransactionForm>;
 }) => {
 	return (
 		<>
@@ -157,8 +157,8 @@ const UserCardCustomSplit = ({
 	getValues,
 }: {
 	user: IAllUsersTable;
-	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
-	getValues: UseFormGetValues<FormValues>;
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
+	getValues: UseFormGetValues<ICreateTransactionForm>;
 }) => {
 	return (
 		<>
@@ -221,8 +221,8 @@ const UserCardPercentageSplit = ({
 	getValues,
 }: {
 	user: IAllUsersTable;
-	field: ControllerRenderProps<FormValues, "splitBy"> | undefined;
-	getValues: UseFormGetValues<FormValues>;
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
+	getValues: UseFormGetValues<ICreateTransactionForm>;
 }) => {
 	return (
 		<>
