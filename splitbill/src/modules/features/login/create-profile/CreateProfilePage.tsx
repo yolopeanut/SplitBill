@@ -131,6 +131,7 @@ const ProfilePictureInput = ({
 	register: UseFormRegister<IFormInput>;
 }) => {
 	const [profilePicture, setProfilePicture] = useState<File | null>(null);
+	const options = { maxSizeMB: 1, maxWidthOrHeight: 100, useWebWorker: true };
 
 	return (
 		<>
@@ -152,7 +153,7 @@ const ProfilePictureInput = ({
 						accept='image/png, image/gif, image/jpeg'
 						onChange={(e) => {
 							if (e.target.files && e.target.files.length > 0) {
-								handleImageUpload(e).then((file) => {
+								handleImageUpload({ event: e, options }).then((file) => {
 									if (file) {
 										setProfilePictureUrl(URL.createObjectURL(file));
 										setProfilePicture(file);

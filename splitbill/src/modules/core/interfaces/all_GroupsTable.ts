@@ -8,7 +8,7 @@ interface IAllGroupsTable {
 	img_src: string | null;
 	img_url: string | null;
 	currency: string;
-	invite_link: string | null;
+	inv_link: string | null;
 	to_pay: number | null;
 	to_receive: number | null;
 	num_members: number | null;

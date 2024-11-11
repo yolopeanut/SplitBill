@@ -1,12 +1,11 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Controller, Control, ControllerRenderProps } from "react-hook-form";
 import Drawer from "react-modern-drawer";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors } from "react-hook-form";
 import { ICreateGroupForm } from "../../../../../core/interfaces/createGroupForm";
 import Currencies from "../../../../../core/constants/Currencies";
 
 type CurrencyInputProps = {
-	register: UseFormRegister<ICreateGroupForm>;
 	errors: FieldErrors<ICreateGroupForm>;
 	control: Control<ICreateGroupForm>;
 };
@@ -17,7 +16,7 @@ type SelectedCurrency = {
 	dollarSign: string;
 };
 
-const CurrencyInput = ({ register, errors, control }: CurrencyInputProps) => {
+const CurrencyInput = ({ errors, control }: CurrencyInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedCurrency, setSelectedCurrency] = useState<SelectedCurrency | null>(
 		Currencies.find((currency) => currency.shortform === "MYR") || null
@@ -28,17 +27,35 @@ const CurrencyInput = ({ register, errors, control }: CurrencyInputProps) => {
 	};
 	return (
 		<>
+			{/* Currency Input Box */}
 			<div
 				className='flex flex-col gap-2 pb-4 w-full'
 				onClick={handleDrawerOpen}
 			>
 				<span className='text-font-white text-sm font-semibold'>Currency</span>
 
+				<div className='w-full min-h-16 bg-card-gray-dark rounded-lg flex items-center px-4 text-font-text-gray'>
+					{selectedCurrency ? (
+						<div className='py-4 w-full'>
+							<CurrencyCard
+								currency={selectedCurrency}
+								field={undefined}
+								setSelectedCurrency={undefined}
+								setIsDrawerOpen={undefined}
+								bordered={false}
+							/>
+						</div>
+					) : (
+						"Select Currency"
+					)}
+				</div>
+
 				{errors.currency && (
 					<span className='text-font-red-dark text-sm'>This field is required</span>
 				)}
 			</div>
 
+			{/* Currency Drawer Controller */}
 			<Controller
 				name='currency'
 				control={control}
@@ -74,15 +91,18 @@ const CurrencyInput = ({ register, errors, control }: CurrencyInputProps) => {
 							</div>
 
 							{/* Currency Cards */}
-							{Currencies.map((currency) => (
-								<CurrencyCard
-									currency={currency}
-									key={currency.shortform}
-									field={field}
-									setSelectedCurrency={setSelectedCurrency}
-									setIsDrawerOpen={setIsDrawerOpen}
-								/>
-							))}
+							<div className='flex flex-col gap-4 bg-card-gray-dark rounded-lg py-4 px-2'>
+								{Currencies.map((currency) => (
+									<CurrencyCard
+										currency={currency}
+										key={currency.shortform}
+										field={field}
+										setSelectedCurrency={setSelectedCurrency}
+										setIsDrawerOpen={setIsDrawerOpen}
+										bordered={true}
+									/>
+								))}
+							</div>
 						</div>
 					</Drawer>
 				)}
@@ -98,6 +118,7 @@ type CurrencyCardProps = {
 	field: ControllerRenderProps<ICreateGroupForm, "currency"> | undefined;
 	setSelectedCurrency: Dispatch<SetStateAction<SelectedCurrency | null>> | undefined;
 	setIsDrawerOpen: Dispatch<SetStateAction<boolean>> | undefined;
+	bordered: boolean;
 };
 
 const CurrencyCard = ({
@@ -105,24 +126,40 @@ const CurrencyCard = ({
 	field,
 	setSelectedCurrency,
 	setIsDrawerOpen,
+	bordered,
 }: CurrencyCardProps) => {
 	return (
 		<>
+			{/* Currency Card */}
 			<div
-				className='flex flex-row justify-between items-center w-full gap-4 cursor-pointer'
+				className='flex flex-row justify-between items-center w-full gap-1 cursor-pointer'
 				onClick={() => {
-					field?.onChange(currency);
+					field?.onChange(currency.shortform);
 					setSelectedCurrency?.(currency);
 					setIsDrawerOpen?.(false);
 				}}
 			>
-				<div className='flex flex-row items-center gap-6'>
-					<div className='flex justify-center items-center rounded-full w-12 h-12 text-font-black'>
+				{/* Currency Card Content */}
+				<div className='flex flex-row items-center gap-6 justify-between w-full'>
+					<div className='flex flex-col'>
+						{/* Currency Card Shortform */}
+						<span className='text-font-white text-base font-semibold'>{currency.shortform}</span>
+
+						{/* Currency Card Elaboration */}
+						<span className='text-font-text-gray text-sm font-semibold'>
+							{currency.elaboration}
+						</span>
+					</div>
+
+					{/* Currency Card Dollar Sign */}
+					<div className='flex justify-center items-center rounded-full w-12 text-font-white text-base'>
 						{currency.dollarSign}
 					</div>
-					<span className='text-font-white text-lg font-semibold'>{currency.shortform}</span>
 				</div>
 			</div>
+
+			{/* Currency Card Border */}
+			{bordered && <hr className='w-full border-b border-input-search-gray' />}
 		</>
 	);
 };

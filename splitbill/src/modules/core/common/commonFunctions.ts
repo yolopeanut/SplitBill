@@ -30,7 +30,13 @@ export function getPlural(num: number, word: string) {
 }
 
 // Function that compresses the image file
-export async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+export async function handleImageUpload({
+	event,
+	options,
+}: {
+	event: React.ChangeEvent<HTMLInputElement>;
+	options: { maxSizeMB: number; maxWidthOrHeight: number; useWebWorker: boolean };
+}) {
 	const imageFile = event.target.files?.[0];
 
 	if (!imageFile) {
@@ -40,11 +46,6 @@ export async function handleImageUpload(event: React.ChangeEvent<HTMLInputElemen
 	// console.log("originalFile instanceof Blob", imageFile instanceof Blob); // true
 	// console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
 
-	const options = {
-		maxSizeMB: 1,
-		maxWidthOrHeight: 100,
-		useWebWorker: true,
-	};
 	try {
 		const compressedFile = await imageCompression(imageFile, options);
 		// console.log("compressedFile instanceof Blob", compressedFile instanceof Blob); // true
