@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SlOptions } from "react-icons/sl";
 import { RiEdit2Fill } from "react-icons/ri";
-import { ImExit } from "react-icons/im";
+import { MdDelete } from "react-icons/md";
 
 const DropdownComponent = ({
 	editGroup,
@@ -55,11 +55,11 @@ const DropdownComponent = ({
 							setIsOpen(false);
 						}}
 					>
-						<ImExit
+						<MdDelete
 							size={20}
 							className='text-font-red-dark'
 						/>
-						Leave
+						Delete
 					</div>
 				</div>
 			)}

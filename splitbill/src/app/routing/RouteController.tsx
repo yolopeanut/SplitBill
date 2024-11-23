@@ -10,6 +10,8 @@ import SelectedGroupPage from "../../modules/features/groups/selected-group/Sele
 import EditGroupPage from "../../modules/features/groups/selected-group/edit-group/EditGroupPage";
 import CreateTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/create-transaction/CreateTransactionPage";
 import CreateGroupPage from "../../modules/features/groups/create-group/CreateGroupPage";
+import EditTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/edit-transaction/EditTransactionPage";
+import TransactionDetailPage from "../../modules/features/groups/selected-group/components/Transactions/transaction-details/TransactionDetailPage";
 
 export const RouteController = () => {
 	return (
@@ -67,6 +69,22 @@ export const RouteController = () => {
 				element={
 					<ProtectedRoutes>
 						<CreateTransactionPage />
+					</ProtectedRoutes>
+				}
+			/>
+			<Route
+				path='/groups/:groupId/transaction-details/:transactionId'
+				element={
+					<ProtectedRoutes>
+						<TransactionDetailPage />
+					</ProtectedRoutes>
+				}
+			/>
+			<Route
+				path='/groups/:groupId/edit-transaction/:transactionId'
+				element={
+					<ProtectedRoutes>
+						<EditTransactionPage />
 					</ProtectedRoutes>
 				}
 			/>

@@ -1,9 +1,11 @@
 /** @type {import('tailwindcss').Config} */
+import colors from "tailwindcss/colors";
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		extend: {},
 		colors: {
+			...colors,
 			"brand-orange": "#FF9A34",
 			"background-black": "#1F1F1F",
 			"background-gray": "#2A2A2A",

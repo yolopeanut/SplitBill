@@ -37,151 +37,151 @@ export const expenseCategories = [
 	{
 		label: ExpenseCategory.Food,
 		icon: <FaUtensils size={20} />,
-		color: "#FF6347", // Tomato
+		color: "bg-red-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Housing,
 		icon: <FaHome size={20} />,
-		color: "#4682B4", // Steel Blue
+		color: "bg-blue-800", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Transportation,
 		icon: <FaBus size={20} />,
-		color: "#FFD700", // Gold
+		color: "bg-yellow-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Utilities,
 		icon: <FaWater size={20} />,
-		color: "#1E90FF", // Dodger Blue
+		color: "bg-blue-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Health,
 		icon: <FaHeart size={20} />,
-		color: "#FF69B4", // Hot Pink
+		color: "bg-pink-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Insurance,
 		icon: <FaShieldCat size={20} />,
-		color: "#32CD32", // Lime Green
+		color: "bg-green-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Entertainment,
 		icon: <FaFilm size={20} />,
-		color: "#FF4500", // Orange Red
+		color: "bg-orange-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Clothing,
 		icon: <FaTshirt size={20} />,
-		color: "#8A2BE2", // Blue Violet
+		color: "bg-purple-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.PersonalCare,
 		icon: <FaSpa size={20} />,
-		color: "#FFB6C1", // Light Pink
+		color: "bg-pink-300", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Education,
 		icon: <FaGraduationCap size={20} />,
-		color: "#6A5ACD", // Slate Blue
+		color: "bg-indigo-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Travel,
 		icon: <FaPlane size={20} />,
-		color: "#20B2AA", // Light Sea Green
+		color: "bg-teal-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Gifts,
 		icon: <FaGift size={20} />,
-		color: "#FF1493", // Deep Pink
+		color: "bg-pink-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Donations,
 		icon: <FaHandsHolding size={20} />,
-		color: "#FFDAB9", // Peach Puff
+		color: "bg-orange-300", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Groceries,
 		icon: <FaShoppingCart size={20} />,
-		color: "#ADFF2F", // Green Yellow
+		color: "bg-lime-500", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.DiningOut,
 		icon: <FaUtensils size={20} />,
-		color: "#FF8C00", // Dark Orange
+		color: "bg-orange-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Subscriptions,
 		icon: <FaStream size={20} />,
-		color: "#9370DB", // Medium Purple
+		color: "bg-purple-500", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.HomeMaintenance,
 		icon: <FaTools size={20} />,
-		color: "#A52A2A", // Brown
+		color: "bg-amber-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Childcare,
 		icon: <FaBaby size={20} />,
-		color: "#FFDEAD", // Navajo White
+		color: "bg-orange-300", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Pets,
 		icon: <FaDog size={20} />,
-		color: "#D2691E", // Chocolate
+		color: "bg-amber-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Fitness,
 		icon: <FaDumbbell size={20} />,
-		color: "#3CB371", // Medium Sea Green
+		color: "bg-emerald-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Hobbies,
 		icon: <FaPaintBrush size={20} />,
-		color: "#FF7F50", // Coral
+		color: "bg-orange-500", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.OfficeSupplies,
 		icon: <FaClipboardList size={20} />,
-		color: "#B0C4DE", // Light Steel Blue
+		color: "bg-blue-300", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Technology,
 		icon: <FaLaptop size={20} />,
-		color: "#4682B4", // Steel Blue
+		color: "bg-blue-800", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Savings,
 		icon: <FaPiggyBank size={20} />,
-		color: "#FFD700", // Gold
+		color: "bg-yellow-500", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Investments,
 		icon: <FaChartLine size={20} />,
-		color: "#32CD32", // Lime Green
+		color: "bg-green-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Taxes,
 		icon: <FaFileInvoiceDollar size={20} />,
-		color: "#FF4500", // Orange Red
+		color: "bg-orange-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Repairs,
 		icon: <FaWrench size={20} />,
-		color: "#A9A9A9", // Dark Gray
+		color: "bg-gray-600", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Events,
 		icon: <FaCalendar size={20} />,
-		color: "#FF6347", // Tomato
+		color: "bg-red-700", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.Miscellaneous,
 		icon: <FaQuestionCircle size={20} />,
-		color: "#B22222", // Firebrick
+		color: "bg-red-900", // Adjusted for better contrast with white text
 	},
 	{
 		label: ExpenseCategory.DebtRepayment,
 		icon: <FaCreditCard size={20} />,
-		color: "#8B0000", // Dark Red
+		color: "bg-red-800", // Adjusted for better contrast with white text
 	},
 ];

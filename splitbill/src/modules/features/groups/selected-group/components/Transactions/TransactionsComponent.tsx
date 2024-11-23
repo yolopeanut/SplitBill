@@ -2,12 +2,31 @@ import { PiReceiptFill } from "react-icons/pi";
 import ExpenseCategory from "../../../../../core/enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../../../../../core/constants/ExpenseCategories";
 import { formatCurrency } from "../../../../../core/common/commonFunctions";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { IAllTransactionsTable } from "../../../../../core/interfaces/all_transactionsTable";
 import { useGroupsContext } from "../../../hooks/useGroupsContext";
 
 interface GroupedTransactions {
 	[key: string]: IAllTransactionsTable[];
+}
+
+const handleClickTransaction = (
+	transactionId: string,
+	groupId: string,
+	navigate: NavigateFunction
+) => {
+	navigate(`/groups/${groupId}/transaction-details/${transactionId}`);
+};
+
+interface TransactionCardProps {
+	transactionId: string;
+	amount: number;
+	category: ExpenseCategory;
+	paidBy: string;
+	title: string;
+	remarks: string;
+	groupId: string;
+	navigate: NavigateFunction;
 }
 
 const TransactionCard = ({
@@ -16,23 +35,22 @@ const TransactionCard = ({
 	paidBy,
 	title,
 	remarks,
-}: {
-	amount: number;
-	category: ExpenseCategory;
-	paidBy: string;
-	title: string;
-	remarks: string;
-}) => {
+	transactionId,
+	groupId,
+	navigate,
+}: TransactionCardProps) => {
 	const categoryData = expenseCategories.find((categories) => categories.label === category);
 	const categoryIcon = categoryData?.icon;
 	const categoryColor = categoryData?.color;
 	return (
 		<>
-			<div className='flex flex-row justify-between items-center w-full gap-4'>
+			<div
+				className='flex flex-row justify-between items-center w-full gap-4'
+				onClick={() => handleClickTransaction(transactionId, groupId, navigate)}
+			>
 				<div className='flex flex-row items-center gap-4 w-[70%]'>
 					<div
-						className='flex justify-center items-center rounded-full min-w-10 min-h-10 text-font-black'
-						style={{ backgroundColor: categoryColor }}
+						className={`flex justify-center items-center rounded-full min-w-10 min-h-10 text-font-white ${categoryColor}`}
 					>
 						{categoryIcon}
 					</div>
@@ -119,6 +137,9 @@ const Transactions = () => {
 							return (
 								<TransactionCard
 									key={transaction.transaction_id}
+									transactionId={transaction.transaction_id}
+									groupId={groupId || ""}
+									navigate={navigate}
 									amount={transaction.total_amount}
 									category={transaction.category as ExpenseCategory}
 									paidBy={paidBy?.name || ""}

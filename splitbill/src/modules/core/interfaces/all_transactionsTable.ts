@@ -14,8 +14,6 @@ interface IAllTransactionsTable {
 	tax: number;
 }
 
-export type { IAllTransactionsTable };
-
 interface ITransactionSplitsTable {
 	transaction_split_id: string;
 	trans_id: string;
@@ -26,4 +24,4 @@ interface ITransactionSplitsTable {
 	percentage_split_amount: number | null;
 }
 
-export type { ITransactionSplitsTable };
+export type { IAllTransactionsTable, ITransactionSplitsTable };
