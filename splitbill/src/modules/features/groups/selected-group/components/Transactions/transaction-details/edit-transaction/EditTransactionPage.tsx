@@ -16,7 +16,8 @@ import { useAddExpense } from "./hooks/useAddExpense";
 import { useGroupsContext } from "../../../../../hooks/useGroupsContext";
 import { ICreateTransactionForm } from "../../../../../../../core/interfaces/createTransactionForm";
 import { queryClient } from "../../../../../../../../config/ReactQuery";
-
+import { useGetTransactionByID } from "../../transaction-details/hooks/useGetTransactionByID";
+import { IAllUsersTable } from "../../../../../../../core/interfaces/all_usersTable";
 const EditTransactionPage = () => {
 	const navigate = useNavigate();
 	const { selectedGroupId } = useGroupsContext();
@@ -72,11 +73,14 @@ const EditTransactionHeader = () => {
 
 const EditTransactionBody = () => {
 	const navigate = useNavigate();
-	const { groupId } = useParams();
+	const { groupId, transactionId } = useParams();
+	const { data, isLoading } = useGetTransactionByID(transactionId!);
+	console.log({ data });
 
 	const { addExpense, isPending } = useAddExpense();
-	const { selectedGroupId } = useGroupsContext();
-	const { register, handleSubmit, control, getValues } = useForm<ICreateTransactionForm>({
+	const { selectedGroupId, groupUsers } = useGroupsContext();
+
+	const { register, handleSubmit, control, getValues, setValue } = useForm<ICreateTransactionForm>({
 		defaultValues: {
 			splitBy: {
 				value: {
@@ -86,6 +90,53 @@ const EditTransactionBody = () => {
 			},
 		},
 	});
+
+	// Use useEffect to set form values when data is loaded
+	useEffect(() => {
+		if (!data || !groupUsers) return; // Exit if either data is not available
+
+		if (isLoading) return;
+
+		// Set basic values
+		setValue("title", data.trans_title);
+		setValue("amount", data.total_amount);
+		setValue("category", data.category);
+		setValue("paidBy", data.paid_by);
+		setValue("remarks", data.remarks);
+		setValue("tax", data.tax);
+		// Set split by values
+		const splitByValue = {
+			value: {
+				type: data.transaction_splits[0]?.split_type || "Error",
+				users: data.transaction_splits
+					.map((split) => {
+						const user = groupUsers.find((u) => u.id === split.split_user_id);
+						if (!user) return null;
+
+						return {
+							user: user,
+							amount:
+								split.unequal_split_amount ||
+								split.equal_split_amount ||
+								split.percentage_split_amount ||
+								0,
+						};
+					})
+					.filter((split): split is { user: IAllUsersTable; amount: number } => split !== null),
+			},
+		};
+		setValue("splitBy", splitByValue, { shouldValidate: true });
+
+		console.log("Setting values:", {
+			title: data.trans_title,
+			amount: data.total_amount,
+			category: data.category,
+			paidBy: data.paid_by,
+			remarks: data.remarks,
+			tax: data.tax,
+			splitBy: splitByValue,
+		});
+	}, [data, groupUsers, setValue, isLoading]);
 
 	const onSubmit: SubmitHandler<ICreateTransactionForm> = (data) => {
 		// Check if all required fields are filled

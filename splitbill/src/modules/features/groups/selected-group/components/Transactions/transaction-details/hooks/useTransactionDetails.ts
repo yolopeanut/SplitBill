@@ -18,7 +18,7 @@ const useTransactionDetails = (data: IAllTransactionsTable | null | undefined) =
 		const amountOwedBeforeTax: number =
 			currentUserSplit?.split_type === "Equal"
 				? (currentUserSplit.equal_split_amount as number)
-				: currentUserSplit?.split_type === "Unequal"
+				: currentUserSplit?.split_type === "Custom"
 				? (currentUserSplit.unequal_split_amount as number)
 				: currentUserSplit?.split_type === "Percentage"
 				? amount * (currentUserSplit.percentage_split_amount! / 100)

@@ -203,7 +203,7 @@ const UserCardCustomSplit = ({
 
 							field?.onChange({
 								value: {
-									type: "Unequal",
+									type: "Custom",
 									users: newUsersArray,
 								},
 							});

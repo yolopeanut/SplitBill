@@ -110,7 +110,7 @@ function analyzeGroupExpenses(
 
 	return { userBalances };
 }
-type SplitType = "equal" | "unequal" | "percentage";
+type SplitType = "equal" | "custom" | "percentage";
 type GetSplitAmountProps = {
 	split: ITransactionSplitsTable;
 	total_amount: number;
@@ -126,7 +126,7 @@ function getSplitAmount({ split, total_amount, tax, numberOfSplits }: GetSplitAm
 		case "equal":
 			if (!split.equal_split_amount) return 0;
 			return split.equal_split_amount + taxPerPerson;
-		case "unequal":
+		case "custom":
 			if (!split.unequal_split_amount) return 0;
 			return split.unequal_split_amount + taxPerPerson;
 		case "percentage":

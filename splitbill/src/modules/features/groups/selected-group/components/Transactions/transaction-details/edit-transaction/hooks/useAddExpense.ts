@@ -58,12 +58,12 @@ export const useAddExpense = () => {
 				// Equal split by
 				const equal_split_amount = amount / split_by_values.users.length;
 
-				// Unequal split by
-				const unequal_split_by = split_by_values.users.map((user) => ({
+				// Custom split by
+				const custom_split_by = split_by_values.users.map((user) => ({
 					...user,
 					amount: user.amount,
 				}));
-				split_by_values.users = unequal_split_by;
+				split_by_values.users = custom_split_by;
 
 				split_by_values.users.map(async (user) => {
 					//If split by is equal, then we need to calculate the equal split amount
@@ -77,8 +77,8 @@ export const useAddExpense = () => {
 							null
 						);
 					}
-					//If split by is unequal, then we need to calculate the unequal split amount
-					else if (split_by_values.type === "Unequal") {
+					//If split by is custom, then we need to calculate the custom split amount
+					else if (split_by_values.type === "Custom") {
 						await postCreateNewTransactionSplitDB(
 							response,
 							user.user.id,

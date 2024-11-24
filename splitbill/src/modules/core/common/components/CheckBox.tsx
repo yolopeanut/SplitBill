@@ -6,12 +6,15 @@ const CheckBox = ({
 	divClassName,
 	iconClassName,
 	onClick,
+	isCheckedInitially,
 }: {
 	divClassName: string;
 	iconClassName: string;
 	onClick: () => void;
+	isCheckedInitially?: boolean;
 }) => {
-	const [isChecked, setIsChecked] = useState(false);
+	console.log({ isCheckedInitially });
+	const [isChecked, setIsChecked] = useState(isCheckedInitially);
 	return (
 		<div
 			className={`${divClassName} ${isChecked ? "bg-brand-orange" : ""}`}

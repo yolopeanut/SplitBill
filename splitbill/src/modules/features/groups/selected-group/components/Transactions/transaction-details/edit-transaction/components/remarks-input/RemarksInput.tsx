@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
 
 export const RemarksInput = ({
 	register,
