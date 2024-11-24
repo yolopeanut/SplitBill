@@ -2,7 +2,8 @@ import { IAllTransactionsTable } from "../../../../../../../core/interfaces/all_
 import { expenseCategories } from "../../../../../../../core/constants/ExpenseCategories";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-import DropdownComponent from "./DropdownComponent";
+import { truncateText } from "../../../../../../../core/common/commonFunctions";
+import DropdownComponent from "./transaction-detail-page-body/components/DropdownComponent";
 
 interface TransactionDetailPageHeaderProps {
 	data: IAllTransactionsTable | null | undefined;
@@ -12,7 +13,7 @@ const TransactionDetailPageHeader = ({ data }: TransactionDetailPageHeaderProps)
 	const navigate = useNavigate();
 	const { groupId } = useParams();
 
-	const transactionTitle = data?.trans_title;
+	const transactionTitle = truncateText(data?.trans_title || "", 20);
 	const category = expenseCategories.find((category) => category.label === data?.category);
 	const backgroundColor = category?.color;
 	const categoryIcon = category?.icon;
@@ -35,8 +36,10 @@ const TransactionDetailPageHeader = ({ data }: TransactionDetailPageHeaderProps)
 				<div className='text-2xl font-bold pl-6 text-font-white'>{transactionTitle}</div>
 				<div className='flex flex-row items-center'>
 					<DropdownComponent
-						editGroup={() => {}}
-						leaveGroup={() => {}}
+						editTransaction={() => {
+							navigate(`/groups/${groupId}/edit-transaction/${data?.transaction_id}`);
+						}}
+						deleteTransaction={() => {}}
 					/>
 				</div>
 

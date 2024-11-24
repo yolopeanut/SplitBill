@@ -6,16 +6,16 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
 import { useEffect } from "react";
-import { ICreateTransactionForm } from "../../../../../../core/interfaces/createTransactionForm";
 import TitleInput from "./components/title-input/TitleInput";
 import AmountInput from "./components/amount-input/AmountInput";
 import CategoryInput from "./components/category-input/CategoryInput";
 import PaidByInput from "./components/paid-by-input/PaidByInput";
 import SplitByInput from "./components/split-by-input/SplitByInput";
 import RemarksInput from "./components/remarks-input/RemarksInput";
-import { useGroupsContext } from "../../../../hooks/useGroupsContext";
 import { useAddExpense } from "./hooks/useAddExpense";
-import { queryClient } from "../../../../../../../config/ReactQuery";
+import { useGroupsContext } from "../../../../../hooks/useGroupsContext";
+import { ICreateTransactionForm } from "../../../../../../../core/interfaces/createTransactionForm";
+import { queryClient } from "../../../../../../../../config/ReactQuery";
 
 const EditTransactionPage = () => {
 	const navigate = useNavigate();
@@ -62,7 +62,7 @@ const EditTransactionHeader = () => {
 					/>
 				</button>
 				<span className='text-font-white text-xl font-semibold absolute left-1/2 -translate-x-1/2'>
-					Add New Expense
+					Update Expense
 				</span>
 				<div></div>
 			</div>

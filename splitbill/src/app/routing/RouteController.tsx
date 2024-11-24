@@ -10,8 +10,8 @@ import SelectedGroupPage from "../../modules/features/groups/selected-group/Sele
 import EditGroupPage from "../../modules/features/groups/selected-group/edit-group/EditGroupPage";
 import CreateTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/create-transaction/CreateTransactionPage";
 import CreateGroupPage from "../../modules/features/groups/create-group/CreateGroupPage";
-import EditTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/edit-transaction/EditTransactionPage";
 import TransactionDetailPage from "../../modules/features/groups/selected-group/components/Transactions/transaction-details/TransactionDetailPage";
+import EditTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/transaction-details/edit-transaction/EditTransactionPage";
 
 export const RouteController = () => {
 	return (

@@ -4,11 +4,11 @@ import { RiEdit2Fill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 
 const DropdownComponent = ({
-	editGroup,
-	leaveGroup,
+	editTransaction,
+	deleteTransaction,
 }: {
-	editGroup: () => void;
-	leaveGroup: () => void;
+	editTransaction: () => void;
+	deleteTransaction: () => void;
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -38,7 +38,7 @@ const DropdownComponent = ({
 					<div
 						className='text-font-white hover:text-brand-orange w-full h-10 flex items-center justify-start pl-2 gap-2'
 						onClick={() => {
-							editGroup();
+							editTransaction();
 							setIsOpen(false);
 						}}
 					>
@@ -51,7 +51,7 @@ const DropdownComponent = ({
 					<div
 						className='text-font-white hover:text-brand-orange w-full h-10 flex items-center justify-start pl-2 gap-2'
 						onClick={() => {
-							leaveGroup();
+							deleteTransaction();
 							setIsOpen(false);
 						}}
 					>

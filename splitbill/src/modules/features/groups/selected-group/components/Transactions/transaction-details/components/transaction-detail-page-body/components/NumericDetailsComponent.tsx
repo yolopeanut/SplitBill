@@ -18,7 +18,7 @@ const NumericDetails = ({
 	return (
 		<div className={`${divClassName}`}>
 			<span className={`${spanClassName}`}>{titleSpan}</span>
-			<div className={`${subDivClassName}`}>{`RM ${amount.toFixed(2)}`}</div>
+			<div className={`${subDivClassName}`}> {`RM ${amount.toFixed(2)}`}</div>
 		</div>
 	);
 };

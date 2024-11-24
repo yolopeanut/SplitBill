@@ -1,12 +1,12 @@
 import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
-import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
-import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
 import { useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
 import TotalComponent from "./components/TotalComponent";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
 
 type SplitByInputProps = {
 	control: Control<ICreateTransactionForm>;

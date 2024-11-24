@@ -1,10 +1,10 @@
 import { ControllerRenderProps, UseFormGetValues } from "react-hook-form";
 
 import { useState } from "react";
-import { ICreateTransactionForm } from "../../../../../../../../../../core/interfaces/createTransactionForm";
-import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
-import { getInitials } from "../../../../../../../../../../core/common/commonFunctions";
-import CheckBox from "../../../../../../../../../../core/common/components/CheckBox";
+import { IAllUsersTable } from "../../../../../../../../../../../core/interfaces/all_usersTable";
+import { ICreateTransactionForm } from "../../../../../../../../../../../core/interfaces/createTransactionForm";
+import { getInitials } from "../../../../../../../../../../../core/common/commonFunctions";
+import CheckBox from "../../../../../../../../../../../core/common/components/CheckBox";
 
 const UserCard = ({
 	user,

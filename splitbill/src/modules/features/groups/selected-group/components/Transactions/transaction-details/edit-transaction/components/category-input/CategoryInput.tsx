@@ -1,9 +1,10 @@
 import { Controller, Control, ControllerRenderProps } from "react-hook-form";
-import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
-import ExpenseCategory from "../../../../../../../../core/enums/ExpenseCategoryEnum";
+
 import Drawer from "react-modern-drawer";
 import { Dispatch, SetStateAction, useState } from "react";
-import { expenseCategories } from "../../../../../../../../core/constants/ExpenseCategories";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import ExpenseCategory from "../../../../../../../../../core/enums/ExpenseCategoryEnum";
+import { expenseCategories } from "../../../../../../../../../core/constants/ExpenseCategories";
 
 export const CategoryInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);

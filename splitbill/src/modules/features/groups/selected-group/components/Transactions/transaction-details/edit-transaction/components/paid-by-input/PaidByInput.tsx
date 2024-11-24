@@ -1,10 +1,10 @@
 import { Controller, ControllerRenderProps, Control } from "react-hook-form";
-import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
-import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
-import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useState } from "react";
+import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { IAllUsersTable } from "../../../../../../../../../core/interfaces/all_usersTable";
 
 export const PaidByInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
