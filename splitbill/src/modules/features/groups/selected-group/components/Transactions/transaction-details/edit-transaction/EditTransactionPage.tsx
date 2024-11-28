@@ -17,7 +17,7 @@ import { useGroupsContext } from "../../../../../hooks/useGroupsContext";
 import { ICreateTransactionForm } from "../../../../../../../core/interfaces/createTransactionForm";
 import { queryClient } from "../../../../../../../../config/ReactQuery";
 
-const CreateTransactionPage = () => {
+const EditTransactionPage = () => {
 	const navigate = useNavigate();
 	const { selectedGroupId } = useGroupsContext();
 	const { groupId } = useParams();
@@ -33,16 +33,16 @@ const CreateTransactionPage = () => {
 	return (
 		<>
 			<div className='flex flex-col gap-4 p-4 h-full'>
-				<CreateTransactionHeader />
-				<CreateTransactionBody />
+				<EditTransactionHeader />
+				<EditTransactionBody />
 			</div>
 		</>
 	);
 };
 
-export default CreateTransactionPage;
+export default EditTransactionPage;
 
-const CreateTransactionHeader = () => {
+const EditTransactionHeader = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const groupName = location.pathname.split("/")[2];
@@ -70,7 +70,7 @@ const CreateTransactionHeader = () => {
 	);
 };
 
-const CreateTransactionBody = () => {
+const EditTransactionBody = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
 
