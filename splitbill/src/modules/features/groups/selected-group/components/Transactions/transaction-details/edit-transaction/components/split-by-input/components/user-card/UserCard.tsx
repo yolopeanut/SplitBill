@@ -1,9 +1,10 @@
 import { ControllerRenderProps, UseFormGetValues } from "react-hook-form";
-import { IAllUsersTable } from "../../../../../../../../../../../core/interfaces/all_usersTable";
+
+import { useState } from "react";
 import { ICreateTransactionForm } from "../../../../../../../../../../../core/interfaces/createTransactionForm";
+import { IAllUsersTable } from "../../../../../../../../../../../core/interfaces/all_usersTable";
 import { getInitials } from "../../../../../../../../../../../core/common/commonFunctions";
 import CheckBox from "../../../../../../../../../../../core/common/components/CheckBox";
-import NumericInput from "./components/NumericInputComponent";
 
 const UserCard = ({
 	user,
@@ -46,6 +47,39 @@ const UserCard = ({
 		);
 };
 
+const NumericInput = ({
+	onChange,
+}: {
+	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
+	const [value, setValue] = useState("0.00");
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const numericValue = e.target.value.replace(/[^\d]/g, "");
+		const floatValue = parseFloat(numericValue) / 100;
+		const formattedValue = floatValue.toFixed(2);
+
+		setValue(formattedValue);
+		e.target.value = formattedValue;
+		onChange(e);
+	};
+
+	return (
+		<div className='w-full'>
+			<input
+				type='text'
+				value={value}
+				className='w-full h-full px-1 text-center font-semibold text-sm border-none outline-none rounded-lg bg-input-box-gray'
+				inputMode='numeric'
+				onChange={handleChange}
+			/>
+		</div>
+	);
+};
+
+export default UserCard;
+
 const UserCardDefault = ({ user }: { user: IAllUsersTable }) => {
 	return (
 		<>
@@ -74,11 +108,6 @@ const UserCardEqualSplit = ({
 	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
 	getValues: UseFormGetValues<ICreateTransactionForm>;
 }) => {
-	console.log({ user: user.id });
-	console.log(
-		getValues().splitBy?.value.users.some((selectedUsers) => selectedUsers.user.id === user.id) ||
-			false
-	);
 	return (
 		<>
 			<div className='flex flex-row items-center justify-between'>
@@ -98,11 +127,6 @@ const UserCardEqualSplit = ({
 				<CheckBox
 					divClassName='w-5 h-5 text-brand-orange outline outline-1 outline-brand-orange rounded flex items-center justify-center'
 					iconClassName='text-font-black text-xl'
-					isCheckedInitially={
-						getValues().splitBy?.value.users.some(
-							(selectedUsers) => selectedUsers.user.id === user.id
-						) || false
-					}
 					onClick={() => {
 						const selectedUsersArray = getValues().splitBy?.value.users || [];
 						const isUserSelected = selectedUsersArray.some(
@@ -116,7 +140,7 @@ const UserCardEqualSplit = ({
 						// Update the field value with the new list of users
 						field?.onChange({
 							value: {
-								type: field?.value?.value?.type || "Equal", // Preserve the existing split type
+								type: "Equal",
 								users: newUsers,
 							},
 						});
@@ -155,11 +179,7 @@ const UserCardCustomSplit = ({
 				<div className='flex flex-row items-center gap-2 min-w-[40%] max-w-[40%]'>
 					RM
 					<NumericInput
-						initialValue={
-							getValues()
-								.splitBy?.value.users.find((selectedUsers) => selectedUsers.user.id === user.id)
-								?.amount.toString() || "0.00"
-						}
+						field={field}
 						onChange={(e) => {
 							const usersArray = getValues().splitBy?.value.users || []; // Get all users
 							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id); // Check if user is already in array
@@ -258,5 +278,3 @@ const UserCardPercentageSplit = ({
 		</>
 	);
 };
-
-export default UserCard;

@@ -1,26 +1,13 @@
-import { Controller, Control, ControllerRenderProps, useWatch } from "react-hook-form";
-
-import Drawer from "react-modern-drawer";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { Controller, Control, ControllerRenderProps } from "react-hook-form";
 import ExpenseCategory from "../../../../../../../../../core/enums/ExpenseCategoryEnum";
+import Drawer from "react-modern-drawer";
+import { Dispatch, SetStateAction, useState } from "react";
 import { expenseCategories } from "../../../../../../../../../core/constants/ExpenseCategories";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
 
 export const CategoryInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState<ExpenseCategory | null>(null);
-
-	// Watch for changes in the category field
-	const category = useWatch({
-		control,
-		name: "category",
-	});
-
-	useEffect(() => {
-		if (category) {
-			setSelectedCategory(category as ExpenseCategory);
-		}
-	}, [category]);
 
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
@@ -74,12 +61,12 @@ export const CategoryInput = ({ control }: { control: Control<ICreateTransaction
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-input-search-gray px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-gray-500 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-input-search-gray px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search Category
 								</label>
@@ -131,8 +118,7 @@ const CategoryCard = ({
 			>
 				<div className='flex flex-row items-center gap-6'>
 					<div
-						className='flex justify-center items-center rounded-full w-12 h-12 text-font-black'
-						style={{ backgroundColor: categoryColor }}
+						className={`flex justify-center items-center rounded-full w-12 h-12 text-font-black ${categoryColor}`}
 					>
 						{categoryIcon}
 					</div>

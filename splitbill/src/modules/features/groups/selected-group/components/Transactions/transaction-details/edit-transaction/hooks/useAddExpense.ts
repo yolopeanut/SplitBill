@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import useAuthContext from "../../../../../../../../core/auth/hooks/useAuthContext";
 import { supabase } from "../../../../../../../../../config/Supabase";
 import postCreateNewTransactionDB from "../../../../../../../../core/database_functions/post_create_new_transaction";
 import postCreateNewTransactionSplitDB from "../../../../../../../../core/database_functions/post_create_new_transaction_split";
+import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 
 type MutationProps = {
 	group_id: string;

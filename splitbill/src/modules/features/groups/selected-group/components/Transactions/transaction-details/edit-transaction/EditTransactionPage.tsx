@@ -16,9 +16,8 @@ import { useAddExpense } from "./hooks/useAddExpense";
 import { useGroupsContext } from "../../../../../hooks/useGroupsContext";
 import { ICreateTransactionForm } from "../../../../../../../core/interfaces/createTransactionForm";
 import { queryClient } from "../../../../../../../../config/ReactQuery";
-import { useGetTransactionByID } from "../../transaction-details/hooks/useGetTransactionByID";
-import { IAllUsersTable } from "../../../../../../../core/interfaces/all_usersTable";
-const EditTransactionPage = () => {
+
+const CreateTransactionPage = () => {
 	const navigate = useNavigate();
 	const { selectedGroupId } = useGroupsContext();
 	const { groupId } = useParams();
@@ -34,16 +33,16 @@ const EditTransactionPage = () => {
 	return (
 		<>
 			<div className='flex flex-col gap-4 p-4 h-full'>
-				<EditTransactionHeader />
-				<EditTransactionBody />
+				<CreateTransactionHeader />
+				<CreateTransactionBody />
 			</div>
 		</>
 	);
 };
 
-export default EditTransactionPage;
+export default CreateTransactionPage;
 
-const EditTransactionHeader = () => {
+const CreateTransactionHeader = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const groupName = location.pathname.split("/")[2];
@@ -63,7 +62,7 @@ const EditTransactionHeader = () => {
 					/>
 				</button>
 				<span className='text-font-white text-xl font-semibold absolute left-1/2 -translate-x-1/2'>
-					Update Expense
+					Add New Expense
 				</span>
 				<div></div>
 			</div>
@@ -71,16 +70,13 @@ const EditTransactionHeader = () => {
 	);
 };
 
-const EditTransactionBody = () => {
+const CreateTransactionBody = () => {
 	const navigate = useNavigate();
-	const { groupId, transactionId } = useParams();
-	const { data, isLoading } = useGetTransactionByID(transactionId!);
-	console.log({ data });
+	const { groupId } = useParams();
 
 	const { addExpense, isPending } = useAddExpense();
-	const { selectedGroupId, groupUsers } = useGroupsContext();
-
-	const { register, handleSubmit, control, getValues, setValue } = useForm<ICreateTransactionForm>({
+	const { selectedGroupId } = useGroupsContext();
+	const { register, handleSubmit, control, getValues } = useForm<ICreateTransactionForm>({
 		defaultValues: {
 			splitBy: {
 				value: {
@@ -90,53 +86,6 @@ const EditTransactionBody = () => {
 			},
 		},
 	});
-
-	// Use useEffect to set form values when data is loaded
-	useEffect(() => {
-		if (!data || !groupUsers) return; // Exit if either data is not available
-
-		if (isLoading) return;
-
-		// Set basic values
-		setValue("title", data.trans_title);
-		setValue("amount", data.total_amount);
-		setValue("category", data.category);
-		setValue("paidBy", data.paid_by);
-		setValue("remarks", data.remarks);
-		setValue("tax", data.tax);
-		// Set split by values
-		const splitByValue = {
-			value: {
-				type: data.transaction_splits[0]?.split_type || "Error",
-				users: data.transaction_splits
-					.map((split) => {
-						const user = groupUsers.find((u) => u.id === split.split_user_id);
-						if (!user) return null;
-
-						return {
-							user: user,
-							amount:
-								split.unequal_split_amount ||
-								split.equal_split_amount ||
-								split.percentage_split_amount ||
-								0,
-						};
-					})
-					.filter((split): split is { user: IAllUsersTable; amount: number } => split !== null),
-			},
-		};
-		setValue("splitBy", splitByValue, { shouldValidate: true });
-
-		console.log("Setting values:", {
-			title: data.trans_title,
-			amount: data.total_amount,
-			category: data.category,
-			paidBy: data.paid_by,
-			remarks: data.remarks,
-			tax: data.tax,
-			splitBy: splitByValue,
-		});
-	}, [data, groupUsers, setValue, isLoading]);
 
 	const onSubmit: SubmitHandler<ICreateTransactionForm> = (data) => {
 		// Check if all required fields are filled

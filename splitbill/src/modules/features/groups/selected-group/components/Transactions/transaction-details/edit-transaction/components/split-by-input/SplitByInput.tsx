@@ -1,18 +1,12 @@
-import {
-	Controller,
-	ControllerRenderProps,
-	Control,
-	UseFormGetValues,
-	useWatch,
-} from "react-hook-form";
+import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
+import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
+import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
 import TotalComponent from "./components/TotalComponent";
-import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
-import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
-import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
 
 type SplitByInputProps = {
 	control: Control<ICreateTransactionForm>;
@@ -28,22 +22,11 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 	// Split By State
 	const [selectedSplitType, setSelectedSplitType] = useState<SelectedSplitType>("Equal");
 
-	// Watch for changes in the splitBy field
-	const splitBy = useWatch({
-		control,
-		name: "splitBy",
-	});
-
+	// Get Group Users
 	const { selectedGroupId } = useGroupsContext();
 
+	// Get Group Users from Database
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
-
-	// Update local state when splitBy changes
-	useEffect(() => {
-		if (splitBy?.value?.type) {
-			setSelectedSplitType(splitBy.value.type as SelectedSplitType);
-		}
-	}, [splitBy]);
 
 	// Handle Drawer Open
 	const handleDrawerOpen = () => {
@@ -61,9 +44,8 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 		// Set Selected Users in Field
 		field.onChange({ value: { type: type, users: [] } });
 	};
-	console.log(getValues().splitBy);
+
 	const splitByUsers = getValues().splitBy?.value.users;
-	console.log({ splitByUsers });
 
 	return (
 		<>
@@ -114,12 +96,12 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm  bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-input-search-gray px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-gray-500duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search User
 								</label>
@@ -162,7 +144,7 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 
 							{/* Total Component */}
 							<TotalComponent
-								type={selectedSplitType as "Equal" | "Custom" | "Percentage"}
+								type={selectedSplitType}
 								getValues={getValues}
 							/>
 

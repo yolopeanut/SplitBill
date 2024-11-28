@@ -1,10 +1,10 @@
-import { Controller, ControllerRenderProps, Control, useWatch } from "react-hook-form";
-import Drawer from "react-modern-drawer";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
+import { Controller, ControllerRenderProps, Control } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
-import { IAllUsersTable } from "../../../../../../../../../core/interfaces/all_usersTable";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
+import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
+import Drawer from "react-modern-drawer";
+import { IAllUsersTable } from "../../../../../../../../../core/interfaces/all_usersTable";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export const PaidByInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -17,22 +17,6 @@ export const PaidByInput = ({ control }: { control: Control<ICreateTransactionFo
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
 	};
-
-	// Watch for changes in the paidBy field
-	const paidById = useWatch({
-		control,
-		name: "paidBy",
-	});
-
-	// Update local state when paidBy changes
-	useEffect(() => {
-		if (paidById && groupUsers) {
-			const user = groupUsers.find((u) => u.id === paidById);
-			if (user) {
-				setSelectedUser(user);
-			}
-		}
-	}, [paidById, groupUsers]);
 
 	return (
 		<>
@@ -82,12 +66,12 @@ export const PaidByInput = ({ control }: { control: Control<ICreateTransactionFo
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-500 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-input-search-gray px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-gray-500 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search User
 								</label>
