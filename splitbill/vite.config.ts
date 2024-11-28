@@ -7,6 +7,8 @@ export default defineConfig({
 	server: {
 		watch: {
 			usePolling: true,
+			interval: 100, // Polling interval in milliseconds
+			ignored: ["**/node_modules/**", "**/.git/**"], // Ignore watching these directories
 		},
 	},
 	plugins: [

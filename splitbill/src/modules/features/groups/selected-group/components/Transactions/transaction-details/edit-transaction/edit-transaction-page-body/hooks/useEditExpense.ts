@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import useAuthContext from "../../../../../../../../core/auth/hooks/useAuthContext";
-import { supabase } from "../../../../../../../../../config/Supabase";
-import postCreateNewTransactionDB from "../../../../../../../../core/database_functions/post_create_new_transaction";
-import postCreateNewTransactionSplitDB from "../../../../../../../../core/database_functions/post_create_new_transaction_split";
-import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
+import useAuthContext from "../../../../../../../../../core/auth/hooks/useAuthContext";
+import { supabase } from "../../../../../../../../../../config/Supabase";
+import postUpdateTransactionDB from "../../../../../../../../../core/database_functions/post_update_transaction";
+import postUpdateTransactionSplitsDB from "../../../../../../../../../core/database_functions/post_update_transaction_splits";
+import { IAllUsersTable } from "../../../../../../../../../core/interfaces/all_usersTable";
 
-type MutationProps = {
+interface MutationProps {
+	transaction_id: string;
 	group_id: string;
 	paid_by: string;
 	expense_title: string;
@@ -15,17 +16,18 @@ type MutationProps = {
 	split_by: {
 		value: {
 			type: string;
-			users: { user: IAllUsersTable; amount: number }[];
+			users: { user: IAllUsersTable; amount: number; transaction_split_id: string }[];
 		};
 	};
 	tax: number | 0;
-};
+}
 
-export const useAddExpense = () => {
+export const useEditExpense = () => {
 	const { user, session, isLoading } = useAuthContext();
 
-	const { mutate: addExpense, isPending } = useMutation({
+	const { mutate: editExpense, isPending } = useMutation({
 		mutationFn: async ({
+			transaction_id,
 			group_id,
 			paid_by,
 			expense_title,
@@ -37,7 +39,19 @@ export const useAddExpense = () => {
 		}: MutationProps) => {
 			if (!user || !session || !supabase || isLoading) return;
 
-			const response = await postCreateNewTransactionDB(
+			console.log({
+				transaction_id,
+				group_id,
+				paid_by,
+				expense_title,
+				category,
+				amount,
+				remarks,
+				tax,
+			});
+
+			const response = await postUpdateTransactionDB(
+				transaction_id,
 				group_id,
 				user.id,
 				paid_by,
@@ -51,6 +65,8 @@ export const useAddExpense = () => {
 			if (response.error) {
 				throw response.error;
 			}
+
+			console.log({ useEditExpenseSplitBy: split_by });
 
 			if (response) {
 				const split_by_values = split_by.value;
@@ -66,9 +82,11 @@ export const useAddExpense = () => {
 				split_by_values.users = custom_split_by;
 
 				split_by_values.users.map(async (user) => {
+					console.log({ useEditExpenseUSER: user });
 					//If split by is equal, then we need to calculate the equal split amount
 					if (split_by_values.type === "Equal") {
-						await postCreateNewTransactionSplitDB(
+						await postUpdateTransactionSplitsDB(
+							user.transaction_split_id,
 							response,
 							user.user.id,
 							split_by_values.type,
@@ -79,7 +97,8 @@ export const useAddExpense = () => {
 					}
 					//If split by is custom, then we need to calculate the custom split amount
 					else if (split_by_values.type === "Custom") {
-						await postCreateNewTransactionSplitDB(
+						await postUpdateTransactionSplitsDB(
+							user.transaction_split_id,
 							response,
 							user.user.id,
 							split_by_values.type,
@@ -90,7 +109,8 @@ export const useAddExpense = () => {
 					}
 					//If split by is percentage, then we need to calculate the percentage of the amount
 					else if (split_by_values.type === "Percentage") {
-						await postCreateNewTransactionSplitDB(
+						await postUpdateTransactionSplitsDB(
+							user.transaction_split_id,
 							response,
 							user.user.id,
 							split_by_values.type,
@@ -107,9 +127,9 @@ export const useAddExpense = () => {
 			return null;
 		},
 		onSuccess: (response) => {
-			console.log("Expense added successfully", response);
+			console.log("Expense updated successfully", response);
 		},
 	});
 
-	return { addExpense, isPending };
+	return { editExpense, isPending };
 };

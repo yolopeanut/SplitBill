@@ -24,7 +24,6 @@ const CreateProfilePage = () => {
 	const navigate = useNavigate();
 	const { user } = useAuthContext();
 	const { getUserById } = useUserContext();
-	console.log({ user, getUserById });
 
 	const { register, handleSubmit } = useForm<IFormInput>();
 	const onSubmit: SubmitHandler<IFormInput> = async (data) => {

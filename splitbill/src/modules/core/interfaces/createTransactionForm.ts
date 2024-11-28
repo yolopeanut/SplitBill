@@ -10,7 +10,7 @@ export interface ICreateTransactionForm {
 	splitBy?: {
 		value: {
 			type: string;
-			users: { user: IAllUsersTable; amount: number }[];
+			users: { user: IAllUsersTable; amount: number; transaction_split_id: string }[];
 		};
 	};
 }

@@ -1,19 +1,15 @@
 import { useState } from "react";
 import { IoIosCheckmark } from "react-icons/io";
 
-// Custom checkbox component
-const CheckBox = ({
-	divClassName,
-	iconClassName,
-	onClick,
-	isCheckedInitially,
-}: {
+interface CheckBoxProps {
 	divClassName: string;
 	iconClassName: string;
 	onClick: () => void;
 	isCheckedInitially?: boolean;
-}) => {
-	console.log({ isCheckedInitially });
+}
+
+// Custom checkbox component
+const CheckBox = ({ divClassName, iconClassName, onClick, isCheckedInitially }: CheckBoxProps) => {
 	const [isChecked, setIsChecked] = useState(isCheckedInitially);
 	return (
 		<div

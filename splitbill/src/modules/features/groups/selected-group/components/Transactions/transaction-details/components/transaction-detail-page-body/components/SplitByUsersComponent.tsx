@@ -14,8 +14,6 @@ const SplitByUsersComponent = ({
 	groupUsers,
 	getUserNetAmountOwed,
 }: SplitByUsersComponentProps) => {
-	console.log({ splitByUsers });
-
 	return (
 		<>
 			{splitByUsers.map((user) => (

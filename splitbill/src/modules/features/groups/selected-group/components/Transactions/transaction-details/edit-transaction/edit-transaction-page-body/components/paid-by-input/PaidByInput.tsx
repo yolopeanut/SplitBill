@@ -1,10 +1,10 @@
 import { Controller, ControllerRenderProps, Control } from "react-hook-form";
-import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
-import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
+import { useGroupsContext } from "../../../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
-import { IAllUsersTable } from "../../../../../../../../../core/interfaces/all_usersTable";
-import { Dispatch, SetStateAction, useState } from "react";
+import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export const PaidByInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -17,6 +17,10 @@ export const PaidByInput = ({ control }: { control: Control<ICreateTransactionFo
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
 	};
+
+	useEffect(() => {
+		setSelectedUser(groupUsers?.find((user) => user.id === control._defaultValues.paidBy) || null);
+	}, [control, groupUsers]);
 
 	return (
 		<>

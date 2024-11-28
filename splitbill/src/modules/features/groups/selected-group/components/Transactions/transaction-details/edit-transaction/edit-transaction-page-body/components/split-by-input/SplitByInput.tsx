@@ -1,9 +1,9 @@
 import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
-import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
+import { ICreateTransactionForm } from "../../../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
-import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
+import { useGroupsContext } from "../../../../../../../../hooks/useGroupsContext";
 import Drawer from "react-modern-drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
 import TotalComponent from "./components/TotalComponent";
@@ -46,6 +46,10 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 	};
 
 	const splitByUsers = getValues().splitBy?.value.users;
+
+	useEffect(() => {
+		setSelectedSplitType(getValues().splitBy?.value.type as SelectedSplitType);
+	}, [getValues, splitByUsers]);
 
 	return (
 		<>
