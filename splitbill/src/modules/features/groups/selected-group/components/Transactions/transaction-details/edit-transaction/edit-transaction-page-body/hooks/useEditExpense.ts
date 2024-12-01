@@ -25,7 +25,7 @@ interface MutationProps {
 export const useEditExpense = () => {
 	const { user, session, isLoading } = useAuthContext();
 
-	const { mutate: editExpense, isPending } = useMutation({
+	const { mutateAsync: editExpense, isPending } = useMutation({
 		mutationFn: async ({
 			transaction_id,
 			group_id,

@@ -4,7 +4,7 @@ import deleteFriendRequestDB from "../../../../core/database_functions/delete_fr
 
 const useDeleteFriendRequest = () => {
 	const { user } = useAuthContext();
-	const { mutate: deleteFriendRequest } = useMutation({
+	const { mutateAsync: deleteFriendRequest } = useMutation({
 		mutationFn: async ({ p_receiver_id }: { p_receiver_id: string }) => {
 			if (!user) return;
 

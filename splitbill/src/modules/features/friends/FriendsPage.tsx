@@ -1,20 +1,31 @@
 import { IoPersonAddSharp } from "react-icons/io5";
-import { getInitials } from "../../core/common/commonFunctions";
-import { BsStar } from "react-icons/bs";
-import { BsStarFill } from "react-icons/bs";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useGetAllFriends } from "./hooks/useGetAllFriends";
 import { useGetAllFriendRequests } from "./hooks/useGetFriendRequests";
 import Loading from "../../core/common/components/Loading";
-import { useAcceptFriendRequest } from "./hooks/useAcceptFriendRequest";
 import { CustomInputField } from "../../core/common/components/CustomInputField";
 import { useNavigate } from "react-router-dom";
+import FriendRequestCard from "./components/FriendRequestCard";
+import FriendCard from "./components/friend-card/FriendCard";
+import ShowMoreCard from "./components/ShowMoreCard";
+import useFavouritedFriends from "./hooks/useFavouritedFriends";
+import {
+	SwipeableList,
+	SwipeableListItem,
+	SwipeAction,
+	TrailingActions,
+	Type,
+} from "react-swipeable-list";
+import "react-swipeable-list/dist/styles.css";
+
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
 
 const FriendsPage = () => {
 	const [searchQuery, setSearchQuery] = useState("");
 	return (
 		<>
-			<div className='flex flex-col gap-4 px-4 pt-8'>
+			<div className='flex flex-col gap-4 px-4 pt-8 overflow-x-hidden'>
 				<FriendsPageHeader setSearchQuery={setSearchQuery} />
 				<FriendsPageBody searchQuery={searchQuery} />
 			</div>
@@ -56,6 +67,9 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 	const [showMore, setShowMore] = useState(false);
 	const getFriends = useGetAllFriends();
 	const getFriendRequests = useGetAllFriendRequests();
+	const { favouritedFriends, normalFriends } = useFavouritedFriends(getFriends.data || []);
+	const [isOpen, setIsOpen] = useState(false);
+	const [friendId, setFriendId] = useState("");
 
 	if (getFriendRequests.isLoading || getFriends.isLoading) {
 		return <Loading />;
@@ -65,10 +79,16 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 		return <div className='text-font-white text-lg font-semibold'>Error loading data</div>;
 	}
 
+	const toggleDrawer = () => {
+		setIsOpen((prevState) => !prevState);
+	};
+
 	console.log(searchQuery);
 
+	//set the swiper to slide to the first slide
+
 	return (
-		<div className='flex flex-col gap-4 overflow-y-scroll h-[calc(100vh-14rem)] pb-20'>
+		<div className='flex flex-col gap-4 overflow-y-scroll h-full pb-20 w-full'>
 			{/* Show only 2 friend requests at a time */}
 			{getFriendRequests.data
 				?.slice(0, showMore ? getFriendRequests.data?.length : 2)
@@ -95,170 +115,116 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 			{/* Horizontal line */}
 			<hr className='border-b-2 border-input-search-gray' />
 
+			{/* Favourited friends */}
+			{favouritedFriends.length > 0 && (
+				<>
+					<span className='text-font-white text-lg font-semibold'>Favourites</span>
+					<SwipeableList
+						className='w-full'
+						type={Type.IOS}
+					>
+						{favouritedFriends?.map((friend) => (
+							<SwipeableListItem
+								key={friend.id}
+								trailingActions={trailingActions(friend.id, toggleDrawer, setFriendId)} // Pass friend.id to identify which friend to delete
+								className='w-full '
+							>
+								<FriendCard
+									key={friend.id}
+									friend_id={friend.id}
+									imgSrc={friend.profile_img_url}
+									name={friend.name}
+									uniqueUsername={friend.unique_username}
+									isFavourite={friend.is_favourited}
+								/>
+							</SwipeableListItem>
+						))}
+					</SwipeableList>
+				</>
+			)}
+
+			{/* Horizontal line if there are favourited friends */}
+			{favouritedFriends.length > 0 && normalFriends.length > 0 && (
+				<hr className='border-b-2 border-input-search-gray' />
+			)}
+
 			{/* Show all friends */}
-			{getFriends.data?.map((friend) => (
-				<FriendCard
-					key={friend.id}
-					imgSrc={friend.profile_img_url}
-					name={friend.name}
-					uniqueUsername={friend.unique_username}
-					isFavourite={friend.is_favourited}
-				/>
-			))}
-		</div>
-	);
-};
-
-const ImagePlaceholder = ({
-	imgSrc,
-	name,
-	className,
-}: {
-	imgSrc: string | null;
-	name: string;
-	className?: string;
-}) => {
-	const initials = getInitials(name);
-
-	if (imgSrc) {
-		return (
-			<div className='avatar placeholder'>
-				<img
-					className='rounded-full w-14'
-					src={imgSrc}
-				/>
-			</div>
-		);
-	} else {
-		return (
-			<div className='avatar placeholder'>
-				<div className={` text-font-white w-14 rounded-full ${className}`}>
-					<span className='text-lg'>{initials}</span>
-				</div>
-			</div>
-		);
-	}
-};
-
-const FriendCard = ({
-	imgSrc,
-	name,
-	uniqueUsername,
-	isFavourite,
-}: {
-	imgSrc: string | null;
-	name: string;
-	uniqueUsername: string;
-	isFavourite: boolean;
-}) => {
-	const FavouriteIcon = () => {
-		if (isFavourite) {
-			return (
-				<BsStarFill
-					size={25}
-					className='text-brand-orange'
-				/>
-			);
-		}
-		return (
-			<BsStar
-				size={25}
-				className='text-brand-orange'
+			{normalFriends.length > 0 && (
+				<>
+					<span className='text-font-white text-lg font-semibold'>Friends</span>
+					<SwipeableList
+						className='flex flex-col w-full gap-4'
+						type={Type.IOS}
+					>
+						{normalFriends.map((friend) => (
+							<SwipeableListItem
+								key={friend.id}
+								trailingActions={trailingActions(friend.id, toggleDrawer, setFriendId)} // Pass friend.id to identify which friend to delete
+								className='w-full'
+								maxSwipe={0.6}
+							>
+								<FriendCard
+									friend_id={friend.id}
+									imgSrc={friend.profile_img_url}
+									name={friend.name}
+									uniqueUsername={friend.unique_username}
+									isFavourite={friend.is_favourited}
+								/>
+							</SwipeableListItem>
+						))}
+					</SwipeableList>
+				</>
+			)}
+			<DrawerComponent
+				isOpen={isOpen}
+				toggleDrawer={toggleDrawer}
+				friendId={friendId}
 			/>
-		);
-	};
-
-	return (
-		<div className='flex flex-row justify-between gap-4'>
-			<div className='flex flex-row gap-4'>
-				<div className='avatar w-14'>
-					<ImagePlaceholder
-						imgSrc={imgSrc}
-						name={name}
-						className='bg-input-search-gray'
-					/>
-				</div>
-
-				<div className='flex flex-col gap-1 justify-top'>
-					<span className='text-font-white text-lg font-semibold'>{name}</span>
-					<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
-				</div>
-			</div>
-
-			<div className='flex items-center'>
-				<FavouriteIcon />
-			</div>
 		</div>
 	);
 };
 
-const FriendRequestCard = ({
-	name,
-	uniqueUsername,
-	img_src,
-	sender_id,
-}: {
-	name: string;
-	uniqueUsername: string;
-	img_src: string | null;
-	sender_id: string;
-}) => {
-	const acceptFriendRequest = useAcceptFriendRequest();
-
-	const handleAcceptFriendRequest = () => {
-		acceptFriendRequest(sender_id);
-	};
-	return (
-		<div className='bg-input-search-gray rounded-lg flex flex-col items-start gap-4 p-4'>
-			<div className='flex flex-row items-center gap-2 w-full'>
-				<div className='avatar w-14 '>
-					<ImagePlaceholder
-						imgSrc={img_src}
-						name={name}
-						className='bg-background-black'
-					/>
-				</div>
-				<div className='flex flex-col justify-center gap-2'>
-					<div className='flex flex-col'>
-						<span className='text-font-white text-lg font-semibold'>{name}</span>
-						<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
-					</div>
-					<span className='text-font-white text-sm font-normal'>Has sent you a friend request</span>
-				</div>
-			</div>
-			<div className='flex flex-row items-center gap-2 w-full self-center justify-center'>
-				<button
-					onClick={handleAcceptFriendRequest}
-					className='btn btn-sm border-none bg-brand-orange w-[48%] text-font-black text-base font-bold'
-				>
-					Accept
-				</button>
-				<button className='btn btn-sm border-brand-orange w-[48%] bg-background-black text-font-white text-base font-bold'>
-					Decline
-				</button>
-			</div>
-		</div>
-	);
-};
-
-const ShowMoreCard = ({
-	setShowMore,
-	showMore,
-}: {
-	setShowMore: Dispatch<SetStateAction<boolean>>;
-	showMore: boolean;
-}) => {
-	const handleShowMore = () => {
-		setShowMore(!showMore);
-	};
-	return (
-		<div className='bg-input-search-gray rounded-lg'>
-			<button
-				onClick={handleShowMore}
-				className='btn w-full text-font-white text-lg font-bold'
+const trailingActions = (
+	friendId: string,
+	toggleDrawer: () => void,
+	setFriendId: Dispatch<SetStateAction<string>>
+) => (
+	<TrailingActions>
+		<SwipeAction
+			onClick={() => {
+				setFriendId(friendId);
+				toggleDrawer();
+			}}
+		>
+			<div
+				className='h-full flex items-center justify-center bg-red-500 px-4'
+				style={{ width: "50vw" }}
 			>
-				{showMore ? "Collapse" : "Expand"}
-			</button>
-		</div>
+				<span className='text-white'>Delete</span>
+			</div>
+		</SwipeAction>
+	</TrailingActions>
+);
+
+const DrawerComponent = ({
+	isOpen,
+	toggleDrawer,
+	friendId,
+}: {
+	isOpen: boolean;
+	toggleDrawer: () => void;
+	friendId: string;
+}) => {
+	return (
+		<Drawer
+			open={isOpen}
+			onClose={toggleDrawer}
+			direction='bottom'
+			className='bg-background-black'
+			size={400}
+		>
+			<div className='text-font-black text-lg font-semibold'>{friendId}</div>
+			<div className='text-font-black text-lg font-semibold'>Hello</div>
+		</Drawer>
 	);
 };

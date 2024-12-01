@@ -4,7 +4,7 @@ import useAuthContext from "../../../../core/auth/hooks/useAuthContext";
 
 const useSendFriendRequest = () => {
 	const { user } = useAuthContext();
-	const { mutate: sendFriendRequest } = useMutation({
+	const { mutateAsync: sendFriendRequest } = useMutation({
 		mutationFn: async ({ p_receiver_id }: { p_receiver_id: string }) => {
 			console.log("SENT REQUEST");
 			if (!user) return;

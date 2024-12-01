@@ -10,7 +10,7 @@ export const useAcceptFriendRequest = () => {
 	const getAllFriends = useGetAllFriends();
 	const getFriendRequests = useGetAllFriendRequests();
 
-	const { mutate: acceptFriendRequest } = useMutation({
+	const { mutateAsync: acceptFriendRequest } = useMutation({
 		mutationFn: async (sender_id: string) => {
 			if (!user || !session || !supabase || isLoading) return;
 
