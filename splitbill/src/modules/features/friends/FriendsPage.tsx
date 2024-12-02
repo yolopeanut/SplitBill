@@ -9,6 +9,7 @@ import FriendRequestCard from "./components/FriendRequestCard";
 import FriendCard from "./components/friend-card/FriendCard";
 import ShowMoreCard from "./components/ShowMoreCard";
 import useFavouritedFriends from "./hooks/useFavouritedFriends";
+
 import {
 	SwipeableList,
 	SwipeableListItem,
@@ -17,9 +18,7 @@ import {
 	Type,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
-
-import Drawer from "react-modern-drawer";
-import "react-modern-drawer/dist/index.css";
+import DrawerComponent from "./components/DrawerComponent";
 
 const FriendsPage = () => {
 	const [searchQuery, setSearchQuery] = useState("");
@@ -175,6 +174,7 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 					</SwipeableList>
 				</>
 			)}
+
 			<DrawerComponent
 				isOpen={isOpen}
 				toggleDrawer={toggleDrawer}
@@ -198,33 +198,10 @@ const trailingActions = (
 		>
 			<div
 				className='h-full flex items-center justify-center bg-red-500 px-4'
-				style={{ width: "50vw" }}
+				style={{ width: "30vw" }}
 			>
 				<span className='text-white'>Delete</span>
 			</div>
 		</SwipeAction>
 	</TrailingActions>
 );
-
-const DrawerComponent = ({
-	isOpen,
-	toggleDrawer,
-	friendId,
-}: {
-	isOpen: boolean;
-	toggleDrawer: () => void;
-	friendId: string;
-}) => {
-	return (
-		<Drawer
-			open={isOpen}
-			onClose={toggleDrawer}
-			direction='bottom'
-			className='bg-background-black'
-			size={400}
-		>
-			<div className='text-font-black text-lg font-semibold'>{friendId}</div>
-			<div className='text-font-black text-lg font-semibold'>Hello</div>
-		</Drawer>
-	);
-};

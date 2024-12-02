@@ -21,6 +21,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { FaUserCheck } from "react-icons/fa6";
 import { IoArrowBack } from "react-icons/io5";
 import { FaPeoplePulling } from "react-icons/fa6";
+import { queryClient } from "../../../../config/ReactQuery";
 
 const AddFriendPage = () => {
 	const [searchQuery, setSearchQuery] = useState("");
@@ -189,9 +190,9 @@ const FriendCard = ({
 			return (
 				<button
 					className='btn btn-primary text-brand-orange border-none'
-					onClick={() => {
-						deleteFriendRequest({ p_receiver_id: id });
-						isRequested.refetch();
+					onClick={async () => {
+						await deleteFriendRequest({ p_receiver_id: id });
+						queryClient.invalidateQueries({ queryKey: ["friends", "fetchSentFriendRequests"] });
 					}}
 				>
 					<FaUserCheck size={30} />
@@ -201,9 +202,9 @@ const FriendCard = ({
 			return (
 				<button
 					className='btn btn-primary text-brand-orange border-none'
-					onClick={() => {
-						sendFriendRequest({ p_receiver_id: id });
-						isRequested.refetch();
+					onClick={async () => {
+						await sendFriendRequest({ p_receiver_id: id });
+						queryClient.invalidateQueries({ queryKey: ["friends", "fetchSentFriendRequests"] });
 					}}
 				>
 					<IoMdPersonAdd size={30} />
