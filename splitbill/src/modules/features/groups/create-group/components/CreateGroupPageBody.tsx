@@ -5,8 +5,11 @@ import CurrencyInput from "./currency-input/CurrencyInput";
 import GroupImageInput from "./image-src-input/ImageSrcInput";
 import SelectUsersInput from "./select-users-input/SelectUsersInput";
 import usePostCreateGroup from "./select-users-input/hooks/usePostCreateGroup";
+import { queryClient } from "../../../../../config/ReactQuery";
+import { useNavigate } from "react-router-dom";
 
 const CreateGroupPageBody = () => {
+	// Form setup
 	const {
 		register,
 		handleSubmit,
@@ -18,11 +21,18 @@ const CreateGroupPageBody = () => {
 			currency: "MYR",
 		},
 	});
+
+	// Post create group hook
 	const { postCreateGroup } = usePostCreateGroup({ data: getValues(), getValues });
 
-	const onSubmit: SubmitHandler<ICreateGroupForm> = async (data) => {
-		console.log(data);
+	// Navigation
+	const navigate = useNavigate();
+
+	// Submit handler for the form
+	const onSubmit: SubmitHandler<ICreateGroupForm> = async () => {
 		await postCreateGroup();
+		queryClient.invalidateQueries({ queryKey: ["groups", "fetchOwnGroups"] });
+		navigate("/groups");
 	};
 
 	return (
@@ -32,15 +42,14 @@ const CreateGroupPageBody = () => {
 					onSubmit={handleSubmit(onSubmit)}
 					className='w-full flex flex-col gap-4 overflow-y-auto pb-40'
 				>
-					<GroupImageInput register={register} />
-					<GroupNameInput
-						register={register}
-						errors={errors}
-					/>
-					{/* <DescriptionInput
-						register={register}
-						errors={errors}
-					/> */}
+					<div className='flex flex-row gap-4'>
+						<GroupImageInput register={register} />
+						<GroupNameInput
+							register={register}
+							errors={errors}
+						/>
+					</div>
+
 					<CurrencyInput
 						errors={errors}
 						control={control}
@@ -49,6 +58,7 @@ const CreateGroupPageBody = () => {
 					<SelectUsersInput
 						control={control}
 						getValues={getValues}
+						errors={errors}
 					/>
 
 					<button

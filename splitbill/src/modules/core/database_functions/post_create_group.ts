@@ -5,7 +5,7 @@ import { ICreateGroupForm } from "../interfaces/createGroupForm";
 export default async function post_create_group(data: ICreateGroupForm): Promise<string> {
 	console.log({ data });
 	const createProfile = await supabase.schema("splitbill").rpc("post_create_group", {
-		p_name: data.name,
+		p_name: data.group_name,
 		p_img_src: data.image_url || null,
 		p_currency: data.currency,
 	});

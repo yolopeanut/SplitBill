@@ -1,7 +1,7 @@
 import { IAllFriendsTable } from "./all_usersTable";
 
 export interface ICreateGroupForm {
-	name: string;
+	group_name: string;
 	description: string;
 	image_src: File;
 	image_url: string;

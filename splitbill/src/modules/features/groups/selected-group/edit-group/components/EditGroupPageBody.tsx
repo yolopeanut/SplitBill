@@ -19,7 +19,7 @@ const EditGroupPageBody = () => {
 					<img
 						src={selectedGroup?.img_url || ""}
 						alt='group-image'
-						className='w-full max-h-full aspect-square object-fill rounded-xl'
+						className='w-full max-h-full aspect-square object-cover rounded-xl'
 					/>
 					<button className='btn btn-sm absolute bottom-2 right-2 bg-brand-orange p-1 rounded-md text-font-black'>
 						<BiSolidEditAlt size={20} />

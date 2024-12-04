@@ -1,20 +1,9 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import { Controller, Control, ControllerRenderProps } from "react-hook-form";
+import { useState } from "react";
+import { Controller } from "react-hook-form";
 import Drawer from "react-modern-drawer";
-import { FieldErrors } from "react-hook-form";
-import { ICreateGroupForm } from "../../../../../core/interfaces/createGroupForm";
 import Currencies from "../../../../../core/constants/Currencies";
-
-type CurrencyInputProps = {
-	errors: FieldErrors<ICreateGroupForm>;
-	control: Control<ICreateGroupForm>;
-};
-
-type SelectedCurrency = {
-	shortform: string;
-	elaboration: string;
-	dollarSign: string;
-};
+import CurrencyCard from "./components/CurrencyCard";
+import { SelectedCurrency, CurrencyInputProps } from "../../../../../core/interfaces/currencies";
 
 const CurrencyInput = ({ errors, control }: CurrencyInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -59,6 +48,22 @@ const CurrencyInput = ({ errors, control }: CurrencyInputProps) => {
 			<Controller
 				name='currency'
 				control={control}
+				rules={{
+					required: "Currency is required",
+					validate: {
+						notEmpty: (value) => {
+							// Check if value is not an empty string after trimming
+							if (typeof value === "string" && value.trim() === "") {
+								return "Currency cannot be empty";
+							}
+							// Or check if value is not an empty array
+							if (Array.isArray(value) && value.length === 0) {
+								return "Please select a currency";
+							}
+							return true;
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}
@@ -79,12 +84,12 @@ const CurrencyInput = ({ errors, control }: CurrencyInputProps) => {
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-font-white bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-font-text-gray duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search Category
 								</label>
@@ -112,54 +117,3 @@ const CurrencyInput = ({ errors, control }: CurrencyInputProps) => {
 };
 
 export default CurrencyInput;
-
-type CurrencyCardProps = {
-	currency: (typeof Currencies)[number];
-	field: ControllerRenderProps<ICreateGroupForm, "currency"> | undefined;
-	setSelectedCurrency: Dispatch<SetStateAction<SelectedCurrency | null>> | undefined;
-	setIsDrawerOpen: Dispatch<SetStateAction<boolean>> | undefined;
-	bordered: boolean;
-};
-
-const CurrencyCard = ({
-	currency,
-	field,
-	setSelectedCurrency,
-	setIsDrawerOpen,
-	bordered,
-}: CurrencyCardProps) => {
-	return (
-		<>
-			{/* Currency Card */}
-			<div
-				className='flex flex-row justify-between items-center w-full gap-1 cursor-pointer'
-				onClick={() => {
-					field?.onChange(currency.shortform);
-					setSelectedCurrency?.(currency);
-					setIsDrawerOpen?.(false);
-				}}
-			>
-				{/* Currency Card Content */}
-				<div className='flex flex-row items-center gap-6 justify-between w-full'>
-					<div className='flex flex-col'>
-						{/* Currency Card Shortform */}
-						<span className='text-font-white text-base font-semibold'>{currency.shortform}</span>
-
-						{/* Currency Card Elaboration */}
-						<span className='text-font-text-gray text-sm font-semibold'>
-							{currency.elaboration}
-						</span>
-					</div>
-
-					{/* Currency Card Dollar Sign */}
-					<div className='flex justify-center items-center rounded-full w-12 text-font-white text-base'>
-						{currency.dollarSign}
-					</div>
-				</div>
-			</div>
-
-			{/* Currency Card Border */}
-			{bordered && <hr className='w-full border-b border-input-search-gray' />}
-		</>
-	);
-};

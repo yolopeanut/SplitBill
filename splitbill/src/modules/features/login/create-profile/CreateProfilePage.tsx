@@ -130,7 +130,7 @@ const ProfilePictureInput = ({
 	register: UseFormRegister<IFormInput>;
 }) => {
 	const [profilePicture, setProfilePicture] = useState<File | null>(null);
-	const options = { maxSizeMB: 1, maxWidthOrHeight: 100, useWebWorker: true };
+	const options = { maxSizeMB: 10, maxWidthOrHeight: 1000, useWebWorker: true };
 
 	return (
 		<>

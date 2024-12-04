@@ -1,22 +1,27 @@
 import { useState } from "react";
-import { Control, Controller, ControllerRenderProps, UseFormGetValues } from "react-hook-form";
+import { Control, Controller, FieldErrors, UseFormGetValues } from "react-hook-form";
 import { ICreateGroupForm } from "../../../../../core/interfaces/createGroupForm";
-import { IAllUsersTable } from "../../../../../core/interfaces/all_usersTable";
 import Drawer from "react-modern-drawer";
 import useGetAllFriends from "./hooks/useGetAllFriends";
-import CheckBox from "../../../../../core/common/components/CheckBox";
-import { getInitials } from "../../../../../core/common/commonFunctions";
+import UserCard from "./components/UserCard";
+import useFilterCurrentUser from "../../../../../core/common/hooks/useFilterCurrentUser";
 
 type SelectUsersInputProps = {
 	control: Control<ICreateGroupForm>;
 	getValues: UseFormGetValues<ICreateGroupForm>;
+	errors: FieldErrors<ICreateGroupForm>;
 };
 
-const SelectUsersInput = ({ control, getValues }: SelectUsersInputProps) => {
+const SelectUsersInput = ({ control, getValues, errors }: SelectUsersInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+	// Get all friends
 	const { data: friends } = useGetAllFriends();
 
+	// // Filter current user from friends
+	const filteredFriends = useFilterCurrentUser(friends ?? []);
+
+	// Handle opening and closing of drawer
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
 	};
@@ -46,12 +51,26 @@ const SelectUsersInput = ({ control, getValues }: SelectUsersInputProps) => {
 						  ))
 						: "Select Friends"}
 				</div>
+				{errors.new_group_users && (
+					<span className='text-font-red-dark text-sm'>{errors.new_group_users.message}</span>
+				)}
 			</div>
 
 			{/* Select Friends Drawer Controller */}
 			<Controller
 				name='new_group_users'
 				control={control}
+				rules={{
+					validate: {
+						minUsers: (value) => {
+							if (!Array.isArray(value) || value.length <= 0) {
+								return "Please select at least one person";
+							}
+
+							return true;
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}
@@ -72,19 +91,19 @@ const SelectUsersInput = ({ control, getValues }: SelectUsersInputProps) => {
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-font-text-gray duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search User
 								</label>
 							</div>
 
 							{/* User Cards */}
-							{friends?.map((user) => (
+							{filteredFriends?.map((user) => (
 								<UserCard
 									user={user}
 									key={user.id}
@@ -102,52 +121,3 @@ const SelectUsersInput = ({ control, getValues }: SelectUsersInputProps) => {
 };
 
 export default SelectUsersInput;
-
-type UserCardProps = {
-	user: IAllUsersTable;
-	field: ControllerRenderProps<ICreateGroupForm, "new_group_users"> | undefined;
-	getValues: UseFormGetValues<ICreateGroupForm>;
-	type: "checkbox" | "default";
-};
-
-const UserCard = ({ user, field, getValues, type }: UserCardProps) => {
-	return (
-		<>
-			<div className='flex flex-row items-center justify-between'>
-				<div className='flex flex-row items-center gap-6'>
-					{user.profile_img_src ? (
-						<img
-							src={user.profile_img_url || ""}
-							alt='user profile'
-							className='w-12 h-12 rounded-full'
-						/>
-					) : (
-						<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
-					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
-				</div>
-
-				{type === "checkbox" && (
-					<CheckBox
-						divClassName='w-5 h-5 text-brand-orange outline outline-1 outline-brand-orange rounded flex items-center justify-center'
-						iconClassName='text-font-black text-xl'
-						onClick={() => {
-							const selectedUsersArray = getValues().new_group_users || [];
-							const isUserSelected = selectedUsersArray?.some(
-								(selectedUsers: IAllUsersTable) => selectedUsers.id === user.id
-							);
-
-							const newUsers = isUserSelected
-								? selectedUsersArray.filter((selectedUsers) => selectedUsers.id !== user.id) // Remove user if already selected
-								: [...selectedUsersArray, user]; // Add user if not selected
-
-							// Update the field value with the new list of users
-							field?.onChange(newUsers);
-							console.log(getValues().new_group_users);
-						}}
-					/>
-				)}
-			</div>
-		</>
-	);
-};
