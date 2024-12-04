@@ -6,13 +6,12 @@ import { ICreateGroupForm } from "../../../../../../core/interfaces/createGroupF
 import { UseFormGetValues } from "react-hook-form";
 
 type TPostCreateGroup = {
-	data: ICreateGroupForm;
 	getValues: UseFormGetValues<ICreateGroupForm>;
 };
-const usePostCreateGroup = ({ data, getValues }: TPostCreateGroup) => {
+const usePostCreateGroup = ({ getValues }: TPostCreateGroup) => {
 	const { user } = useAuthContext();
 
-	const postCreateGroup = async () => {
+	const postCreateGroup = async (data: ICreateGroupForm) => {
 		if (user && getValues().image_src) {
 			const imagePath = await post_image_to_storage_and_ref_table(getValues().image_src, user.id);
 			data.image_url = imagePath;

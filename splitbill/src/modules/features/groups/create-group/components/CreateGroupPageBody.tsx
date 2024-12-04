@@ -18,19 +18,21 @@ const CreateGroupPageBody = () => {
 		getValues,
 	} = useForm<ICreateGroupForm>({
 		defaultValues: {
+			group_name: "",
 			currency: "MYR",
 		},
 	});
 
 	// Post create group hook
-	const { postCreateGroup } = usePostCreateGroup({ data: getValues(), getValues });
+	const { postCreateGroup } = usePostCreateGroup({ getValues });
 
 	// Navigation
 	const navigate = useNavigate();
 
 	// Submit handler for the form
-	const onSubmit: SubmitHandler<ICreateGroupForm> = async () => {
-		await postCreateGroup();
+	const onSubmit: SubmitHandler<ICreateGroupForm> = async (data) => {
+		console.log({ data });
+		await postCreateGroup(data);
 		queryClient.invalidateQueries({ queryKey: ["groups", "fetchOwnGroups"] });
 		navigate("/groups");
 	};

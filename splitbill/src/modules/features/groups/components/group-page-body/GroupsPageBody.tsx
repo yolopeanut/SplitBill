@@ -11,10 +11,10 @@ const GroupsPageBody = () => {
 
 	return (
 		<>
-			<div className='flex flex-col gap-12 items-start w-full overflow-y-scroll h-[calc(100vh-11rem)]'>
+			<div className='flex flex-col gap-12 items-start w-full h-full'>
 				<div className='flex flex-col gap-8 w-full items-start'>
 					<div className='text-font-white text-lg font-semibold'>All Groups</div>
-					<div className='flex flex-col gap-6 w-full pb-20'>
+					<div className='flex flex-col gap-6 w-full pb-20 overflow-y-auto h-[calc(100vh-16rem)]'>
 						{ownGroups?.map((group) => (
 							<GroupCard
 								key={group.id}

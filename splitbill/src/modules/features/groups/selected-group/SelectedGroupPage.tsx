@@ -7,7 +7,7 @@ import { FaShareSquare } from "react-icons/fa";
 
 // interfaces
 import { IAllGroupsTable } from "../../../core/interfaces/all_GroupsTable";
-import { formatCurrency, getInitials } from "../../../core/common/commonFunctions";
+import { formatCurrency } from "../../../core/common/commonFunctions";
 
 // components
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -24,6 +24,7 @@ import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 import { IBalances } from "../../../core/interfaces/user_balances";
 import useGetBalances from "./components/Balances/hooks/useGetBalances";
 import useGetHeaderBalances from "./hooks/useGetHeaderBalances";
+import GroupImg from "./components/GroupImg";
 
 const handleEditGroupDropDown = ({
 	navigate,
@@ -110,7 +111,7 @@ const SelectedGroupPage = () => {
 
 	return (
 		<>
-			<div className='flex flex-col gap-4 relative p-1 h-full overflow-y-auto'>
+			<div className='flex flex-col gap-4 relative p-1'>
 				<SelectedGroupHeader selectedGroup={selectedGroup} />
 				<SelectedGroupBody />
 			</div>
@@ -124,23 +125,6 @@ export default SelectedGroupPage;
 const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable | undefined }) => {
 	const navigate = useNavigate();
 
-	const GroupImg = ({ className }: { className: string }) => {
-		if (selectedGroup?.img_url) {
-			return (
-				<img
-					src={selectedGroup.img_url}
-					alt='group'
-					className={className}
-				/>
-			);
-		}
-		return (
-			<div className='w-10 h-10 rounded-full bg-brand-orange'>
-				{getInitials(selectedGroup?.name || "")}
-			</div>
-		);
-	};
-
 	// Styling classes for to pay, to receive, and total amounts
 	const amountClass = "text-font-white text-sm font-bold";
 	const amountTitleClass = "text-font-white text-xs font-light";
@@ -152,7 +136,10 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 			<div className='min-h-48 flex flex-col justify-between'>
 				{/* Header and bg image */}
 				<div className='flex flex-row justify-between items-center relative px-4 py-2'>
-					<GroupImg className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]' />
+					<GroupImg
+						className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]'
+						selectedGroup={selectedGroup}
+					/>
 					<button
 						className='btn border-none p-0'
 						onClick={() => {

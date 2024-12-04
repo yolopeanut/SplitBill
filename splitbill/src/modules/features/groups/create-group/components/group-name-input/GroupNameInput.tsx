@@ -17,10 +17,6 @@ const GroupNameInput = ({ register, errors }: GroupNameInputProps) => {
 					placeholder='Group Name'
 					{...register("group_name", {
 						required: "Group name is required",
-						validate: {
-							notEmpty: (value) =>
-								value.trim() !== "" || "Group name cannot be empty or only spaces",
-						},
 					})}
 				/>
 				{errors.group_name && (

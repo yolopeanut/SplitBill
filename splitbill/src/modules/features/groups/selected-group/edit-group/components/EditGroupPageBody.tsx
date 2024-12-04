@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useGroupsContext } from "../../../hooks/useGroupsContext";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
+import GroupImg from "../../components/GroupImg";
 
 const EditGroupPageBody = () => {
 	const { selectedGroup, groupUsers } = useGroupsContext();
@@ -16,10 +17,9 @@ const EditGroupPageBody = () => {
 			<div className='flex flex-col gap-4 px-4 w-full h-full'>
 				{/* Group Image */}
 				<div className='h-[30%] relative'>
-					<img
-						src={selectedGroup?.img_url || ""}
-						alt='group-image'
+					<GroupImg
 						className='w-full max-h-full aspect-square object-cover rounded-xl'
+						selectedGroup={selectedGroup}
 					/>
 					<button className='btn btn-sm absolute bottom-2 right-2 bg-brand-orange p-1 rounded-md text-font-black'>
 						<BiSolidEditAlt size={20} />
