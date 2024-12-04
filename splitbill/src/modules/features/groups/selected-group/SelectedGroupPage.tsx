@@ -10,7 +10,7 @@ import { IAllGroupsTable } from "../../../core/interfaces/all_GroupsTable";
 import { formatCurrency, getInitials } from "../../../core/common/commonFunctions";
 
 // components
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Badges from "./components/BadgesComponent";
 import Transactions from "./components/Transactions/TransactionsComponent";
 import Balances from "./components/Balances/BalancesComponent";
@@ -214,6 +214,28 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 //=========== Selected Group Body ============//
 const SelectedGroupBody = () => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
+	const { groupId } = useParams();
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+	const handleScroll = useCallback(
+		(event: React.UIEvent<HTMLDivElement>) => {
+			const scrollPosition = event.currentTarget.scrollTop;
+
+			const timeoutId = setTimeout(() => {
+				sessionStorage.setItem(`transactions-scroll-${groupId}`, scrollPosition.toString());
+			}, 100);
+
+			return () => clearTimeout(timeoutId);
+		},
+		[groupId]
+	);
+	// Add useEffect to restore scroll position on mount
+	useEffect(() => {
+		const savedScrollPosition = sessionStorage.getItem(`transactions-scroll-${groupId}`);
+		if (savedScrollPosition && scrollContainerRef.current) {
+			scrollContainerRef.current.scrollTop = parseInt(savedScrollPosition);
+		}
+	}, [groupId]);
 
 	return (
 		<>
@@ -223,7 +245,11 @@ const SelectedGroupBody = () => {
 					setSelectedBadge={setSelectedBadge}
 				/>
 			</div>
-			<div className='flex flex-col gap-4 px-4 w-full h-full overflow-auto'>
+			<div
+				className='flex flex-col gap-4 px-4 w-full h-full overflow-auto'
+				onScroll={handleScroll}
+				ref={scrollContainerRef}
+			>
 				{selectedBadge === "Transactions" && <Transactions />}
 				{selectedBadge === "Balances" && <Balances />}
 				{selectedBadge === "Analytics" && <Analytics />}

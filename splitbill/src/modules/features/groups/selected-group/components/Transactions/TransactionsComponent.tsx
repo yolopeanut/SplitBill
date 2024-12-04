@@ -18,21 +18,15 @@ const Transactions = () => {
 		navigate(`/groups/${groupId}/create-transaction`);
 	};
 
-	const sortedTransaction = (
-		allTransactions: IAllTransactionsTable[] | undefined
-	) => {
+	const sortedTransaction = (allTransactions: IAllTransactionsTable[] | undefined) => {
 		if (!allTransactions) return [];
 		const sortedTransactions = allTransactions?.sort((a, b) => {
-			return (
-				new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-			);
+			return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
 		});
 		return sortedTransactions;
 	};
 
-	const groupTransactionsByDate = (
-		transactions: IAllTransactionsTable[] | undefined
-	) => {
+	const groupTransactionsByDate = (transactions: IAllTransactionsTable[] | undefined) => {
 		if (!transactions) return {};
 		return transactions.reduce((groups: GroupedTransactions, transaction) => {
 			const date = new Date(transaction.created_at).toLocaleDateString();
@@ -44,9 +38,7 @@ const Transactions = () => {
 		}, {});
 	};
 
-	const groupedSortedTransactions = groupTransactionsByDate(
-		sortedTransaction(allTransactions)
-	);
+	const groupedSortedTransactions = groupTransactionsByDate(sortedTransaction(allTransactions));
 
 	return (
 		<div className='flex flex-col justify-start items-center gap-4 w-full h-full'>
@@ -54,14 +46,11 @@ const Transactions = () => {
 				return (
 					<div
 						key={groupedDates}
-						className='flex flex-col justify-start items-start gap-4 w-full'>
-						<span className='text-font-white text-base font-semibold'>
-							{groupedDates}
-						</span>
+						className='flex flex-col justify-start items-start gap-4 w-full'
+					>
+						<span className='text-font-white text-base font-semibold'>{groupedDates}</span>
 						{groupedSortedTransactions[groupedDates].map((transaction) => {
-							const paidBy = groupUsers?.find(
-								(user) => user.id === transaction.paid_by
-							);
+							const paidBy = groupUsers?.find((user) => user.id === transaction.paid_by);
 							return (
 								<TransactionCard
 									key={transaction.transaction_id}
@@ -80,9 +69,7 @@ const Transactions = () => {
 				);
 			})}
 			{/* Add Transaction Floating Button */}
-			<FloatingButton
-				handleAddTransactionOnClick={handleAddTransactionOnClick}
-			/>
+			<FloatingButton handleAddTransactionOnClick={handleAddTransactionOnClick} />
 		</div>
 	);
 };
