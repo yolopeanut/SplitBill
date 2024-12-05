@@ -69,7 +69,7 @@ const OwedUserCard = ({
 		<>
 			<div className='flex flex-col'>
 				{amount > 0 ? (
-					<span className='text-red-500 text-sm'>
+					<span className='text-font-red text-sm'>
 						{owedUser?.name || ""} owes {OwedUser?.name}{" "}
 						<span className='text-font-red-owes inline font-bold'>
 							{selectedGroup?.currency}

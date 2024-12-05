@@ -14,7 +14,6 @@ import AmountInput from "./components/amount-input/AmountInput";
 import { useGetGroupUsers } from "./components/paid-by-input/hooks/useGetGroupUsers";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import { useEditExpense } from "./hooks/useEditExpense";
-import { useEffect } from "react";
 
 const EditTransactionBody = () => {
 	const navigate = useNavigate();
@@ -24,7 +23,13 @@ const EditTransactionBody = () => {
 	const { editExpense, isPending } = useEditExpense();
 	const { selectedGroupId } = useGroupsContext();
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
-	const { register, handleSubmit, control, getValues } = useForm<ICreateTransactionForm>({
+	const {
+		register,
+		handleSubmit,
+		control,
+		getValues,
+		formState: { errors },
+	} = useForm<ICreateTransactionForm>({
 		defaultValues:
 			data && groupUsers
 				? {
@@ -74,11 +79,7 @@ const EditTransactionBody = () => {
 				  },
 	});
 
-	useEffect(() => {
-		console.log({ getValuesFirst: data, getValuesSecond: getValues() });
-	}, [getValues]);
-
-	const onSubmit: SubmitHandler<ICreateTransactionForm> = (data) => {
+	const onSubmit: SubmitHandler<ICreateTransactionForm> = async (data) => {
 		// Check if all required fields are filled
 		if (!selectedGroupId) return;
 		if (!data.paidBy) return;
@@ -87,9 +88,7 @@ const EditTransactionBody = () => {
 		if (!data.amount) return;
 		if (!data.splitBy) return;
 
-		console.log({ data });
-
-		editExpense({
+		await editExpense({
 			transaction_id: transactionId!,
 			group_id: selectedGroupId,
 			paid_by: data.paidBy,
@@ -118,16 +117,27 @@ const EditTransactionBody = () => {
 			>
 				<div className='flex flex-col gap-8 w-full h-full'>
 					<div className='flex flex-col h-full pb-80 overflow-y-auto'>
-						<TitleInput register={register} />
+						<TitleInput
+							register={register}
+							errors={errors}
+						/>
 						<AmountInput
 							register={register}
 							getValues={getValues}
+							errors={errors}
 						/>
-						<CategoryInput control={control} />
-						<PaidByInput control={control} />
+						<CategoryInput
+							control={control}
+							errors={errors}
+						/>
+						<PaidByInput
+							control={control}
+							errors={errors}
+						/>
 						<SplitByInput
 							control={control}
 							getValues={getValues}
+							errors={errors}
 						/>
 						<RemarksInput register={register} />
 						<button

@@ -4,24 +4,18 @@ import { useNavigate } from "react-router-dom";
 
 // common
 import Loading from "../../../core/common/components/Loading";
-import { getInitials } from "../../../core/common/commonFunctions";
 import { CustomInputField } from "../../../core/common/components/CustomInputField";
 
 // custom hooks
 import useUserContext from "../../login/hooks/useUserContext";
-import useSendFriendRequest from "./hooks/useSendFriendRequest";
 import useSearchFriends from "./hooks/useSearchFriends";
-import useDeleteFriendRequest from "./hooks/useDeleteFriendRequest";
-import useGetAllSentFriendRequests from "./hooks/useGetAllSentFriendRequests";
 import useGetAllFriends from "../hooks/useGetAllFriends";
 
 // icons
 import { FaPersonCircleQuestion } from "react-icons/fa6";
-import { IoMdPersonAdd } from "react-icons/io";
-import { FaUserCheck } from "react-icons/fa6";
 import { IoArrowBack } from "react-icons/io5";
 import { FaPeoplePulling } from "react-icons/fa6";
-import { queryClient } from "../../../../config/ReactQuery";
+import FriendCard from "./components/FriendCard";
 
 const AddFriendPage = () => {
 	const [searchQuery, setSearchQuery] = useState("");
@@ -139,99 +133,35 @@ const AddFriendPageBody = ({ searchQuery }: { searchQuery: string }) => {
 	);
 };
 
-const ImagePlaceholder = ({
-	imgSrc,
-	name,
-	className,
-}: {
-	imgSrc: string | null;
-	name: string;
-	className?: string;
-}) => {
-	const initials = getInitials(name);
+// const ImagePlaceholder = ({
+// 	imgSrc,
+// 	name,
+// 	className,
+// }: {
+// 	imgSrc: string | null;
+// 	name: string;
+// 	className?: string;
+// }) => {
+// 	const initials = getInitials(name);
 
-	if (imgSrc) {
-		return (
-			<div className='avatar placeholder'>
-				<img
-					className='rounded-full w-14'
-					src={imgSrc}
-				/>
-			</div>
-		);
-	} else {
-		return (
-			<div className='avatar placeholder'>
-				<div className={` text-font-white w-14 rounded-full ${className}`}>
-					<span className='text-lg'>{initials}</span>
-				</div>
-			</div>
-		);
-	}
-};
-
-const FriendCard = ({
-	id,
-	imgSrc,
-	name,
-	uniqueUsername,
-}: {
-	id: string;
-	imgSrc: string | null;
-	name: string;
-	uniqueUsername: string;
-}) => {
-	const sendFriendRequest = useSendFriendRequest();
-	const deleteFriendRequest = useDeleteFriendRequest();
-	const isRequested = useGetAllSentFriendRequests();
-
-	const FriendRequestButton = () => {
-		if (isRequested.data?.some((request) => request.id === id)) {
-			return (
-				<button
-					className='btn btn-primary text-brand-orange border-none'
-					onClick={async () => {
-						await deleteFriendRequest({ p_receiver_id: id });
-						queryClient.invalidateQueries({ queryKey: ["friends", "fetchSentFriendRequests"] });
-					}}
-				>
-					<FaUserCheck size={30} />
-				</button>
-			);
-		} else {
-			return (
-				<button
-					className='btn btn-primary text-brand-orange border-none'
-					onClick={async () => {
-						await sendFriendRequest({ p_receiver_id: id });
-						queryClient.invalidateQueries({ queryKey: ["friends", "fetchSentFriendRequests"] });
-					}}
-				>
-					<IoMdPersonAdd size={30} />
-				</button>
-			);
-		}
-	};
-
-	return (
-		<div className='flex flex-row justify-between gap-4'>
-			<div className='flex flex-row gap-4'>
-				<div className='avatar w-14'>
-					<ImagePlaceholder
-						imgSrc={imgSrc}
-						name={name}
-						className='bg-input-search-gray'
-					/>
-				</div>
-
-				<div className='flex flex-col gap-1 justify-start'>
-					<span className='text-font-white text-lg font-semibold '>{name}</span>
-					<span className='text-font-text-gray text-sm font-normal'>@{uniqueUsername}</span>
-				</div>
-			</div>
-			<FriendRequestButton />
-		</div>
-	);
-};
+// 	if (imgSrc) {
+// 		return (
+// 			<div className='avatar placeholder'>
+// 				<img
+// 					className='rounded-full w-14'
+// 					src={imgSrc}
+// 				/>
+// 			</div>
+// 		);
+// 	} else {
+// 		return (
+// 			<div className='avatar placeholder'>
+// 				<div className={` text-font-white w-14 rounded-full ${className}`}>
+// 					<span className='text-lg'>{initials}</span>
+// 				</div>
+// 			</div>
+// 		);
+// 	}
+// };
 
 export default AddFriendPage;

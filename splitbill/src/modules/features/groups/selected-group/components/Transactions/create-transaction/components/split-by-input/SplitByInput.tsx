@@ -1,4 +1,10 @@
-import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
+import {
+	Controller,
+	ControllerRenderProps,
+	Control,
+	UseFormGetValues,
+	FieldErrors,
+} from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
@@ -11,11 +17,12 @@ import TotalComponent from "./components/TotalComponent";
 type SplitByInputProps = {
 	control: Control<ICreateTransactionForm>;
 	getValues: UseFormGetValues<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
 };
 
 type SelectedSplitType = "Equal" | "Custom" | "Percentage";
 
-export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
+export const SplitByInput = ({ control, getValues, errors }: SplitByInputProps) => {
 	// Drawer State
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -70,12 +77,24 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 						  ))
 						: "Select friends"}
 				</div>
+				{errors?.splitBy && <span className='text-font-red text-sm'>{errors.splitBy.message}</span>}
 			</div>
 
 			{/* Split By Drawer Controller */}
 			<Controller
 				name='splitBy'
 				control={control}
+				rules={{
+					validate: {
+						minSplitBy: (value) => {
+							if (!value) return "Please select a split type or users";
+							if (value.value.users.length <= 1) {
+								return "Please select two or more users";
+							}
+							return true;
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}
@@ -96,12 +115,12 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm  bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-font-text-gray duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search User
 								</label>

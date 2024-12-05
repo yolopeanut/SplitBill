@@ -16,7 +16,7 @@ function LoginPage() {
 		if (session) {
 			// Check if user data is loading
 			if (!getUserById.isLoading && !isLoading) {
-				console.log("login page", { hasCreatedProfile });
+				// console.log("login page", { hasCreatedProfile });
 				// Check if user has created profile
 				if (hasCreatedProfile) {
 					// Navigate to groups page

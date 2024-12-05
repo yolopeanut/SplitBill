@@ -1,7 +1,12 @@
-import { UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 
-export const TitleInput = ({ register }: { register: UseFormRegister<ICreateTransactionForm> }) => {
+interface TitleInputProps {
+	register: UseFormRegister<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
+}
+
+export const TitleInput = ({ register, errors }: TitleInputProps) => {
 	return (
 		<>
 			{/* Title */}
@@ -11,8 +16,9 @@ export const TitleInput = ({ register }: { register: UseFormRegister<ICreateTran
 					type='text'
 					className='input w-full bg-input-box-gray outline-none border-none placeholder:text-font-text-gray'
 					placeholder='Expense Title'
-					{...register("title")}
+					{...register("title", { required: "Title is required" })}
 				/>
+				{errors.title && <span className='text-font-red text-sm'>{errors.title.message}</span>}
 			</div>
 		</>
 	);

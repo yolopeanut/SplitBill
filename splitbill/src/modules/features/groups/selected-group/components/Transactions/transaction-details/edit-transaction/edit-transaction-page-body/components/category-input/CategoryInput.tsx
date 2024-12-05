@@ -1,4 +1,4 @@
-import { Controller, Control, ControllerRenderProps } from "react-hook-form";
+import { Controller, Control, ControllerRenderProps, FieldErrors } from "react-hook-form";
 import ExpenseCategory from "../../../../../../../../../../core/enums/ExpenseCategoryEnum";
 import Drawer from "react-modern-drawer";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -7,9 +7,10 @@ import { ICreateTransactionForm } from "../../../../../../../../../../core/inter
 
 interface ICategoryInputProps {
 	control: Control<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
 }
 
-export const CategoryInput = ({ control }: ICategoryInputProps) => {
+export const CategoryInput = ({ control, errors }: ICategoryInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState<ExpenseCategory | null>(null);
 
@@ -43,12 +44,26 @@ export const CategoryInput = ({ control }: ICategoryInputProps) => {
 						"Select Category"
 					)}
 				</div>
+				{errors.category && (
+					<span className='text-font-red text-sm'>{errors.category.message}</span>
+				)}
 			</div>
 
 			{/* Category Drawer Controller */}
 			<Controller
 				name='category'
 				control={control}
+				rules={{
+					validate: {
+						minCategory: (value) => {
+							if (!value) {
+								return "Please select a category";
+							}
+
+							return true;
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}

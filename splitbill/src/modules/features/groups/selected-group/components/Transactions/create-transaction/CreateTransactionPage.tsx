@@ -76,7 +76,13 @@ const CreateTransactionBody = () => {
 
 	const { addExpense, isPending } = useAddExpense();
 	const { selectedGroupId } = useGroupsContext();
-	const { register, handleSubmit, control, getValues } = useForm<ICreateTransactionForm>({
+	const {
+		register,
+		handleSubmit,
+		control,
+		getValues,
+		formState: { errors },
+	} = useForm<ICreateTransactionForm>({
 		defaultValues: {
 			splitBy: {
 				value: {
@@ -87,7 +93,7 @@ const CreateTransactionBody = () => {
 		},
 	});
 
-	const onSubmit: SubmitHandler<ICreateTransactionForm> = (data) => {
+	const onSubmit: SubmitHandler<ICreateTransactionForm> = async (data) => {
 		// Check if all required fields are filled
 		if (!selectedGroupId) return;
 		if (!data.paidBy) return;
@@ -96,7 +102,7 @@ const CreateTransactionBody = () => {
 		if (!data.amount) return;
 		if (!data.splitBy) return;
 
-		addExpense({
+		await addExpense({
 			group_id: selectedGroupId,
 			paid_by: data.paidBy,
 			expense_title: data.title,
@@ -124,13 +130,26 @@ const CreateTransactionBody = () => {
 			>
 				<div className='flex flex-col gap-8 w-full h-full'>
 					<div className='flex flex-col h-full pb-80 overflow-y-auto'>
-						<TitleInput register={register} />
-						<AmountInput register={register} />
-						<CategoryInput control={control} />
-						<PaidByInput control={control} />
+						<TitleInput
+							register={register}
+							errors={errors}
+						/>
+						<AmountInput
+							register={register}
+							errors={errors}
+						/>
+						<CategoryInput
+							control={control}
+							errors={errors}
+						/>
+						<PaidByInput
+							control={control}
+							errors={errors}
+						/>
 						<SplitByInput
 							control={control}
 							getValues={getValues}
+							errors={errors}
 						/>
 						<RemarksInput register={register} />
 						<button

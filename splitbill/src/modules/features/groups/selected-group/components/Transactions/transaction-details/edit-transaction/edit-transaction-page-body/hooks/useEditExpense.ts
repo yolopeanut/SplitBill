@@ -66,7 +66,7 @@ export const useEditExpense = () => {
 				throw response.error;
 			}
 
-			console.log({ useEditExpenseSplitBy: split_by });
+			// console.log({ useEditExpenseSplitBy: split_by });
 
 			if (response) {
 				const split_by_values = split_by.value;
@@ -82,7 +82,7 @@ export const useEditExpense = () => {
 				split_by_values.users = custom_split_by;
 
 				split_by_values.users.map(async (user) => {
-					console.log({ useEditExpenseUSER: user });
+					// console.log({ useEditExpenseUSER: user });
 					//If split by is equal, then we need to calculate the equal split amount
 					if (split_by_values.type === "Equal") {
 						await postUpdateTransactionSplitsDB(
@@ -127,7 +127,7 @@ export const useEditExpense = () => {
 			return null;
 		},
 		onSuccess: (response) => {
-			console.log("Expense updated successfully", response);
+			// console.log("Expense updated successfully", response);
 		},
 	});
 

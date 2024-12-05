@@ -1,4 +1,10 @@
-import { Controller, ControllerRenderProps, Control, UseFormGetValues } from "react-hook-form";
+import {
+	Controller,
+	ControllerRenderProps,
+	Control,
+	UseFormGetValues,
+	FieldErrors,
+} from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "../paid-by-input/hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../../../hooks/useGroupsContext";
@@ -11,11 +17,12 @@ import TotalComponent from "./components/TotalComponent";
 type SplitByInputProps = {
 	control: Control<ICreateTransactionForm>;
 	getValues: UseFormGetValues<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
 };
 
 type SelectedSplitType = "Equal" | "Custom" | "Percentage";
 
-export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
+export const SplitByInput = ({ control, getValues, errors }: SplitByInputProps) => {
 	// Drawer State
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -74,12 +81,24 @@ export const SplitByInput = ({ control, getValues }: SplitByInputProps) => {
 						  ))
 						: "Select friends"}
 				</div>
+				{errors.splitBy && <span className='text-font-red text-sm'>{errors.splitBy.message}</span>}
 			</div>
 
 			{/* Split By Drawer Controller */}
 			<Controller
 				name='splitBy'
 				control={control}
+				rules={{
+					validate: {
+						minSplitBy: (value) => {
+							if (!value) return "Please select a split type or users";
+							if (value.value.users.length <= 1) {
+								return "Please select two or more users";
+							}
+							return true;
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}

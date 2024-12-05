@@ -18,7 +18,7 @@ const UserCardEqualSplit = ({
 	getValues,
 	originalSplitBy,
 }: UserCardEqualSplitProps) => {
-	console.log({ getValues: getValues(), originalSplitBy });
+	// console.log({ getValues: getValues(), originalSplitBy });
 
 	return (
 		<>

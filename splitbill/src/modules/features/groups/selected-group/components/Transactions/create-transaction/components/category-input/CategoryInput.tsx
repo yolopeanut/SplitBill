@@ -1,11 +1,16 @@
-import { Controller, Control, ControllerRenderProps } from "react-hook-form";
+import { Controller, Control, FieldErrors } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import ExpenseCategory from "../../../../../../../../core/enums/ExpenseCategoryEnum";
 import Drawer from "react-modern-drawer";
-import { Dispatch, SetStateAction, useState } from "react";
-import { expenseCategories } from "../../../../../../../../core/constants/ExpenseCategories";
+import { useState } from "react";
+import CategoryCard from "./components/CategoryCard";
 
-export const CategoryInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
+interface CategoryInputProps {
+	control: Control<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
+}
+
+export const CategoryInput = ({ control, errors }: CategoryInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState<ExpenseCategory | null>(null);
 
@@ -35,12 +40,26 @@ export const CategoryInput = ({ control }: { control: Control<ICreateTransaction
 						"Select Category"
 					)}
 				</div>
+				{errors?.category && (
+					<span className='text-font-red text-sm'>{errors.category.message}</span>
+				)}
 			</div>
 
 			{/* Category Drawer Controller */}
 			<Controller
 				name='category'
 				control={control}
+				rules={{
+					validate: {
+						minCategory: (value) => {
+							if (!value) {
+								return "Please select a category";
+							}
+
+							return true;
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}
@@ -61,12 +80,12 @@ export const CategoryInput = ({ control }: { control: Control<ICreateTransaction
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-font-white bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-input-search-gray px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search Category
 								</label>
@@ -91,40 +110,3 @@ export const CategoryInput = ({ control }: { control: Control<ICreateTransaction
 };
 
 export default CategoryInput;
-
-const CategoryCard = ({
-	category,
-	field,
-	setSelectedCategory,
-	setIsDrawerOpen,
-}: {
-	category: ExpenseCategory;
-	field: ControllerRenderProps<ICreateTransactionForm, "category"> | undefined;
-	setSelectedCategory: Dispatch<SetStateAction<ExpenseCategory | null>> | undefined;
-	setIsDrawerOpen: Dispatch<SetStateAction<boolean>> | undefined;
-}) => {
-	const categoryData = expenseCategories.find((categories) => categories.label === category);
-	const categoryIcon = categoryData?.icon;
-	const categoryColor = categoryData?.color;
-	return (
-		<>
-			<div
-				className='flex flex-row justify-between items-center w-full gap-4 cursor-pointer'
-				onClick={() => {
-					field?.onChange(category);
-					setSelectedCategory?.(category);
-					setIsDrawerOpen?.(false);
-				}}
-			>
-				<div className='flex flex-row items-center gap-6'>
-					<div
-						className={`flex justify-center items-center rounded-full w-12 h-12 text-font-black ${categoryColor}`}
-					>
-						{categoryIcon}
-					</div>
-					<span className='text-font-white text-lg font-semibold'>{category}</span>
-				</div>
-			</div>
-		</>
-	);
-};

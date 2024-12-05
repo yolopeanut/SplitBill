@@ -5,8 +5,14 @@ import { useGroupsContext } from "../../../../../../../../hooks/useGroupsContext
 import Drawer from "react-modern-drawer";
 import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { FieldErrors } from "react-hook-form";
 
-export const PaidByInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
+interface PaidByInputProps {
+	control: Control<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
+}
+
+export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedUser, setSelectedUser] = useState<IAllUsersTable | null>(null);
 
@@ -44,12 +50,22 @@ export const PaidByInput = ({ control }: { control: Control<ICreateTransactionFo
 						"Select who paid"
 					)}
 				</div>
+				{errors.paidBy && <span className='text-font-red text-sm'>{errors.paidBy.message}</span>}
 			</div>
 
 			{/* Paid By Drawer Controller */}
 			<Controller
 				name='paidBy'
 				control={control}
+				rules={{
+					validate: {
+						minPaidBy: (value) => {
+							if (!value) {
+								return "Please select a user";
+							}
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}

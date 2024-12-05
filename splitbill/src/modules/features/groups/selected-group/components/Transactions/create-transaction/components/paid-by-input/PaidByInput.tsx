@@ -1,4 +1,4 @@
-import { Controller, ControllerRenderProps, Control } from "react-hook-form";
+import { Controller, ControllerRenderProps, Control, FieldErrors } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
@@ -6,7 +6,12 @@ import Drawer from "react-modern-drawer";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useState } from "react";
 
-export const PaidByInput = ({ control }: { control: Control<ICreateTransactionForm> }) => {
+interface PaidByInputProps {
+	control: Control<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
+}
+
+export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [selectedUser, setSelectedUser] = useState<IAllUsersTable | null>(null);
 
@@ -40,12 +45,22 @@ export const PaidByInput = ({ control }: { control: Control<ICreateTransactionFo
 						"Select who paid"
 					)}
 				</div>
+				{errors?.paidBy && <span className='text-font-red text-sm'>{errors.paidBy.message}</span>}
 			</div>
 
 			{/* Paid By Drawer Controller */}
 			<Controller
 				name='paidBy'
 				control={control}
+				rules={{
+					validate: {
+						minPaidBy: (value) => {
+							if (!value) {
+								return "Please select a user";
+							}
+						},
+					},
+				}}
 				render={({ field }) => (
 					<Drawer
 						open={isDrawerOpen}
@@ -66,12 +81,12 @@ export const PaidByInput = ({ control }: { control: Control<ICreateTransactionFo
 								<input
 									type='text'
 									id='floating_outlined'
-									className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+									className='block px-2.5 pb-2.5 pt-4 w-full text-sm bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto text-white focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
 									placeholder=' '
 								/>
 								<label
 									htmlFor='floating_outlined'
-									className='absolute text-sm text-gray-500 text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-gray-900 px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
+									className='absolute text-sm text-font-text-gray duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
 								>
 									Search User
 								</label>
