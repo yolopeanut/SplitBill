@@ -5,9 +5,9 @@ import { useForm, UseFormRegister } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form";
 import { IFormInput } from "../../../core/interfaces/createProfileForm";
 import update_user_profile from "../../../core/database_functions/createProfilePost";
-import post_image_to_storage_and_ref_table from "../../../core/database_functions/postImageToStorage";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import useUserContext from "../hooks/useUserContext";
+import post_image_to_storage from "../../../core/database_functions/postImageToStorage";
 
 const CreateProfileText = (
 	<div className='flex flex-col gap-2 items-start w-full'>
@@ -32,7 +32,7 @@ const CreateProfilePage = () => {
 		// upload form data to backend
 		if (user) {
 			// upload image to storage and get the path, waiting for the image path to be returned
-			const imagePath = await post_image_to_storage_and_ref_table(data.profilePicture, user.id);
+			const imagePath = await post_image_to_storage(data.profilePicture);
 
 			// update user profile, waiting for the user profile to update
 			await update_user_profile(data, imagePath, user.id);
