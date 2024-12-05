@@ -7,7 +7,7 @@ type ImageSrcInputProps = {
 	register: UseFormRegister<ICreateGroupForm>;
 };
 
-const options = { maxSizeMB: 10, maxWidthOrHeight: 1000, useWebWorker: true };
+const options = { maxSizeMB: 0.7, maxWidthOrHeight: 1000, useWebWorker: true };
 
 const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 	const [groupImage, setGroupImage] = useState<File | null>(null);

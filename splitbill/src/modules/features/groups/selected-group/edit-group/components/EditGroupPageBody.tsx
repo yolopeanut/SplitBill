@@ -45,7 +45,7 @@ const EditGroupPageBody = () => {
 							if (e.target.files && e.target.files.length > 0) {
 								handleImageUpload({
 									event: e,
-									options: { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true },
+									options: { maxSizeMB: 0.7, maxWidthOrHeight: 1000, useWebWorker: true },
 								}).then((file) => {
 									if (file) {
 										handleEditImage(file);

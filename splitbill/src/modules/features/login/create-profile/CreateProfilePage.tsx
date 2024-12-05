@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleImageUpload } from "../../../core/common/commonFunctions";
-import { useForm, UseFormRegister } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form";
 import { IFormInput } from "../../../core/interfaces/createProfileForm";
 import update_user_profile from "../../../core/database_functions/createProfilePost";
 import useAuthContext from "../../../core/auth/hooks/useAuthContext";
 import useUserContext from "../hooks/useUserContext";
 import post_image_to_storage from "../../../core/database_functions/postImageToStorage";
+import LetsGoButton from "./components/LetsGoButton";
+import UserNameInput from "./components/UserNameInput";
+import NameInput from "./components/NameInput";
+import ProfilePictureInput from "./components/ProfilePictureInput";
 
 const CreateProfileText = (
 	<div className='flex flex-col gap-2 items-start w-full'>
@@ -78,92 +81,3 @@ const CreateProfilePage = () => {
 };
 
 export default CreateProfilePage;
-const LetsGoButton = () => {
-	return (
-		<div className='flex h-14 w-full justify-center items-center'>
-			<button
-				type='submit'
-				className='btn bg-brand-orange text-font-black font-black text-base rounded-full w-full max-w-xs h-full '
-			>
-				Let's go
-			</button>
-		</div>
-	);
-};
-const UserNameInput = ({ register }: { register: UseFormRegister<IFormInput> }) => {
-	return (
-		<>
-			<div className='label'>
-				<span className='label-text text-font-white text-base font-semibold'>Unique Username</span>
-			</div>
-			<input
-				type='text'
-				placeholder=''
-				className='input w-full max-w-xs bg-input-box-gray text-font-white rounded-xl'
-				{...register("username")}
-			/>
-		</>
-	);
-};
-
-const NameInput = ({ register }: { register: UseFormRegister<IFormInput> }) => {
-	return (
-		<>
-			<div className='label'>
-				<span className='label-text text-font-white text-base font-semibold'>Display Name</span>
-			</div>
-			<input
-				type='text'
-				placeholder=''
-				className='input w-full max-w-xs bg-input-box-gray text-font-white rounded-xl'
-				{...register("displayName")}
-			/>
-		</>
-	);
-};
-
-const ProfilePictureInput = ({
-	setProfilePictureUrl,
-	register,
-}: {
-	setProfilePictureUrl: (url: string | null) => void;
-	register: UseFormRegister<IFormInput>;
-}) => {
-	const [profilePicture, setProfilePicture] = useState<File | null>(null);
-	const options = { maxSizeMB: 10, maxWidthOrHeight: 1000, useWebWorker: true };
-
-	return (
-		<>
-			<div className='flex flex-col gap-2 w-20 h-20 justify-center items-center bg-font-white rounded-full '>
-				<label className='w-64 flex flex-col items-center px-4 py-6 '>
-					{profilePicture ? (
-						<img
-							src={profilePicture ? URL.createObjectURL(profilePicture) : ""}
-							alt='Profile Picture'
-							className='w-20 h-20 object-cover rounded-full'
-						/>
-					) : (
-						<span className='text-font-black text-4xl font-semibold'>+</span>
-					)}
-					<input
-						type='file'
-						placeholder=''
-						className='hidden'
-						accept='image/png, image/gif, image/jpeg'
-						onChange={(e) => {
-							if (e.target.files && e.target.files.length > 0) {
-								handleImageUpload({ event: e, options }).then((file) => {
-									if (file) {
-										setProfilePictureUrl(URL.createObjectURL(file));
-										setProfilePicture(file);
-										register("profilePicture", { value: file });
-									}
-								});
-							}
-						}}
-					/>
-				</label>
-			</div>
-		</>
-	);
-};
