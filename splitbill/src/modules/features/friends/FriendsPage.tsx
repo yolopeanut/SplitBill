@@ -66,7 +66,10 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 	const [showMore, setShowMore] = useState(false);
 	const getFriends = useGetAllFriends();
 	const getFriendRequests = useGetAllFriendRequests();
-	const { favouritedFriends, normalFriends } = useFavouritedFriends(getFriends.data || []);
+	const { favouritedFriends, normalFriends } = useFavouritedFriends({
+		data: getFriends.data || [],
+		searchQuery,
+	});
 	const [isOpen, setIsOpen] = useState(false);
 	const [friendId, setFriendId] = useState("");
 
@@ -82,7 +85,7 @@ const FriendsPageBody = ({ searchQuery }: { searchQuery: string }) => {
 		setIsOpen((prevState) => !prevState);
 	};
 
-	console.log(searchQuery);
+	// console.log(searchQuery);
 
 	//set the swiper to slide to the first slide
 

@@ -39,16 +39,16 @@ export const useEditExpense = () => {
 		}: MutationProps) => {
 			if (!user || !session || !supabase || isLoading) return;
 
-			console.log({
-				transaction_id,
-				group_id,
-				paid_by,
-				expense_title,
-				category,
-				amount,
-				remarks,
-				tax,
-			});
+			// console.log({
+			// 	transaction_id,
+			// 	group_id,
+			// 	paid_by,
+			// 	expense_title,
+			// 	category,
+			// 	amount,
+			// 	remarks,
+			// 	tax,
+			// });
 
 			const response = await postUpdateTransactionDB(
 				transaction_id,
@@ -126,9 +126,9 @@ export const useEditExpense = () => {
 
 			return null;
 		},
-		onSuccess: (response) => {
-			// console.log("Expense updated successfully", response);
-		},
+		// onSuccess: (response) => {
+		// 	// console.log("Expense updated successfully", response);
+		// },
 	});
 
 	return { editExpense, isPending };

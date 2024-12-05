@@ -106,9 +106,9 @@ export const useAddExpense = () => {
 
 			return null;
 		},
-		onSuccess: (response) => {
-			console.log("Expense added successfully", response);
-		},
+		// onSuccess: (response) => {
+		// 	console.log("Expense added successfully", response);
+		// },
 	});
 
 	return { addExpense, isPending };

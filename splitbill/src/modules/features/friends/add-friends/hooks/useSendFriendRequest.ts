@@ -6,7 +6,7 @@ const useSendFriendRequest = () => {
 	const { user } = useAuthContext();
 	const { mutateAsync: sendFriendRequest } = useMutation({
 		mutationFn: async ({ p_receiver_id }: { p_receiver_id: string }) => {
-			console.log("SENT REQUEST");
+			// console.log("SENT REQUEST");
 			if (!user) return;
 			await sendFriendRequestDB(user.id, p_receiver_id);
 		},

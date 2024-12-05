@@ -14,7 +14,7 @@ const TransactionDetailPage = () => {
 	if (data.transaction_id !== transactionId) {
 		return <Loading />;
 	}
-	console.log({ data });
+	// console.log({ data });
 
 	return (
 		<>

@@ -3,13 +3,23 @@ import { useGroupsContext } from "../../../hooks/useGroupsContext";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
 import GroupImg from "../../components/GroupImg";
+import useEditImage from "../hooks/useEditImage";
+import { handleImageUpload } from "../../../../../core/common/commonFunctions";
+import { useRef } from "react";
+import { queryClient } from "../../../../../../config/ReactQuery";
 
 const EditGroupPageBody = () => {
 	const { selectedGroup, groupUsers } = useGroupsContext();
 	const { register } = useForm();
-
+	const { editImage } = useEditImage();
 	const handleDeleteGroup = () => {
 		console.log("Delete Group");
+	};
+	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const handleEditImage = async (image: File) => {
+		await editImage(image);
+		queryClient.invalidateQueries({ queryKey: ["groups", "fetchSelectedGroup"] });
 	};
 
 	return (
@@ -17,13 +27,33 @@ const EditGroupPageBody = () => {
 			<div className='flex flex-col gap-4 px-4 w-full h-full'>
 				{/* Group Image */}
 				<div className='h-[30%] relative'>
-					<GroupImg
-						className='w-full max-h-full aspect-square object-cover rounded-xl'
-						selectedGroup={selectedGroup}
-					/>
-					<button className='btn btn-sm absolute bottom-2 right-2 bg-brand-orange p-1 rounded-md text-font-black'>
+					<GroupImg className='w-full max-h-full aspect-square object-cover rounded-xl' />
+					<button
+						className='btn btn-sm absolute bottom-2 right-2 bg-brand-orange p-1 rounded-md text-font-black'
+						onClick={() => fileInputRef.current?.click()}
+					>
 						<BiSolidEditAlt size={20} />
 					</button>
+
+					<input
+						ref={fileInputRef}
+						type='file'
+						placeholder=''
+						className='hidden'
+						accept='image/png, image/gif, image/jpeg'
+						onChange={(e) => {
+							if (e.target.files && e.target.files.length > 0) {
+								handleImageUpload({
+									event: e,
+									options: { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true },
+								}).then((file) => {
+									if (file) {
+										handleEditImage(file);
+									}
+								});
+							}
+						}}
+					/>
 				</div>
 
 				{/* Group Name */}
@@ -71,14 +101,6 @@ const EditGroupPageBody = () => {
 						</div>
 					))}
 				</div>
-
-				{/* Save Button */}
-				<button
-					type='submit'
-					className='btn bg-brand-orange text-font-black w-full'
-				>
-					Save
-				</button>
 
 				{/* Delete Group Button */}
 				<button

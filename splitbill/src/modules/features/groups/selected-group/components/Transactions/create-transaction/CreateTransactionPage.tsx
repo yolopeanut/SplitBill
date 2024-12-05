@@ -113,7 +113,7 @@ const CreateTransactionBody = () => {
 			tax: data.tax || 0,
 		});
 		if (isPending) {
-			console.log("isPending");
+			// console.log("isPending");
 			return;
 		}
 

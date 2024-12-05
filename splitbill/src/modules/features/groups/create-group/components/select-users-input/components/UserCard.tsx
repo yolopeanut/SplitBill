@@ -45,7 +45,7 @@ const UserCard = ({ user, field, getValues, type }: UserCardProps) => {
 
 							// Update the field value with the new list of users
 							field?.onChange(newUsers);
-							console.log(getValues().new_group_users);
+							// console.log(getValues().new_group_users);
 						}}
 					/>
 				)}

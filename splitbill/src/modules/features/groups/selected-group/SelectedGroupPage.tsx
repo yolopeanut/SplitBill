@@ -17,22 +17,16 @@ import Balances from "./components/Balances/BalancesComponent";
 import Analytics from "./components/Analytics/AnalyticsComponent";
 import DropdownComponent from "./components/DropdownComponent";
 import Loading from "../../../core/common/components/Loading";
-import { useGroupsContext } from "../hooks/useGroupsContext";
-import { useGetSelectedGroup } from "./hooks/useGetSelectedGroup";
-import { useGetAllTransactions } from "./components/Transactions/hooks/useGetAllTransactions";
-import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
-import { IBalances } from "../../../core/interfaces/user_balances";
-import useGetBalances from "./components/Balances/hooks/useGetBalances";
 import useGetHeaderBalances from "./hooks/useGetHeaderBalances";
 import GroupImg from "./components/GroupImg";
+import { useSelectedGroup } from "./hooks/useSelectedGroup";
 
-const handleEditGroupDropDown = ({
-	navigate,
-	groupId,
-}: {
+interface handleEditGroupDropDownProps {
 	navigate: NavigateFunction;
 	groupId: string;
-}) => {
+}
+
+const handleEditGroupDropDown = ({ navigate, groupId }: handleEditGroupDropDownProps) => {
 	navigate(`/groups/${groupId}/edit-group`);
 };
 
@@ -43,66 +37,12 @@ const handleLeaveGroupDropDown = () => {
 //=========== Selected Group Page ============//
 const SelectedGroupPage = () => {
 	const {
-		setGroupUsers,
-		setSelectedGroupId,
-		setSelectedGroup,
-		setAllTransactions,
-		setUserBalances,
-	} = useGroupsContext();
-
-	// Get group id
-	const { groupId } = useParams();
-
-	// Get selected group
-	const { data: selectedGroup, isLoading } = useGetSelectedGroup(groupId || "");
-
-	// Get all transactions
-	const { data: allTransactions, isLoading: isLoadingAllTransactions } = useGetAllTransactions(
-		groupId || ""
-	);
-
-	// Get group users
-	const { data: groupUsers, isLoading: isLoadingGroupUsers } = useGetGroupUsers({
-		group_id: groupId || "",
-	});
-
-	// Get user balances
-	const {
-		userBalances,
-		isLoading: isLoadingBalances,
-	}: { userBalances: IBalances["userBalances"]; isLoading: boolean } = useGetBalances({
-		allTransactions,
-		groupUsers,
-	});
-
-	useEffect(() => {
-		if (groupUsers) {
-			setGroupUsers(groupUsers);
-		}
-		if (groupId) {
-			setSelectedGroupId(groupId);
-		}
-		if (selectedGroup) {
-			setSelectedGroup(selectedGroup);
-		}
-		if (allTransactions) {
-			setAllTransactions(allTransactions);
-		}
-		if (userBalances) {
-			setUserBalances(userBalances);
-		}
-	}, [
-		groupUsers,
-		setGroupUsers,
-		groupId,
-		setSelectedGroupId,
 		selectedGroup,
-		setSelectedGroup,
-		allTransactions,
-		setAllTransactions,
-		userBalances,
-		setUserBalances,
-	]);
+		isLoading,
+		isLoadingAllTransactions,
+		isLoadingGroupUsers,
+		isLoadingBalances,
+	} = useSelectedGroup();
 
 	// If loading, show loading screen
 	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers || isLoadingBalances) {
@@ -136,10 +76,7 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 			<div className='min-h-48 flex flex-col justify-between w-full'>
 				{/* Header and bg image */}
 				<div className='flex flex-row justify-between items-center relative px-4 py-2'>
-					<GroupImg
-						className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]'
-						selectedGroup={selectedGroup}
-					/>
+					<GroupImg className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]' />
 					<button
 						className='btn border-none p-0'
 						onClick={() => {
