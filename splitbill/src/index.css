@@ -29,13 +29,10 @@ a:hover {
 }
 
 body {
-	-webkit-overflow-scrolling: touch;
-	position: fixed;
 	margin: 0;
 	place-items: start;
 	min-width: 320px;
 	min-height: 100vh;
-	overscroll-behavior: none;
 }
 
 h1 {
