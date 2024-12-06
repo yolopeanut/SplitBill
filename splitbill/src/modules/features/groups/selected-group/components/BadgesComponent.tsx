@@ -9,9 +9,9 @@ interface IBadgesProps {
 const Badges = ({ selectedBadge, setSelectedBadge, swiperRef }: IBadgesProps) => {
 	// Styling classes for badges
 	const badgeClassName =
-		"btn btn-sm bg-button-gray rounded-full w-32  flex justify-center items-center border-brand-orange text-font-white";
+		"btn btn-sm bg-button-gray rounded-full w-[31.5%] flex justify-center items-center border-brand-orange text-font-white";
 	const selectedBadgeClassName =
-		"btn btn-sm bg-brand-orange rounded-full w-32 h-8 flex justify-center items-center text-font-black";
+		"btn btn-sm bg-brand-orange rounded-full w-[31.5%] h-8 flex justify-center items-center text-font-black";
 
 	const handleBadgeClick = (badge: string) => {
 		const badges = ["Transactions", "Balances", "Analytics"];
@@ -23,7 +23,7 @@ const Badges = ({ selectedBadge, setSelectedBadge, swiperRef }: IBadgesProps) =>
 	};
 
 	return (
-		<div className='flex flex-row justify-start items-center gap-2 overflow-x-auto min-h-10 no-scrollbar'>
+		<div className='flex flex-row justify-center items-center gap-2 overflow-x-hidden min-h-10 no-scrollbar w-full'>
 			{/* Transactions badge */}
 			<button
 				className={selectedBadge === "Transactions" ? selectedBadgeClassName : badgeClassName}
