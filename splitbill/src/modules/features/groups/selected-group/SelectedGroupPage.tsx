@@ -21,6 +21,15 @@ import useGetHeaderBalances from "./hooks/useGetHeaderBalances";
 import GroupImg from "./components/GroupImg";
 import { useSelectedGroup } from "./hooks/useSelectedGroup";
 
+// Import Swiper React components
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 interface handleEditGroupDropDownProps {
 	navigate: NavigateFunction;
 	groupId: string;
@@ -51,7 +60,7 @@ const SelectedGroupPage = () => {
 
 	return (
 		<>
-			<div className='flex flex-col gap-4 relative'>
+			<div className='flex flex-col gap-4 relative h-[calc(100vh-4rem)]'>
 				<SelectedGroupHeader selectedGroup={selectedGroup} />
 				<SelectedGroupBody />
 			</div>
@@ -141,6 +150,12 @@ const SelectedGroupBody = () => {
 	const { groupId } = useParams();
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+	// Handle slide changes and scroll reset
+	const handleSlideChange = (swiper: SwiperClass) => {
+		const badges = ["Transactions", "Balances", "Analytics"];
+		setSelectedBadge(badges[swiper.activeIndex]);
+	};
+
 	const handleScroll = useCallback(
 		(event: React.UIEvent<HTMLDivElement>) => {
 			const scrollPosition = event.currentTarget.scrollTop;
@@ -170,13 +185,40 @@ const SelectedGroupBody = () => {
 				/>
 			</div>
 			<div
-				className='flex flex-col gap-4 px-4 w-full h-full overflow-auto'
+				className='flex flex-col gap-4 px-4 w-full h-[calc(100vh-9.75rem)] overflow-y-auto'
 				onScroll={handleScroll}
 				ref={scrollContainerRef}
 			>
-				{selectedBadge === "Transactions" && <Transactions />}
-				{selectedBadge === "Balances" && <Balances />}
-				{selectedBadge === "Analytics" && <Analytics />}
+				<Swiper
+					modules={[]}
+					spaceBetween={50}
+					slidesPerView={1}
+					onSlideChange={handleSlideChange}
+					touchRatio={1}
+					resistance={true}
+					resistanceRatio={0.85}
+					threshold={5}
+					updateOnWindowResize={true}
+					observer={true}
+					observeParents={true}
+					className='w-full h-full overflow-y-auto'
+				>
+					<SwiperSlide className='h-full'>
+						<div className='h-full'>
+							<Transactions />
+						</div>
+					</SwiperSlide>
+					<SwiperSlide className='h-full'>
+						<div className='h-full'>
+							<Balances />
+						</div>
+					</SwiperSlide>
+					<SwiperSlide className='h-full'>
+						<div className='h-full'>
+							<Analytics />
+						</div>
+					</SwiperSlide>
+				</Swiper>
 			</div>
 		</>
 	);

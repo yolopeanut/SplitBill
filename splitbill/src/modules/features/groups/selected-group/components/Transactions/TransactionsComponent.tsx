@@ -41,7 +41,7 @@ const Transactions = () => {
 	const groupedSortedTransactions = groupTransactionsByDate(sortedTransaction(allTransactions));
 
 	return (
-		<div className='flex flex-col justify-start items-center gap-4 w-full h-full'>
+		<div className='flex flex-col justify-start items-center gap-4 w-full h-[63vh] overflow-y-auto'>
 			{Object.keys(groupedSortedTransactions).map((groupedDates) => {
 				return (
 					<div
