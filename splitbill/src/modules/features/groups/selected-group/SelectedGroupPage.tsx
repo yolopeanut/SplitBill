@@ -205,7 +205,7 @@ const SelectedGroupBody = () => {
 					updateOnWindowResize={true}
 					observer={true}
 					observeParents={true}
-					className='w-full h-full overflow-y-auto'
+					className='w-full h-full'
 				>
 					<SwiperSlide className='h-full'>
 						<div className='h-full'>

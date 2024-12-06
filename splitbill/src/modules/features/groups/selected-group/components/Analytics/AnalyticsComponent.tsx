@@ -1,5 +1,5 @@
 const Analytics = () => {
-	return <div>Analytics</div>;
+	return <div className='h-[63vh] overflow-y-auto pb-40'>Analytics</div>;
 };
 
 export default Analytics;
