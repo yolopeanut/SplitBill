@@ -23,7 +23,6 @@ import { useSelectedGroup } from "./hooks/useSelectedGroup";
 
 // Import Swiper React components
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
@@ -149,6 +148,7 @@ const SelectedGroupBody = () => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
 	const { groupId } = useParams();
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
+	const swiperRef = useRef<SwiperClass | null>(null);
 
 	// Handle slide changes and scroll reset
 	const handleSlideChange = (swiper: SwiperClass) => {
@@ -182,6 +182,7 @@ const SelectedGroupBody = () => {
 				<Badges
 					selectedBadge={selectedBadge}
 					setSelectedBadge={setSelectedBadge}
+					swiperRef={swiperRef}
 				/>
 			</div>
 			<div
@@ -194,6 +195,9 @@ const SelectedGroupBody = () => {
 					spaceBetween={50}
 					slidesPerView={1}
 					onSlideChange={handleSlideChange}
+					onSwiper={(swiper) => {
+						swiperRef.current = swiper;
+					}}
 					touchRatio={1}
 					resistance={true}
 					resistanceRatio={0.85}
