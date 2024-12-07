@@ -6,9 +6,10 @@ interface CommonDrawerProps {
 	children: React.ReactNode;
 	isOpen: boolean;
 	toggleDrawer: () => void;
+	size?: number;
 }
 
-const CommonDrawer = ({ children, isOpen, toggleDrawer }: CommonDrawerProps) => {
+const CommonDrawer = ({ children, isOpen, toggleDrawer, size = 400 }: CommonDrawerProps) => {
 	useEffect(() => {
 		// This runs when the component mounts or when isOpen changes
 		if (isOpen) {
@@ -30,7 +31,7 @@ const CommonDrawer = ({ children, isOpen, toggleDrawer }: CommonDrawerProps) => 
 				open={isOpen}
 				onClose={toggleDrawer}
 				direction='bottom'
-				size={400}
+				size={size}
 				className='rounded-t-2xl'
 				style={{ backgroundColor: "#1F1F1F" }}
 			>

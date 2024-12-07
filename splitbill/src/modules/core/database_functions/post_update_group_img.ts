@@ -5,7 +5,7 @@ export default async function post_update_group_img(
 	group_id: string,
 	img_src: string
 ): Promise<void> {
-	console.log("post_update_group_img", group_id, img_src);
+	// console.log("post_update_group_img", group_id, img_src);
 	const updateImage = await supabase.schema("splitbill").rpc("post_update_group_img", {
 		p_group_id: group_id,
 		p_img_src: img_src,

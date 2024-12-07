@@ -1,5 +1,5 @@
-import useAuthContext from "../../../core/auth/hooks/useAuthContext";
-import { IAllFriendsTable } from "../../../core/interfaces/all_usersTable";
+import useAuthContext from "../../auth/hooks/useAuthContext";
+import { IAllFriendsTable } from "../../interfaces/all_usersTable";
 
 interface IFavouritedFriends {
 	data: IAllFriendsTable[];

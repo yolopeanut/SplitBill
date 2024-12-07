@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useGroupsContext } from "../../hooks/useGroupsContext";
-import EditGroupPageBody from "./components/EditGroupPageBody";
+import EditGroupPageBody from "./components/edit-group-page-body/EditGroupPageBody";
 import EditGroupPageHeader from "./components/EditGroupPageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 

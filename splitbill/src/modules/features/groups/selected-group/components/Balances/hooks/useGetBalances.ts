@@ -6,13 +6,20 @@ import {
 import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
 import { IBalances } from "../../../../../../core/interfaces/user_balances";
 
+interface UseGetBalancesProps {
+	allTransactions: IAllTransactionsTable[] | undefined;
+	groupUsers: IAllUsersTable[] | undefined;
+}
+
+interface UseGetBalancesResult {
+	userBalances: IBalances["userBalances"];
+	isLoading: boolean;
+}
+
 const useGetBalances = ({
 	allTransactions,
 	groupUsers,
-}: {
-	allTransactions: IAllTransactionsTable[] | undefined;
-	groupUsers: IAllUsersTable[] | undefined;
-}): { userBalances: IBalances["userBalances"]; isLoading: boolean } => {
+}: UseGetBalancesProps): UseGetBalancesResult => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [userBalances, setUserBalances] = useState<IBalances["userBalances"]>({});
 

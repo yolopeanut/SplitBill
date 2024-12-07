@@ -19,7 +19,7 @@ const GroupsPageBody = () => {
 							<GroupCard
 								key={group.id}
 								groupId={group.id}
-								image_src={group.img_url}
+								image_src={group.img_url ?? ""}
 								groupName={group.name}
 								numMembers={group.num_members ?? 0}
 								balance={group.to_pay ?? 0 + (group.to_receive ?? 0)}

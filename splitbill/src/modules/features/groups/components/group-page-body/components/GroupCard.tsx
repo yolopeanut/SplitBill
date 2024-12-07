@@ -3,19 +3,15 @@ import { IoPersonSharp } from "react-icons/io5";
 import { PiCurrencyCircleDollarFill } from "react-icons/pi";
 import { getFirstLetter, truncateText } from "../../../../../core/common/commonFunctions";
 
-const GroupCard = ({
-	groupId,
-	image_src,
-	groupName,
-	numMembers,
-	balance,
-}: {
+interface GroupCardProps {
 	groupId: string;
-	image_src: string | null;
+	image_src: string;
 	groupName: string;
 	numMembers: number;
 	balance: number;
-}) => {
+}
+
+const GroupCard = ({ groupId, image_src, groupName, numMembers, balance }: GroupCardProps) => {
 	const navigate = useNavigate();
 
 	const handleClick = () => {

@@ -1,3 +1,5 @@
+type status = "operating" | "kicked";
+
 interface IAllUsersTable {
 	id: string;
 	created_at: string | null;
@@ -7,6 +9,7 @@ interface IAllUsersTable {
 	profile_img_url: string | null;
 	owes_curr_user: number | null;
 	owes_users: IAllUsersTable[] | null;
+	status: status;
 }
 
 export type { IAllUsersTable };

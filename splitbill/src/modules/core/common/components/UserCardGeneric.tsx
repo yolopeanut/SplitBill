@@ -10,7 +10,7 @@ const UserCardGeneric = ({ userid, groupUsers }: UserCardGenericProps) => {
 	const user = groupUsers?.find((user) => user.id === userid);
 	return (
 		<>
-			<div className='flex flex-row gap-4 items-center '>
+			<div className='flex flex-row gap-4 items-center active:bg-gray-800 active:border active:border-gray-700 rounded-lg p-2 transition-all duration-200 min-h-16'>
 				<img
 					alt='user'
 					src={user?.profile_img_url || getInitials(user?.name || "")}

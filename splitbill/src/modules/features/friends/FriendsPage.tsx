@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import FriendRequestCard from "./components/FriendRequestCard";
 import FriendCard from "./components/friend-card/FriendCard";
 import ShowMoreCard from "./components/ShowMoreCard";
-import useFavouritedFriends from "./hooks/useFavouritedFriends";
+import useFavouritedFriends from "../../core/common/hooks/useFavouritedFriends";
 
 import {
 	SwipeableList,

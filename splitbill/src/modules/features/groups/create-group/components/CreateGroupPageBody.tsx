@@ -31,7 +31,6 @@ const CreateGroupPageBody = () => {
 
 	// Submit handler for the form
 	const onSubmit: SubmitHandler<ICreateGroupForm> = async (data) => {
-		// console.log({ data });
 		await postCreateGroup(data);
 		queryClient.invalidateQueries({ queryKey: ["groups", "fetchOwnGroups"] });
 		navigate("/groups");
