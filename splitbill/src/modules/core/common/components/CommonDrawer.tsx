@@ -6,7 +6,7 @@ interface CommonDrawerProps {
 	children: React.ReactNode;
 	isOpen: boolean;
 	toggleDrawer: () => void;
-	size?: number;
+	size?: number | string;
 }
 
 const CommonDrawer = ({ children, isOpen, toggleDrawer, size = 400 }: CommonDrawerProps) => {

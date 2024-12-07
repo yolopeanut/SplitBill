@@ -42,7 +42,7 @@ const SelectUsersInput = ({
 
 	const { control, getValues } = useForm<IEditUserForm>({});
 
-	const drawerSize = filteredGroupUsersAndCurrentUser.length > 0 ? 800 : 400;
+	const drawerSize = filteredGroupUsersAndCurrentUser.length > 0 ? "90vh" : "50vh";
 
 	const { addUsersToGroup } = useAddUsersToGroup();
 
@@ -69,12 +69,12 @@ const SelectUsersInput = ({
 						toggleDrawer={() => setIsSelectUsersDrawerOpen(false)}
 						size={drawerSize}
 					>
-						<div className='flex flex-col gap-4 p-8 pt-4 h-full overflow-y-auto pb-20'>
+						<div className='flex flex-col gap-4 pt-4 h-full overflow-y-auto pb-20'>
 							{/* {Any Friends} */}
 							{filteredGroupUsersAndCurrentUser && filteredGroupUsersAndCurrentUser.length > 0 && (
 								<>
-									<div className='flex flex-col gap-12 h-full'>
-										<div className='flex flex-col gap-4'>
+									<div className='flex flex-col gap-12 h-full items-center justify-center w-full'>
+										<div className='flex flex-col gap-4 h-full overflow-y-auto px-4 w-full'>
 											{/* Search Input */}
 											<div className='relative'>
 												<input
@@ -125,7 +125,7 @@ const SelectUsersInput = ({
 										</div>
 
 										<button
-											className='bg-brand-orange text-font-black font-semibold rounded-lg px-4 py-2'
+											className='bg-brand-orange text-font-black font-semibold rounded-lg w-[70%] outline-none border-none py-2'
 											onClick={async () => {
 												setIsSelectUsersDrawerOpen(false);
 												await addUsersToGroup({ getValues });
