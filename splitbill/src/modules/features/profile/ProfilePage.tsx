@@ -1,9 +1,9 @@
 import { IoLogOutOutline } from "react-icons/io5";
-import { IoSettingsOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
-import useAuthContext from "../../core/auth/hooks/useAuthContext";
 import useUserContext from "../login/hooks/useUserContext";
 import { getInitials } from "../../core/common/commonFunctions";
+import { useState } from "react";
+import LogoutDrawer from "./components/LogOutDrawer";
 
 const ProfilePage = () => {
 	const { currentUser } = useUserContext();
@@ -72,7 +72,8 @@ const ProfilePageBody = () => {
 	const iconClass = "text-brand-orange";
 	const textClassGeneric = "text-font-white text-lg font-medium";
 
-	const { signOut } = useAuthContext();
+	const [isLogoutDrawerOpen, setIsLogoutDrawerOpen] = useState(false);
+
 	return (
 		<div className='w-full flex flex-col gap-4'>
 			<button className={btnClass}>
@@ -80,19 +81,12 @@ const ProfilePageBody = () => {
 					size={30}
 					className={iconClass}
 				/>
-				<span className={textClassGeneric}>Profile</span>
-			</button>
-			<button className={btnClass}>
-				<IoSettingsOutline
-					size={30}
-					className={iconClass}
-				/>
-				<span className={textClassGeneric}>Settings</span>
+				<span className={textClassGeneric}>Edit Profile</span>
 			</button>
 
 			<button
 				className={btnClass}
-				onClick={signOut}
+				onClick={() => setIsLogoutDrawerOpen(true)}
 			>
 				<IoLogOutOutline
 					size={30}
@@ -100,6 +94,11 @@ const ProfilePageBody = () => {
 				/>
 				<span className='text-font-red-dark text-lg font-medium'>Logout</span>
 			</button>
+
+			<LogoutDrawer
+				setIsLogoutDrawerOpen={setIsLogoutDrawerOpen}
+				isLogoutDrawerOpen={isLogoutDrawerOpen}
+			/>
 		</div>
 	);
 };
