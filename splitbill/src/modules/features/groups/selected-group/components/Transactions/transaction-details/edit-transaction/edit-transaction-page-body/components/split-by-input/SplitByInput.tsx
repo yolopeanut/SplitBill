@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import SplitByCard from "./components/SplitByCard";
 import UserCard from "./components/user-card/UserCard";
 import TotalComponent from "./components/TotalComponent";
+import useFilterKickedGroupUsers from "../../../../../../../../../../core/common/hooks/useFilterKickedGroupUsers";
 
 type SplitByInputProps = {
 	control: Control<ICreateTransactionForm>;
@@ -34,6 +35,9 @@ export const SplitByInput = ({ control, getValues, errors }: SplitByInputProps) 
 
 	// Get Group Users from Database
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
+
+	// Filter Kicked Users
+	const filteredGroupUsers = useFilterKickedGroupUsers(groupUsers);
 
 	// Handle Drawer Open
 	const handleDrawerOpen = () => {
@@ -153,7 +157,7 @@ export const SplitByInput = ({ control, getValues, errors }: SplitByInputProps) 
 							</div>
 
 							{/* User Cards */}
-							{groupUsers?.map((user) => (
+							{filteredGroupUsers?.map((user) => (
 								<UserCard
 									key={user.id}
 									user={user}

@@ -14,7 +14,6 @@ const useEditImage = () => {
 
 	// Delete the old image from the storage
 	const deleteImageStorage = async () => {
-		// console.log("deleteImageStorage", selectedGroup?.img_src);
 		const { error } = await supabase.storage.from("images").remove([`${selectedGroup?.img_src}`]);
 		if (error) {
 			throw error;

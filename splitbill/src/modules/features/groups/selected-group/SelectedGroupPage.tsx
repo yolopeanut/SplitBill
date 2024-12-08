@@ -10,7 +10,7 @@ import { IAllGroupsTable } from "../../../core/interfaces/all_GroupsTable";
 import { formatCurrency } from "../../../core/common/commonFunctions";
 
 // components
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import Badges from "./components/BadgesComponent";
 import Transactions from "./components/Transactions/TransactionsComponent";
 import Balances from "./components/Balances/BalancesComponent";
@@ -28,6 +28,7 @@ import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import LeaveGroupDrawer from "./components/leave-group-drawer/LeaveGroupDrawer";
 
 interface handleEditGroupDropDownProps {
 	navigate: NavigateFunction;
@@ -36,10 +37,6 @@ interface handleEditGroupDropDownProps {
 
 const handleEditGroupDropDown = ({ navigate, groupId }: handleEditGroupDropDownProps) => {
 	navigate(`/groups/${groupId}/edit-group`);
-};
-
-const handleLeaveGroupDropDown = () => {
-	console.log("leave group");
 };
 
 //=========== Selected Group Page ============//
@@ -51,7 +48,7 @@ const SelectedGroupPage = () => {
 		isLoadingGroupUsers,
 		isLoadingBalances,
 	} = useSelectedGroup();
-
+	const [isLeaveGroupDrawerOpen, setIsLeaveGroupDrawerOpen] = useState(false);
 	// If loading, show loading screen
 	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers || isLoadingBalances) {
 		return <Loading />;
@@ -60,8 +57,14 @@ const SelectedGroupPage = () => {
 	return (
 		<>
 			<div className='flex flex-col gap-4 relative h-[calc(100vh-4rem)]'>
-				<SelectedGroupHeader selectedGroup={selectedGroup} />
-				<SelectedGroupBody />
+				<SelectedGroupHeader
+					selectedGroup={selectedGroup}
+					setIsLeaveGroupDrawerOpen={setIsLeaveGroupDrawerOpen}
+				/>
+				<SelectedGroupBody
+					isLeaveGroupDrawerOpen={isLeaveGroupDrawerOpen}
+					setIsLeaveGroupDrawerOpen={setIsLeaveGroupDrawerOpen}
+				/>
 			</div>
 		</>
 	);
@@ -70,7 +73,16 @@ export default SelectedGroupPage;
 //=========== Selected Group Page ============//
 
 //=========== Selected Group Header ============//
-const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable | undefined }) => {
+
+interface SelectedGroupHeaderProps {
+	selectedGroup: IAllGroupsTable | undefined;
+	setIsLeaveGroupDrawerOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const SelectedGroupHeader = ({
+	selectedGroup,
+	setIsLeaveGroupDrawerOpen,
+}: SelectedGroupHeaderProps) => {
 	const navigate = useNavigate();
 
 	// Styling classes for to pay, to receive, and total amounts
@@ -109,7 +121,7 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 							editGroup={() =>
 								handleEditGroupDropDown({ navigate, groupId: selectedGroup?.id || "" })
 							}
-							leaveGroup={handleLeaveGroupDropDown}
+							leaveGroup={() => setIsLeaveGroupDrawerOpen(true)}
 						/>
 					</div>
 				</div>
@@ -144,7 +156,15 @@ const SelectedGroupHeader = ({ selectedGroup }: { selectedGroup: IAllGroupsTable
 //=========== Selected Group Header ============//
 
 //=========== Selected Group Body ============//
-const SelectedGroupBody = () => {
+interface SelectedGroupBodyProps {
+	isLeaveGroupDrawerOpen: boolean;
+	setIsLeaveGroupDrawerOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const SelectedGroupBody = ({
+	isLeaveGroupDrawerOpen,
+	setIsLeaveGroupDrawerOpen,
+}: SelectedGroupBodyProps) => {
 	const [selectedBadge, setSelectedBadge] = useState("Transactions");
 	const { groupId } = useParams();
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -224,6 +244,10 @@ const SelectedGroupBody = () => {
 					</SwiperSlide>
 				</Swiper>
 			</div>
+			<LeaveGroupDrawer
+				isLeaveGroupDrawerOpen={isLeaveGroupDrawerOpen}
+				setIsLeaveGroupDrawerOpen={setIsLeaveGroupDrawerOpen}
+			/>
 		</>
 	);
 };

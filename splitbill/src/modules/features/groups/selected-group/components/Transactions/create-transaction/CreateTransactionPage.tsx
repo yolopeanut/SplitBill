@@ -15,7 +15,6 @@ import SplitByInput from "./components/split-by-input/SplitByInput";
 import RemarksInput from "./components/remarks-input/RemarksInput";
 import { useGroupsContext } from "../../../../hooks/useGroupsContext";
 import { useAddExpense } from "./hooks/useAddExpense";
-import { queryClient } from "../../../../../../../config/ReactQuery";
 
 const CreateTransactionPage = () => {
 	const navigate = useNavigate();
@@ -116,8 +115,6 @@ const CreateTransactionBody = () => {
 			// console.log("isPending");
 			return;
 		}
-
-		queryClient.invalidateQueries({ queryKey: ["groups", "fetchAllTransactions"] });
 
 		navigate(`/groups/${groupId}`);
 	};

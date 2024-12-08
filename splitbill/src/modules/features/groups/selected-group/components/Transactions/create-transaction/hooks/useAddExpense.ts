@@ -4,6 +4,7 @@ import { supabase } from "../../../../../../../../config/Supabase";
 import postCreateNewTransactionDB from "../../../../../../../core/database_functions/post_create_new_transaction";
 import postCreateNewTransactionSplitDB from "../../../../../../../core/database_functions/post_create_new_transaction_split";
 import { IAllUsersTable } from "../../../../../../../core/interfaces/all_usersTable";
+import { queryClient } from "../../../../../../../../config/ReactQuery";
 
 type MutationProps = {
 	group_id: string;
@@ -106,9 +107,9 @@ export const useAddExpense = () => {
 
 			return null;
 		},
-		// onSuccess: (response) => {
-		// 	console.log("Expense added successfully", response);
-		// },
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["groups", "fetchAllTransactions"] });
+		},
 	});
 
 	return { addExpense, isPending };

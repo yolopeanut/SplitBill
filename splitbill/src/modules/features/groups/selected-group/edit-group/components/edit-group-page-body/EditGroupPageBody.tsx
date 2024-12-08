@@ -13,15 +13,13 @@ import UserCardGeneric from "../../../../../../core/common/components/UserCardGe
 import DropdownComponent from "./components/DropdownComponent";
 import { useLongPressDropdown } from "../../../../../../core/common/hooks/useLongPressDropdown";
 import KickUsersDrawer from "./components/kick-user-drawer/KickUsersDrawer";
+import DeleteGroupDrawer from "./components/delete-group-drawer/DeleteGroupDrawer";
 
 const EditGroupPageBody = () => {
 	const { selectedGroup, groupUsers, selectedGroupId } = useGroupsContext();
 	const filteredKickedGroupUsers = useFilterKickedGroupUsers(groupUsers ?? []);
 	const { register } = useForm();
 	const { editImage } = useEditImage();
-	const handleDeleteGroup = () => {
-		console.log("Delete Group");
-	};
 
 	// File input ref for changing group image when uploaded img
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,6 +33,12 @@ const EditGroupPageBody = () => {
 	const [isSelectUsersDrawerOpen, setIsSelectUsersDrawerOpen] = useState(false);
 	const handleSelectUsersDrawerOpen = () => {
 		setIsSelectUsersDrawerOpen(!isSelectUsersDrawerOpen);
+	};
+
+	// Open delete group drawer
+	const [isDeleteGroupDrawerOpen, setIsDeleteGroupDrawerOpen] = useState(false);
+	const handleDeleteGroupDrawerOpen = () => {
+		setIsDeleteGroupDrawerOpen(!isDeleteGroupDrawerOpen);
 	};
 
 	// Open select users drawer to kick users
@@ -147,8 +151,8 @@ const EditGroupPageBody = () => {
 				{/* Delete Group Button */}
 				<button
 					type='button'
-					className='btn border-outline-red text-outline-red w-full'
-					onClick={handleDeleteGroup}
+					className='btn border-font-red-dark text-font-red-dark w-full'
+					onClick={handleDeleteGroupDrawerOpen}
 				>
 					Delete Group
 				</button>
@@ -163,6 +167,12 @@ const EditGroupPageBody = () => {
 				setIsKickUsersDrawerOpen={handleKickUsersDrawerClose}
 				isKickUsersDrawerOpen={isKickUsersDrawerOpen}
 				selectedId={selectedUserToKick ?? ""}
+				selectedGroupId={selectedGroupId ?? ""}
+			/>
+
+			<DeleteGroupDrawer
+				setIsDeleteGroupDrawerOpen={setIsDeleteGroupDrawerOpen}
+				isDeleteGroupDrawerOpen={isDeleteGroupDrawerOpen}
 				selectedGroupId={selectedGroupId ?? ""}
 			/>
 		</>

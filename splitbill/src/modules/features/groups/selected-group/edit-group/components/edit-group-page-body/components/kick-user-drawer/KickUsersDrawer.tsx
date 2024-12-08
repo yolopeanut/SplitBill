@@ -5,7 +5,7 @@ import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import { GiBootKick } from "react-icons/gi";
 
 interface KickUsersDrawerProps {
-	setIsKickUsersDrawerOpen: Dispatch<SetStateAction<boolean>>;
+	setIsKickUsersDrawerOpen: Dispatch<SetStateAction<void>>;
 	isKickUsersDrawerOpen: boolean;
 	selectedId: string;
 	selectedGroupId: string;
@@ -21,7 +21,7 @@ const KickUsersDrawer = ({
 
 	const handleKickUser = () => {
 		kickGroupMember({ userId: selectedId, groupId: selectedGroupId ?? "" });
-		setIsKickUsersDrawerOpen(false);
+		setIsKickUsersDrawerOpen();
 	};
 
 	const { groupUsers } = useGroupsContext();
@@ -30,7 +30,7 @@ const KickUsersDrawer = ({
 	return (
 		<CommonDrawer
 			isOpen={isKickUsersDrawerOpen}
-			toggleDrawer={() => setIsKickUsersDrawerOpen(false)}
+			toggleDrawer={() => setIsKickUsersDrawerOpen()}
 		>
 			<div className='flex flex-col items-center justify-center gap-8 w-full h-full'>
 				<div className='text-center text-white text-2xl font-semibold flex flex-col items-center justify-center gap-2 w-full'>
