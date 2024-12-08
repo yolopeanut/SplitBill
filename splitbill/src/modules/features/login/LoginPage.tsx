@@ -2,25 +2,41 @@ import useAuthContext from "../../core/auth/hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { GiCoinflip } from "react-icons/gi";
 import { FcGoogle } from "react-icons/fc";
-import Loading from "../../core/common/Loading";
+import Loading from "../../core/common/components/Loading";
+import useUserContext from "./hooks/useUserContext";
+import { useEffect } from "react";
 
 function LoginPage() {
 	const { session, isLoading, googleLogin } = useAuthContext();
 	const navigate = useNavigate();
+	const { hasCreatedProfile, getUserById } = useUserContext();
+
+	// Check if user is logged in
+	useEffect(() => {
+		if (session) {
+			// Check if user data is loading
+			if (!getUserById.isLoading && !isLoading) {
+				// console.log("login page", { hasCreatedProfile });
+				// Check if user has created profile
+				if (hasCreatedProfile) {
+					// Navigate to groups page
+					navigate("/groups");
+				} else {
+					// Navigate to create profile page
+					navigate("/create-profile");
+				}
+			}
+		}
+	}, [session, getUserById.isLoading, hasCreatedProfile, navigate, isLoading]);
 
 	//Check if process is loading
 	if (isLoading) {
 		return <Loading />;
 	}
 
-	//Check if user is logged in
-	if (session) {
-		navigate("/create-profile");
-	}
-
-	//Handle login with google
+	// Handle login with google
 	const handleLogin = async () => {
-		await googleLogin();
+		googleLogin();
 	};
 
 	return (
@@ -49,7 +65,9 @@ const LoginPageBody = ({ handleLogin }: { handleLogin: () => void }) => {
 
 const CoinFlipIcon = <GiCoinflip className='text-brand-orange text-8xl' />;
 
-const TitleText = () => <div className='text-3xl font-bold text-font-white'>Let's Get Started!</div>;
+const TitleText = () => (
+	<div className='text-3xl font-bold text-font-white'>Let's Get Started!</div>
+);
 
 const GoogleLoginButton = ({ handleLogin }: { handleLogin: () => void }) => {
 	return (
