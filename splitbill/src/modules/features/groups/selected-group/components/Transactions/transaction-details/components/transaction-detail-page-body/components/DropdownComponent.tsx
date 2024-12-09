@@ -3,13 +3,12 @@ import { SlOptions } from "react-icons/sl";
 import { RiEdit2Fill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 
-const DropdownComponent = ({
-	editTransaction,
-	deleteTransaction,
-}: {
+interface DropdownComponentProps {
 	editTransaction: () => void;
 	deleteTransaction: () => void;
-}) => {
+}
+
+const DropdownComponent = ({ editTransaction, deleteTransaction }: DropdownComponentProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleDropdown = () => {

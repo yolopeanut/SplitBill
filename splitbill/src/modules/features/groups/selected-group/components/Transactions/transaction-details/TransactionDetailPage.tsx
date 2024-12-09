@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import TransactionDetailPageBody from "./components/transaction-detail-page-body/TransactionDetailPageBody";
-import TransactionDetailPageHeader from "./components/TransactionDetailPageHeader";
+import TransactionDetailPageHeader from "./components/transaction-detail-page-header/TransactionDetailPageHeader";
 import { useGetTransactionByID } from "./hooks/useGetTransactionByID";
 import Loading from "../../../../../../core/common/components/Loading";
 

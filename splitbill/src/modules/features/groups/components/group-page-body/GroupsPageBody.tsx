@@ -4,7 +4,6 @@ import GroupCard from "./components/GroupCard";
 
 const GroupsPageBody = () => {
 	const { data: ownGroups, isLoading: isLoadingOwnGroups } = useGetOwnGroups();
-	console.log({ ownGroups });
 
 	if (isLoadingOwnGroups) {
 		return <Loading />;
