@@ -38,18 +38,16 @@ const CreateGroupPageBody = () => {
 
 	return (
 		<>
-			<div className='flex flex-col items-center w-full h-full p-2'>
+			<div className='flex flex-col items-center w-full h-full p-4'>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className='w-full flex flex-col gap-4 overflow-y-auto pb-40'
 				>
-					<div className='flex flex-row gap-4'>
-						<GroupImageInput register={register} />
-						<GroupNameInput
-							register={register}
-							errors={errors}
-						/>
-					</div>
+					<GroupImageInput register={register} />
+					<GroupNameInput
+						register={register}
+						errors={errors}
+					/>
 
 					<CurrencyInput
 						errors={errors}

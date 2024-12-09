@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import useAuthContext from "../../../../../../../../../core/auth/hooks/useAuthContext";
-import { supabase } from "../../../../../../../../../../config/Supabase";
-import getOwnFriendsOnly from "../../../../../../../../../core/database_functions/getOwnFriendsOnly";
-import getPublicUrl from "../../../../../../../../../core/database_functions/getPublicUrl";
-import { IAllFriendsTable } from "../../../../../../../../../core/interfaces/all_usersTable";
+import useAuthContext from "../../../../../../../../../../core/auth/hooks/useAuthContext";
+import { supabase } from "../../../../../../../../../../../config/Supabase";
+import getOwnFriendsOnly from "../../../../../../../../../../core/database_functions/getOwnFriendsOnly";
+import getPublicUrl from "../../../../../../../../../../core/database_functions/getPublicUrl";
+import { IAllFriendsTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
 
 export const useGetAllFriends = () => {
 	const { user, session, isLoading } = useAuthContext();

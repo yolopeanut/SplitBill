@@ -96,7 +96,10 @@ const SelectedGroupHeader = ({
 			<div className='min-h-48 flex flex-col justify-between w-full'>
 				{/* Header and bg image */}
 				<div className='flex flex-row justify-between items-center relative px-4 py-2'>
-					<GroupImg className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]' />
+					<GroupImg
+						className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]'
+						img_url={selectedGroup?.img_url ?? undefined}
+					/>
 					<button
 						className='btn border-none p-0'
 						onClick={() => {

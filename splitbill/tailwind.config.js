@@ -32,6 +32,7 @@ export default {
 
 			"outline-gray": "#444343",
 			"outline-red": "#F12020",
+			"outline-white": "#FFFFFF",
 		},
 		fontFamily: {
 			sans: ["DM Sans"],

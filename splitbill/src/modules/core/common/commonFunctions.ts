@@ -2,6 +2,7 @@ import imageCompression from "browser-image-compression";
 import ExpenseCategory from "../enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../constants/ExpenseCategories";
 import { IUserBalance } from "../interfaces/user_balances";
+import { Area } from "react-easy-crop";
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -84,3 +85,59 @@ export function getTotalOwed(owes_users: IUserBalance["owes_users"]) {
 		return acc + curr;
 	}, 0);
 }
+
+export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<Blob | null> => {
+	console.log("Starting getCroppedImg with:", {
+		imageSrc,
+		pixelCrop,
+	});
+
+	const image = await createImage(imageSrc);
+	console.log("Created image:", {
+		width: image.width,
+		height: image.height,
+	});
+
+	const canvas = document.createElement("canvas");
+	const ctx = canvas.getContext("2d");
+
+	if (!ctx) {
+		return null;
+	}
+
+	// Set canvas size to the cropped size
+	canvas.width = pixelCrop.width;
+	canvas.height = pixelCrop.height;
+
+	console.log("Canvas dimensions:", {
+		width: canvas.width,
+		height: canvas.height,
+	});
+
+	ctx.drawImage(
+		image,
+		pixelCrop.x,
+		pixelCrop.y,
+		pixelCrop.width,
+		pixelCrop.height,
+		0,
+		0,
+		pixelCrop.width,
+		pixelCrop.height
+	);
+
+	return new Promise((resolve) => {
+		canvas.toBlob((blob) => {
+			console.log("Final blob size:", blob?.size);
+			resolve(blob);
+		}, "image/jpeg");
+	});
+};
+
+const createImage = (url: string): Promise<HTMLImageElement> =>
+	new Promise((resolve, reject) => {
+		const image = new Image();
+		image.addEventListener("load", () => resolve(image));
+		image.addEventListener("error", (error) => reject(error));
+		image.src = url;
+	});

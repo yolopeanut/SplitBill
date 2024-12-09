@@ -1,18 +1,11 @@
-import { useEffect, useState } from "react";
 import BackgroundImages from "../../../../core/constants/BackgroundImages";
-import { useGroupsContext } from "../../hooks/useGroupsContext";
 
 interface IGroupImg {
 	className: string;
+	img_url?: string;
 }
 
-const GroupImg = ({ className }: IGroupImg) => {
-	const { selectedGroup } = useGroupsContext();
-	const [img_url, setImgUrl] = useState<string | null>(null);
-	useEffect(() => {
-		setImgUrl(selectedGroup?.img_url || null);
-	}, [selectedGroup?.img_url]);
-
+const GroupImg = ({ className, img_url }: IGroupImg) => {
 	const bg = BackgroundImages[Math.floor(Math.random() * 8)];
 	if (img_url) {
 		return (
