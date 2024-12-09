@@ -82,7 +82,7 @@ const SelectUsersInput = ({ control, getValues, errors }: SelectUsersInputProps)
 						style={{ backgroundColor: "#1F1F1F" }}
 						duration={400}
 					>
-						<div className='flex flex-col gap-4 p-8 pt-4 h-full overflow-y-auto pb-20'>
+						<div className='flex flex-col gap-4 p-4 pt-4 h-full overflow-y-auto pb-20'>
 							{/* Swipe to close */}
 							<div className='border-brand-orange border-2 rounded-lg w-14 self-center'></div>
 
