@@ -15,7 +15,7 @@ const ImagePlaceholder = ({
 		return (
 			<div className='avatar placeholder'>
 				<img
-					className='rounded-full w-14'
+					className='rounded-full min-w-14 min-h-14 max-w-14 max-h-14'
 					src={imgSrc}
 				/>
 			</div>

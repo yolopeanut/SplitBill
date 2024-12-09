@@ -49,7 +49,7 @@ const FriendCard = ({ id, imgSrc, name, uniqueUsername }: IFriendCardProps) => {
 	return (
 		<div className='flex flex-row justify-between gap-4'>
 			<div className='flex flex-row gap-4'>
-				<div className='avatar w-14'>
+				<div className='avatar min-w-14 min-h-14 max-w-14 max-h-14'>
 					<ImagePlaceholder
 						imgSrc={imgSrc}
 						name={name}

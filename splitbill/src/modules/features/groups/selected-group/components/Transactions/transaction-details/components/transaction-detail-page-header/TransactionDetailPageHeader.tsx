@@ -1,9 +1,11 @@
-import { IAllTransactionsTable } from "../../../../../../../core/interfaces/all_transactionsTable";
-import { expenseCategories } from "../../../../../../../core/constants/ExpenseCategories";
+import { IAllTransactionsTable } from "../../../../../../../../core/interfaces/all_transactionsTable";
+import { expenseCategories } from "../../../../../../../../core/constants/ExpenseCategories";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-import { truncateText } from "../../../../../../../core/common/commonFunctions";
-import DropdownComponent from "./transaction-detail-page-body/components/DropdownComponent";
+import { truncateText } from "../../../../../../../../core/common/commonFunctions";
+import DropdownComponent from "../transaction-detail-page-body/components/DropdownComponent";
+import { useState } from "react";
+import DeleteTransactionDrawer from "./components/DeleteTransactionDrawer";
 
 interface TransactionDetailPageHeaderProps {
 	data: IAllTransactionsTable | null | undefined;
@@ -17,6 +19,9 @@ const TransactionDetailPageHeader = ({ data }: TransactionDetailPageHeaderProps)
 	const category = expenseCategories.find((category) => category.label === data?.category);
 	const backgroundColor = category?.color;
 	const categoryIcon = category?.icon;
+
+	const [isDeleteTransactionDrawerOpen, setIsDeleteTransactionDrawerOpen] = useState(false);
+
 	return (
 		<>
 			<div
@@ -39,7 +44,9 @@ const TransactionDetailPageHeader = ({ data }: TransactionDetailPageHeaderProps)
 						editTransaction={() => {
 							navigate(`/groups/${groupId}/edit-transaction/${data?.transaction_id}`);
 						}}
-						deleteTransaction={() => {}}
+						deleteTransaction={() => {
+							setIsDeleteTransactionDrawerOpen(true);
+						}}
 					/>
 				</div>
 
@@ -51,6 +58,11 @@ const TransactionDetailPageHeader = ({ data }: TransactionDetailPageHeaderProps)
 					</div>
 				</div>
 			</div>
+			<DeleteTransactionDrawer
+				isDeleteTransactionDrawerOpen={isDeleteTransactionDrawerOpen}
+				setIsDeleteTransactionDrawerOpen={() => setIsDeleteTransactionDrawerOpen}
+				selectedId={data?.transaction_id ?? ""}
+			/>
 		</>
 	);
 };
