@@ -10,6 +10,7 @@ interface ImageCropperProps {
 	setCroppedImageUrl: (croppedImageUrl: string) => void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	register: UseFormRegister<any> | undefined;
+	registerName: string | undefined;
 	customHandleCropComplete: (image: File) => void;
 }
 
@@ -19,6 +20,7 @@ const ImageCropperDialog = ({
 	setIsModalOpen,
 	setCroppedImageUrl,
 	register,
+	registerName,
 	customHandleCropComplete,
 }: ImageCropperProps) => {
 	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
@@ -75,8 +77,8 @@ const ImageCropperDialog = ({
 								const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels);
 								setCroppedImageUrl(croppedImage.url);
 								setIsModalOpen(false);
-								if (register) {
-									register("image_src", { value: croppedImage });
+								if (register && registerName) {
+									register(registerName, { value: croppedImage });
 								}
 								if (croppedImage.file) {
 									customHandleCropComplete(croppedImage.file);

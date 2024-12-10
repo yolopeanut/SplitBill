@@ -63,6 +63,7 @@ const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 				setIsModalOpen={setIsModalOpen}
 				setCroppedImageUrl={setCroppedImageUrl}
 				register={register}
+				registerName='image_src'
 				customHandleCropComplete={() => {}}
 			/>
 		</>

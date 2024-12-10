@@ -63,6 +63,7 @@ const EditGroupImage = () => {
 				setIsModalOpen={setIsModalOpen}
 				setCroppedImageUrl={setCroppedImageUrl}
 				register={undefined}
+				registerName={undefined}
 				customHandleCropComplete={handleEditImage}
 			/>
 		</>

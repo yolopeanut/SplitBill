@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form";
@@ -23,7 +22,6 @@ const MakeItUniqueText = (
 );
 
 const CreateProfilePage = () => {
-	const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
 	const navigate = useNavigate();
 	const { user } = useAuthContext();
 	const { getUserById } = useUserContext();
@@ -35,7 +33,7 @@ const CreateProfilePage = () => {
 		// upload form data to backend
 		if (user) {
 			// upload image to storage and get the path, waiting for the image path to be returned
-			const imagePath = await post_image_to_storage(data.profilePicture);
+			const imagePath = await post_image_to_storage(data.profilePicture.file);
 
 			// update user profile, waiting for the user profile to update
 			await update_user_profile(data, imagePath, user.id);
@@ -44,10 +42,6 @@ const CreateProfilePage = () => {
 			await getUserById.refetch();
 		}
 
-		// revoke the picture to prevent memory leaks
-		if (profilePictureUrl) {
-			URL.revokeObjectURL(profilePictureUrl);
-		}
 		navigate("/groups");
 	};
 	return (
@@ -62,11 +56,7 @@ const CreateProfilePage = () => {
 					<div className='flex flex-col w-[80%] justify-center items-center gap-10'>
 						{CreateProfileText}
 						<div className='flex flex-col gap-2 w-full justify-start items-start'>
-							{/* Passing setProfilePictureUrl because we need to revoke the object URL when the user goes to the next page */}
-							<ProfilePictureInput
-								setProfilePictureUrl={setProfilePictureUrl}
-								register={register}
-							/>
+							<ProfilePictureInput register={register} />
 							<UserNameInput register={register} />
 							<NameInput register={register} />
 						</div>
