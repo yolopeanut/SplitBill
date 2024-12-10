@@ -86,34 +86,38 @@ export function getTotalOwed(owes_users: IUserBalance["owes_users"]) {
 	}, 0);
 }
 
-export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<Blob | null> => {
-	console.log("Starting getCroppedImg with:", {
-		imageSrc,
-		pixelCrop,
+const createImage = (url: string): Promise<HTMLImageElement> =>
+	new Promise((resolve, reject) => {
+		const image = new Image();
+		image.addEventListener("load", () => resolve(image));
+		image.addEventListener("error", (error) => reject(error));
+		image.setAttribute("crossOrigin", "anonymous"); // needed to avoid cross-origin issues on CodeSandbox
+		image.src = url;
 	});
 
+/**
+ * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
+ * @param {File} image - Image File url
+ * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
+ * @param {number} rotation - optional rotation parameter
+ */
+export async function getCroppedImg(
+	imageSrc: string,
+	pixelCrop: Area
+): Promise<{ file: File | null; url: string }> {
 	const image = await createImage(imageSrc);
-	console.log("Created image:", {
-		width: image.width,
-		height: image.height,
-	});
-
 	const canvas = document.createElement("canvas");
 	const ctx = canvas.getContext("2d");
 
 	if (!ctx) {
-		return null;
+		return { file: null, url: "" };
 	}
 
-	// Set canvas size to the cropped size
+	// Set the canvas size to the cropped dimensions
 	canvas.width = pixelCrop.width;
 	canvas.height = pixelCrop.height;
 
-	console.log("Canvas dimensions:", {
-		width: canvas.width,
-		height: canvas.height,
-	});
-
+	// Draw the cropped portion of the image
 	ctx.drawImage(
 		image,
 		pixelCrop.x,
@@ -126,18 +130,17 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: Area): Promise<
 		pixelCrop.height
 	);
 
+	// Convert to blob and return as URL
 	return new Promise((resolve) => {
-		canvas.toBlob((blob) => {
-			console.log("Final blob size:", blob?.size);
-			resolve(blob);
+		canvas.toBlob((file) => {
+			if (!file) {
+				resolve({ file: null, url: "" });
+				return;
+			}
+			resolve({
+				file: new File([file], "cropped.jpg", { type: "image/jpeg" }),
+				url: URL.createObjectURL(file),
+			});
 		}, "image/jpeg");
 	});
-};
-
-const createImage = (url: string): Promise<HTMLImageElement> =>
-	new Promise((resolve, reject) => {
-		const image = new Image();
-		image.addEventListener("load", () => resolve(image));
-		image.addEventListener("error", (error) => reject(error));
-		image.src = url;
-	});
+}

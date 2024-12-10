@@ -4,7 +4,6 @@ import GroupImg from "../../../../../components/GroupImg";
 import { queryClient } from "../../../../../../../../../config/ReactQuery";
 import { BiSolidEditAlt } from "react-icons/bi";
 import ImageCropperDialog from "../../../../../../../../core/common/components/ImageCropperDialog";
-import useImageCropper from "../../../../../../../../core/common/hooks/useImageCropper";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 
 const EditGroupImage = () => {
@@ -12,24 +11,9 @@ const EditGroupImage = () => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const { selectedGroup } = useGroupsContext();
 
-	const [groupImage, setGroupImage] = useState<File | null>(null);
 	const [groupImageUrl, setGroupImageUrl] = useState<string | null>(null);
-
-	const {
-		isModalOpen,
-		setIsModalOpen,
-		crop,
-		setCrop,
-		zoom,
-		setZoom,
-		onCropComplete,
-		handleCropComplete: originalHandleCropComplete,
-	} = useImageCropper({
-		groupImageUrl,
-		setGroupImageUrl,
-		setGroupImage,
-		register: undefined,
-	});
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
 
 	const handleEditImage = async (image: File) => {
 		try {
@@ -37,15 +21,6 @@ const EditGroupImage = () => {
 			queryClient.invalidateQueries({ queryKey: ["groups", "fetchSelectedGroup"] });
 		} catch (error) {
 			console.error("Error editing image:", error);
-		}
-	};
-
-	const handleCropComplete = async () => {
-		await originalHandleCropComplete();
-		// Wait for groupImage to be set before handling edit
-		if (groupImage) {
-			await handleEditImage(groupImage);
-			setIsModalOpen(false);
 		}
 	};
 
@@ -58,7 +33,7 @@ const EditGroupImage = () => {
 			<div className='h-[30%] relative'>
 				<GroupImg
 					className='w-full h-full object-cover rounded-2xl'
-					img_url={groupImageUrl ?? undefined}
+					img_url={croppedImageUrl ?? groupImageUrl ?? undefined}
 				/>
 				<button
 					className='btn btn-sm absolute bottom-2 right-2 bg-brand-orange p-1 rounded-md text-font-black'
@@ -83,15 +58,12 @@ const EditGroupImage = () => {
 			</div>
 
 			<ImageCropperDialog
+				imageUrl={groupImageUrl ?? ""}
 				isModalOpen={isModalOpen}
 				setIsModalOpen={setIsModalOpen}
-				groupImageUrl={groupImageUrl ?? ""}
-				crop={crop}
-				setCrop={setCrop}
-				zoom={zoom}
-				setZoom={setZoom}
-				onCropComplete={onCropComplete}
-				handleCropComplete={handleCropComplete}
+				setCroppedImageUrl={setCroppedImageUrl}
+				register={undefined}
+				customHandleCropComplete={handleEditImage}
 			/>
 		</>
 	);

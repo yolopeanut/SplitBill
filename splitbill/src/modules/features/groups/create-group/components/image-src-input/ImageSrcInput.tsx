@@ -4,7 +4,6 @@ import { useState } from "react";
 import { handleImageUpload } from "../../../../../core/common/commonFunctions";
 import { MdOutlineFileUpload } from "react-icons/md";
 import ImageCropperDialog from "../../../../../core/common/components/ImageCropperDialog";
-import useImageCropper from "../../../../../core/common/hooks/useImageCropper";
 
 type ImageSrcInputProps = {
 	register: UseFormRegister<ICreateGroupForm>;
@@ -15,24 +14,16 @@ const options = { maxSizeMB: 0.7, maxWidthOrHeight: 1000, useWebWorker: true };
 const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 	const [groupImage, setGroupImage] = useState<File | null>(null);
 	const [groupImageUrl, setGroupImageUrl] = useState<string | null>(null);
-	const {
-		isModalOpen,
-		setIsModalOpen,
-		crop,
-		setCrop,
-		zoom,
-		setZoom,
-		onCropComplete,
-		handleCropComplete,
-	} = useImageCropper({ register, groupImageUrl, setGroupImageUrl, setGroupImage });
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
 
 	return (
 		<>
-			<div className='flex flex-col gap-2 w-full h-52 justify-center items-center bg-background-gray rounded-2xl border border-outline-white'>
+			<div className='flex flex-col gap-2 w-full h-full justify-center items-center bg-background-gray rounded-2xl border border-outline-white'>
 				<label className='w-full flex flex-col items-center justify-center h-52'>
 					{groupImage ? (
 						<img
-							src={groupImageUrl ?? ""}
+							src={croppedImageUrl ?? groupImageUrl ?? ""}
 							alt='Group Image'
 							className='w-full h-full object-cover rounded-2xl'
 						/>
@@ -66,17 +57,13 @@ const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 					/>
 				</label>
 			</div>
-
 			<ImageCropperDialog
+				imageUrl={groupImageUrl ?? ""}
 				isModalOpen={isModalOpen}
 				setIsModalOpen={setIsModalOpen}
-				groupImageUrl={groupImageUrl ?? ""}
-				crop={crop}
-				setCrop={setCrop}
-				zoom={zoom}
-				setZoom={setZoom}
-				onCropComplete={onCropComplete}
-				handleCropComplete={handleCropComplete}
+				setCroppedImageUrl={setCroppedImageUrl}
+				register={register}
+				customHandleCropComplete={() => {}}
 			/>
 		</>
 	);

@@ -1,73 +1,88 @@
+import { useState } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
+import { getCroppedImg } from "../commonFunctions";
+import { UseFormRegister } from "react-hook-form";
 
 interface ImageCropperProps {
+	imageUrl: string;
 	isModalOpen: boolean;
 	setIsModalOpen: (isModalOpen: boolean) => void;
-	groupImageUrl: string;
-	crop: Area;
-	setCrop: (crop: Area) => void;
-	zoom: number;
-	setZoom: (zoom: number) => void;
-	onCropComplete: (croppedArea: Area, croppedAreaPixels: Area) => void;
-	handleCropComplete: () => void;
+	setCroppedImageUrl: (croppedImageUrl: string) => void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	register: UseFormRegister<any> | undefined;
+	customHandleCropComplete: (image: File) => void;
 }
 
 const ImageCropperDialog = ({
+	imageUrl,
 	isModalOpen,
 	setIsModalOpen,
-	groupImageUrl,
-	crop,
-	setCrop,
-	zoom,
-	setZoom,
-	onCropComplete,
-	handleCropComplete,
+	setCroppedImageUrl,
+	register,
+	customHandleCropComplete,
 }: ImageCropperProps) => {
+	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+	const [zoom, setZoom] = useState(1);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+	const aspectRatio = 4 / 3;
+
 	return (
 		<dialog
 			id='my_modal_4'
-			className='modal'
+			className='modal '
 			open={isModalOpen}
 			onClose={() => setIsModalOpen(false)}
 		>
-			<div className='modal-box w-11/12 max-w-5xl h-[80%] bg-background-gray'>
-				<div className='modal-action flex flex-col gap-2 w-full h-full'>
-					<div className='relative h-full w-full'>
-						<Cropper
-							image={groupImageUrl ?? ""}
-							crop={crop}
-							zoom={zoom}
-							aspect={4 / 3}
-							onCropChange={(location: Point) =>
-								setCrop({
-									x: location.x,
-									y: location.y,
-									width: 100,
-									height: 100,
-								})
-							}
-							onCropComplete={onCropComplete}
-							onZoomChange={setZoom}
-							objectFit='cover'
-							style={{
-								containerStyle: {
-									width: "100%",
-									height: "100%",
-									backgroundColor: "#262626",
-								},
-								mediaStyle: {
-									width: "100%",
-									height: "100%",
-								},
-							}}
-						/>
-					</div>
+			<div className='modal-box w-11/12 max-w-5xl h-[80vh] relative bg-background-gray'>
+				<div className='relative h-[80%] w-full'>
+					<Cropper
+						image={imageUrl}
+						crop={crop}
+						zoom={zoom}
+						aspect={aspectRatio}
+						onCropChange={setCrop}
+						onZoomChange={setZoom}
+						onCropComplete={(_, croppedAreaPixels) => {
+							setCroppedAreaPixels(croppedAreaPixels);
+						}}
+						objectFit='contain'
+						minZoom={0.5}
+						maxZoom={3}
+						style={{
+							containerStyle: {
+								width: "100%",
+								height: "100%",
+							},
+							cropAreaStyle: {
+								border: "2px solid #fff",
+							},
+						}}
+					/>
+				</div>
 
-					{/* if there is a button, it will close the modal */}
+				<div className='flex justify-end gap-2 mt-4'>
 					<button
-						className='btn'
+						className='btn btn-ghost'
+						onClick={() => setIsModalOpen(false)}
+					>
+						Cancel
+					</button>
+					<button
+						className='btn btn-primary border-brand-orange'
 						type='button'
-						onClick={handleCropComplete}
+						onClick={async () => {
+							if (croppedAreaPixels) {
+								const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels);
+								setCroppedImageUrl(croppedImage.url);
+								setIsModalOpen(false);
+								if (register) {
+									register("image_src", { value: croppedImage });
+								}
+								if (croppedImage.file) {
+									customHandleCropComplete(croppedImage.file);
+								}
+							}
+						}}
 					>
 						Done
 					</button>
