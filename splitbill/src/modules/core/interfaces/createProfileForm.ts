@@ -1,5 +1,5 @@
 export interface IFormInput {
 	username: string;
 	displayName: string;
-	profilePicture: File;
+	profilePicture: { file: File; url: string };
 }

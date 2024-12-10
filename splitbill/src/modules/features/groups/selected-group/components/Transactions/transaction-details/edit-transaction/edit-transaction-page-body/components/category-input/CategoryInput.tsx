@@ -1,9 +1,9 @@
 import { Controller, Control, ControllerRenderProps, FieldErrors } from "react-hook-form";
 import ExpenseCategory from "../../../../../../../../../../core/enums/ExpenseCategoryEnum";
-import Drawer from "react-modern-drawer";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { expenseCategories } from "../../../../../../../../../../core/constants/ExpenseCategories";
 import { ICreateTransactionForm } from "../../../../../../../../../../core/interfaces/createTransactionForm";
+import CommonDrawer from "../../../../../../../../../../core/common/components/CommonDrawer";
 
 interface ICategoryInputProps {
 	control: Control<ICreateTransactionForm>;
@@ -65,20 +65,12 @@ export const CategoryInput = ({ control, errors }: ICategoryInputProps) => {
 					},
 				}}
 				render={({ field }) => (
-					<Drawer
-						open={isDrawerOpen}
-						onClose={handleDrawerOpen}
-						direction='bottom'
-						className='rounded-t-lg h-full w-full'
-						size='80%'
-						lockBackgroundScroll={true}
-						style={{ backgroundColor: "#1F1F1F" }}
-						duration={400}
+					<CommonDrawer
+						isOpen={isDrawerOpen}
+						toggleDrawer={handleDrawerOpen}
+						size='80vh'
 					>
-						<div className='flex flex-col gap-4 p-8 pt-4 h-full overflow-y-auto pb-20'>
-							{/* Swipe to close */}
-							<div className='border-brand-orange border-2 rounded-lg w-14 self-center'></div>
-
+						<div className='flex flex-col gap-4 p-4 pt-4 h-full overflow-y-auto pb-20'>
 							{/* Search Input */}
 							<div className='relative'>
 								<input
@@ -106,7 +98,7 @@ export const CategoryInput = ({ control, errors }: ICategoryInputProps) => {
 								/>
 							))}
 						</div>
-					</Drawer>
+					</CommonDrawer>
 				)}
 			/>
 		</>

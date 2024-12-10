@@ -15,7 +15,8 @@ const usePostCreateGroup = ({ getValues }: TPostCreateGroup) => {
 	const { mutateAsync: postCreateGroup } = useMutation({
 		mutationFn: async (data: ICreateGroupForm) => {
 			if (user && getValues().image_src) {
-				const imagePath = await post_image_to_storage(getValues().image_src);
+				const imageData = getValues().image_src;
+				const imagePath = await post_image_to_storage(imageData.file);
 				data.image_url = imagePath;
 			}
 			if (user) {

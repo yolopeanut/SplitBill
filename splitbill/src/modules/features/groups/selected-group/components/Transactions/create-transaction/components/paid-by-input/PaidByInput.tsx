@@ -2,9 +2,9 @@ import { Controller, ControllerRenderProps, Control, FieldErrors } from "react-h
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
-import Drawer from "react-modern-drawer";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import { Dispatch, SetStateAction, useState } from "react";
+import CommonDrawer from "../../../../../../../../core/common/components/CommonDrawer";
 
 interface PaidByInputProps {
 	control: Control<ICreateTransactionForm>;
@@ -62,20 +62,12 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 					},
 				}}
 				render={({ field }) => (
-					<Drawer
-						open={isDrawerOpen}
-						onClose={handleDrawerOpen}
-						direction='bottom'
-						className='rounded-t-lg h-full w-full'
-						size='80%'
-						lockBackgroundScroll={true}
-						style={{ backgroundColor: "#1F1F1F" }}
-						duration={400}
+					<CommonDrawer
+						isOpen={isDrawerOpen}
+						toggleDrawer={handleDrawerOpen}
+						size='80vh'
 					>
-						<div className='flex flex-col gap-4 p-8 pt-4 h-full overflow-y-auto pb-20'>
-							{/* Swipe to close */}
-							<div className='border-brand-orange border-2 rounded-lg w-14 self-center'></div>
-
+						<div className='flex flex-col gap-4 p-4 pt-4 h-full overflow-y-auto pb-20'>
 							{/* Search Input */}
 							<div className='relative'>
 								<input
@@ -103,7 +95,7 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 								/>
 							))}
 						</div>
-					</Drawer>
+					</CommonDrawer>
 				)}
 			/>
 		</>

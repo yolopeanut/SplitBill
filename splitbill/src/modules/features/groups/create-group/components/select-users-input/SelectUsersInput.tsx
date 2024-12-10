@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Control, Controller, FieldErrors, UseFormGetValues } from "react-hook-form";
 import { ICreateGroupForm } from "../../../../../core/interfaces/createGroupForm";
-import Drawer from "react-modern-drawer";
 import useGetAllFriends from "./hooks/useGetAllFriends";
 import UserCard from "./components/UserCard";
 import useFilterCurrentUser from "../../../../../core/common/hooks/useFilterCurrentUser";
+import CommonDrawer from "../../../../../core/common/components/CommonDrawer";
 
 type SelectUsersInputProps = {
 	control: Control<ICreateGroupForm>;
@@ -72,20 +72,12 @@ const SelectUsersInput = ({ control, getValues, errors }: SelectUsersInputProps)
 					},
 				}}
 				render={({ field }) => (
-					<Drawer
-						open={isDrawerOpen}
-						onClose={handleDrawerOpen}
-						direction='bottom'
-						className='rounded-t-lg h-full w-full'
-						size='80%'
-						lockBackgroundScroll={true}
-						style={{ backgroundColor: "#1F1F1F" }}
-						duration={400}
+					<CommonDrawer
+						isOpen={isDrawerOpen}
+						toggleDrawer={handleDrawerOpen}
+						size='80vh'
 					>
-						<div className='flex flex-col gap-4 p-8 pt-4 h-full overflow-y-auto pb-20'>
-							{/* Swipe to close */}
-							<div className='border-brand-orange border-2 rounded-lg w-14 self-center'></div>
-
+						<div className='flex flex-col gap-4 p-4 pt-4 h-full overflow-y-auto pb-20'>
 							{/* Search Input */}
 							<div className='relative'>
 								<input
@@ -113,7 +105,7 @@ const SelectUsersInput = ({ control, getValues, errors }: SelectUsersInputProps)
 								/>
 							))}
 						</div>
-					</Drawer>
+					</CommonDrawer>
 				)}
 			/>
 		</>

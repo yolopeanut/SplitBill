@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
-import useKickGroupMember from "../../hooks/useKickGroupMember";
-import CommonDrawer from "../../../../../../../../core/common/components/CommonDrawer";
-import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
+import useKickGroupMember from "../../../hooks/useKickGroupMember";
+import CommonDrawer from "../../../../../../../../../core/common/components/CommonDrawer";
+import { useGroupsContext } from "../../../../../../../hooks/useGroupsContext";
 import { GiBootKick } from "react-icons/gi";
 
 interface KickUsersDrawerProps {

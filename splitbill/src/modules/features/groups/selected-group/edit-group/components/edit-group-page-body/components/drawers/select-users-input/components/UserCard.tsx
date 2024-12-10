@@ -1,9 +1,9 @@
 import { ControllerRenderProps } from "react-hook-form";
 import { UseFormGetValues } from "react-hook-form";
-import { IEditUserForm } from "../../../../../../../../../core/interfaces/editUserForm";
-import { IAllUsersTable } from "../../../../../../../../../core/interfaces/all_usersTable";
-import { getInitials } from "../../../../../../../../../core/common/commonFunctions";
-import CheckBox from "../../../../../../../../../core/common/components/CheckBox";
+import { IEditUserForm } from "../../../../../../../../../../core/interfaces/editUserForm";
+import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/all_usersTable";
+import { getInitials } from "../../../../../../../../../../core/common/commonFunctions";
+import CheckBox from "../../../../../../../../../../core/common/components/CheckBox";
 
 type UserCardProps = {
 	user: IAllUsersTable;

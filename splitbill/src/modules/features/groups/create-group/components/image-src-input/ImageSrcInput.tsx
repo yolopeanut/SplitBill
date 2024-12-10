@@ -2,6 +2,8 @@ import { UseFormRegister } from "react-hook-form";
 import { ICreateGroupForm } from "../../../../../core/interfaces/createGroupForm";
 import { useState } from "react";
 import { handleImageUpload } from "../../../../../core/common/commonFunctions";
+import { MdOutlineFileUpload } from "react-icons/md";
+import ImageCropperDialog from "../../../../../core/common/components/ImageCropperDialog";
 
 type ImageSrcInputProps = {
 	register: UseFormRegister<ICreateGroupForm>;
@@ -12,18 +14,27 @@ const options = { maxSizeMB: 0.7, maxWidthOrHeight: 1000, useWebWorker: true };
 const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 	const [groupImage, setGroupImage] = useState<File | null>(null);
 	const [groupImageUrl, setGroupImageUrl] = useState<string | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
+
 	return (
 		<>
-			<div className='flex flex-col gap-2 w-20 h-20 justify-center items-center bg-font-white rounded-lg '>
-				<label className='w-64 flex flex-col items-center px-4 py-6 '>
+			<div className='flex flex-col gap-2 w-full h-full justify-center items-center bg-background-gray rounded-2xl border border-outline-white'>
+				<label className='w-full flex flex-col items-center justify-center h-52'>
 					{groupImage ? (
 						<img
-							src={groupImageUrl ? groupImageUrl : ""}
+							src={croppedImageUrl ?? groupImageUrl ?? ""}
 							alt='Group Image'
-							className='w-20 h-20 object-cover rounded-lg'
+							className='w-full h-full object-cover rounded-2xl'
 						/>
 					) : (
-						<span className='text-font-black text-4xl font-semibold'>+</span>
+						<div className='flex flex-col items-center gap-2'>
+							<MdOutlineFileUpload
+								size={45}
+								className='text-brand-orange'
+							/>
+							<span className='text-font-white text-base font-semibold'>Upload Group Image</span>
+						</div>
 					)}
 					<input
 						type='file'
@@ -36,7 +47,9 @@ const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 									if (file) {
 										setGroupImageUrl(URL.createObjectURL(file));
 										setGroupImage(file);
-										register("image_src", { value: file });
+
+										// Open modal after image is processed
+										setIsModalOpen(true);
 									}
 								});
 							}
@@ -44,6 +57,15 @@ const GroupImageInput = ({ register }: ImageSrcInputProps) => {
 					/>
 				</label>
 			</div>
+			<ImageCropperDialog
+				imageUrl={groupImageUrl ?? ""}
+				isModalOpen={isModalOpen}
+				setIsModalOpen={setIsModalOpen}
+				setCroppedImageUrl={setCroppedImageUrl}
+				register={register}
+				registerName='image_src'
+				customHandleCropComplete={() => {}}
+			/>
 		</>
 	);
 };

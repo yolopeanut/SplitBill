@@ -93,7 +93,7 @@ const UserCardDefault = ({ user }: { user: IAllUsersTable }) => {
 				) : (
 					<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
 				)}
-				<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+				<span className='text-font-white text-sm font-semibold'>{user.name}</span>
 			</div>
 		</>
 	);
@@ -121,7 +121,7 @@ const UserCardEqualSplit = ({
 					) : (
 						<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
 					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+					<span className='text-font-white text-base font-semibold'>{user.name}</span>
 				</div>
 
 				<CheckBox
@@ -173,7 +173,7 @@ const UserCardCustomSplit = ({
 					) : (
 						<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
 					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+					<span className='text-font-white text-base font-semibold'>{user.name}</span>
 				</div>
 
 				<div className='flex flex-row items-center gap-2 min-w-[40%] max-w-[40%]'>
@@ -237,7 +237,7 @@ const UserCardPercentageSplit = ({
 					) : (
 						<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
 					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+					<span className='text-font-white text-base font-semibold'>{user.name}</span>
 				</div>
 
 				<div className='flex flex-row items-center gap-2 min-w-[40%] max-w-[40%] justify-end'>

@@ -2,6 +2,7 @@ import imageCompression from "browser-image-compression";
 import ExpenseCategory from "../enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../constants/ExpenseCategories";
 import { IUserBalance } from "../interfaces/user_balances";
+import { Area } from "react-easy-crop";
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -83,4 +84,63 @@ export function getTotalOwed(owes_users: IUserBalance["owes_users"]) {
 	return Object.values(owes_users).reduce((acc, curr) => {
 		return acc + curr;
 	}, 0);
+}
+
+const createImage = (url: string): Promise<HTMLImageElement> =>
+	new Promise((resolve, reject) => {
+		const image = new Image();
+		image.addEventListener("load", () => resolve(image));
+		image.addEventListener("error", (error) => reject(error));
+		image.setAttribute("crossOrigin", "anonymous"); // needed to avoid cross-origin issues on CodeSandbox
+		image.src = url;
+	});
+
+/**
+ * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
+ * @param {File} image - Image File url
+ * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
+ * @param {number} rotation - optional rotation parameter
+ */
+export async function getCroppedImg(
+	imageSrc: string,
+	pixelCrop: Area
+): Promise<{ file: File | null; url: string }> {
+	const image = await createImage(imageSrc);
+	const canvas = document.createElement("canvas");
+	const ctx = canvas.getContext("2d");
+
+	if (!ctx) {
+		return { file: null, url: "" };
+	}
+
+	// Set the canvas size to the cropped dimensions
+	canvas.width = pixelCrop.width;
+	canvas.height = pixelCrop.height;
+
+	// Draw the cropped portion of the image
+	ctx.drawImage(
+		image,
+		pixelCrop.x,
+		pixelCrop.y,
+		pixelCrop.width,
+		pixelCrop.height,
+		0,
+		0,
+		pixelCrop.width,
+		pixelCrop.height
+	);
+
+	// Convert to blob and return as URL
+	return new Promise((resolve) => {
+		canvas.toBlob((file) => {
+			if (!file) {
+				resolve({ file: null, url: "" });
+				return;
+			}
+			resolve({
+				file: new File([file], "cropped.jpg", { type: "image/jpeg" }),
+				url: URL.createObjectURL(file),
+			});
+		}, "image/jpeg");
+	});
 }

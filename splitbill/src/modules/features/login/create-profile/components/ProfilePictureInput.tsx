@@ -2,14 +2,18 @@ import { UseFormRegister } from "react-hook-form";
 import { IFormInput } from "../../../../core/interfaces/createProfileForm";
 import { useState } from "react";
 import { handleImageUpload } from "../../../../core/common/commonFunctions";
+import ImageCropperDialog from "../../../../core/common/components/ImageCropperDialog";
 
 interface ProfilePictureInputProps {
-	setProfilePictureUrl: (url: string | null) => void;
 	register: UseFormRegister<IFormInput>;
 }
 
-const ProfilePictureInput = ({ setProfilePictureUrl, register }: ProfilePictureInputProps) => {
+const ProfilePictureInput = ({ register }: ProfilePictureInputProps) => {
 	const [profilePicture, setProfilePicture] = useState<File | null>(null);
+	const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
+
 	const options = { maxSizeMB: 0.7, maxWidthOrHeight: 1000, useWebWorker: true };
 
 	return (
@@ -18,7 +22,7 @@ const ProfilePictureInput = ({ setProfilePictureUrl, register }: ProfilePictureI
 				<label className='w-64 flex flex-col items-center px-4 py-6 '>
 					{profilePicture ? (
 						<img
-							src={profilePicture ? URL.createObjectURL(profilePicture) : ""}
+							src={croppedImageUrl ?? profilePictureUrl ?? ""}
 							alt='Profile Picture'
 							className='w-20 h-20 object-cover rounded-full'
 						/>
@@ -36,7 +40,7 @@ const ProfilePictureInput = ({ setProfilePictureUrl, register }: ProfilePictureI
 									if (file) {
 										setProfilePictureUrl(URL.createObjectURL(file));
 										setProfilePicture(file);
-										register("profilePicture", { value: file });
+										setIsModalOpen(true);
 									}
 								});
 							}
@@ -44,6 +48,16 @@ const ProfilePictureInput = ({ setProfilePictureUrl, register }: ProfilePictureI
 					/>
 				</label>
 			</div>
+
+			<ImageCropperDialog
+				imageUrl={profilePictureUrl ?? ""}
+				isModalOpen={isModalOpen}
+				setIsModalOpen={setIsModalOpen}
+				setCroppedImageUrl={setCroppedImageUrl}
+				register={register}
+				registerName='profilePicture'
+				customHandleCropComplete={() => {}}
+			/>
 		</>
 	);
 };

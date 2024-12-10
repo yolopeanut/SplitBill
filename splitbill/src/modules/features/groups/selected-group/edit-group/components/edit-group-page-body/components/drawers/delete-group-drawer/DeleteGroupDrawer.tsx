@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import CommonDrawer from "../../../../../../../../core/common/components/CommonDrawer";
+import CommonDrawer from "../../../../../../../../../core/common/components/CommonDrawer";
 import { TbHttpDelete } from "react-icons/tb";
 import useDeleteGroup from "./hook/useDeleteGroup";
 import { useNavigate } from "react-router-dom";
