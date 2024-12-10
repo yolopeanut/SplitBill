@@ -1,4 +1,4 @@
-import React, { SetStateAction, Dispatch } from "react";
+import { SetStateAction, Dispatch } from "react";
 import SelectUsersInput from "./select-users-input/SelectUsersInput";
 import KickUsersDrawer from "./kick-user-drawer/KickUsersDrawer";
 import DeleteGroupDrawer from "./delete-group-drawer/DeleteGroupDrawer";
