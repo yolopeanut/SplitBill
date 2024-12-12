@@ -6,6 +6,7 @@ import { IAllUsersTable } from "../../../../../../../../../../core/interfaces/al
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FieldErrors } from "react-hook-form";
 import CommonDrawer from "../../../../../../../../../../core/common/components/CommonDrawer";
+import useFilterKickedGroupUsers from "../../../../../../../../../../core/common/hooks/useFilterKickedGroupUsers";
 
 interface PaidByInputProps {
 	control: Control<ICreateTransactionForm>;
@@ -19,6 +20,8 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 	const { selectedGroupId } = useGroupsContext();
 
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
+
+	const filteredGroupUsers = useFilterKickedGroupUsers(groupUsers);
 
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
@@ -90,7 +93,7 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 							</div>
 
 							{/* User Cards */}
-							{groupUsers?.map((user) => (
+							{filteredGroupUsers?.map((user) => (
 								<UserCard
 									user={user}
 									key={user.id}

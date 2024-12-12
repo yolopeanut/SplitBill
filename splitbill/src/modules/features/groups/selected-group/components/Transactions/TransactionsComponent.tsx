@@ -62,6 +62,8 @@ const Transactions = () => {
 									paidBy={paidBy?.name || ""}
 									title={transaction.trans_title || ""}
 									remarks={transaction.remarks || ""}
+									transactionSplits={transaction.transaction_splits}
+									tax={transaction.tax}
 								/>
 							);
 						})}
