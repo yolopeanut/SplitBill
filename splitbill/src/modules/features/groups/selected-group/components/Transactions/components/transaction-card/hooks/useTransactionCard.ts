@@ -23,15 +23,44 @@ const useTransactionCard = ({
 	const categoryIcon = categoryData?.icon;
 	const categoryColor = categoryData?.color;
 
-	const splitAmount = transactionSplits.find((split) => split.split_user_id === user?.id);
-
 	const getSplitAmountWithTax = () => {
-		if (splitAmount?.equal_split_amount) {
-			return splitAmount.equal_split_amount + tax / transactionSplits.length;
-		} else if (splitAmount?.percentage_split_amount) {
-			return (splitAmount.percentage_split_amount / 100) * amount + tax / transactionSplits.length;
-		} else if (splitAmount?.unequal_split_amount) {
-			return splitAmount.unequal_split_amount + tax / transactionSplits.length;
+		let splitAmount = 0;
+
+		// If the paid by is the user, then the split amount is the other users' accumulated split amount
+		if (paidBy?.id !== user?.id) {
+			// Add the split amount of the other users
+			splitAmount = transactionSplits.reduce((acc, split) => {
+				if (split.split_user_id === user?.id) {
+					acc +=
+						split.equal_split_amount ||
+						((split.percentage_split_amount || 0) / 100) * amount ||
+						split.unequal_split_amount ||
+						0;
+				}
+				return acc;
+			}, 0);
+		}
+
+		// If the paid by is not the user, then the split amount is the user's split amount
+		else {
+			// How much everyone else owes me
+			const splitTransaction = transactionSplits.filter(
+				(split) => split.split_user_id !== user?.id
+			);
+			// Add the split amount of the other users
+			splitAmount = splitTransaction.reduce((acc, split) => {
+				acc +=
+					split.equal_split_amount ||
+					((split.percentage_split_amount || 0) / 100) * amount ||
+					split.unequal_split_amount ||
+					0;
+				return acc;
+			}, 0);
+		}
+
+		// Add the tax to the split amount
+		if (splitAmount) {
+			return splitAmount + tax / transactionSplits.length;
 		}
 		return 0;
 	};

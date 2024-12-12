@@ -60,7 +60,10 @@ const TransactionCard = ({
 					<div className='flex flex-col justify-center items-start w-[80%]'>
 						<span className='text-font-white text-base font-semibold'>{title}</span>
 						<span className='text-font-text-gray text-sm w-full overflow-x-auto whitespace-wrap'>
-							{paidBy?.name} paid {formatCurrency(amount, selectedGroup?.currency || "RM")}
+							{paidBy?.name} paid{" "}
+							<span className=' font-bold'>
+								{formatCurrency(amount, selectedGroup?.currency || "RM")}
+							</span>
 						</span>
 						{remarks && (
 							<div className='overflow-x-auto whitespace-nowrap w-full text-xs text-font-text-gray'>

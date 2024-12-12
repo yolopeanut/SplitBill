@@ -1,4 +1,4 @@
-import { getInitials } from "../../../../../../core/common/commonFunctions";
+import { formatCurrency, getInitials } from "../../../../../../core/common/commonFunctions";
 import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
 import { useGroupsContext } from "../../../../hooks/useGroupsContext";
 
@@ -54,8 +54,7 @@ const TotalOwedSpan = ({
 				<span>
 					{user.name} owes{" "}
 					<span className='text-font-red-owes inline font-bold'>
-						{currency}
-						{Math.abs(totalOwed).toFixed(2)}
+						{formatCurrency(Math.abs(totalOwed), currency || "RM")}
 					</span>{" "}
 					in total
 				</span>
@@ -63,8 +62,7 @@ const TotalOwedSpan = ({
 				<span>
 					{user.name} is owed{" "}
 					<span className='text-font-green-is-owed font-bold'>
-						{currency}
-						{Math.abs(totalOwed).toFixed(2)}
+						{formatCurrency(Math.abs(totalOwed), currency || "RM")}
 					</span>{" "}
 					in total
 				</span>
