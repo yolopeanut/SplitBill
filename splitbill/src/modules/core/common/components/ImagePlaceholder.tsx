@@ -1,21 +1,19 @@
 import { getInitials } from "../commonFunctions";
 
-const ImagePlaceholder = ({
-	imgSrc,
-	name,
-	className,
-}: {
+interface IImagePlaceholder {
 	imgSrc: string | null;
 	name: string;
 	className?: string;
-}) => {
+}
+
+const ImagePlaceholder = ({ imgSrc, name, className }: IImagePlaceholder) => {
 	const initials = getInitials(name);
 
 	if (imgSrc) {
 		return (
 			<div className='avatar placeholder'>
 				<img
-					className='rounded-full min-w-14 min-h-14 max-w-14 max-h-14'
+					className={`rounded-full ${className}`}
 					src={imgSrc}
 				/>
 			</div>
@@ -23,7 +21,9 @@ const ImagePlaceholder = ({
 	} else {
 		return (
 			<div className='avatar placeholder'>
-				<div className={` text-font-white w-14 rounded-full ${className}`}>
+				<div
+					className={` text-font-white rounded-full flex justify-center items-center border-2 border-brand-orange ${className}`}
+				>
 					<span className='text-lg'>{initials}</span>
 				</div>
 			</div>

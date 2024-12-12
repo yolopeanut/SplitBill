@@ -18,6 +18,10 @@ const Transactions = () => {
 		navigate(`/groups/${groupId}/create-transaction`);
 	};
 
+	const handleSettleUpOnClick = () => {
+		navigate(`/groups/${groupId}/settle-up`);
+	};
+
 	const sortedTransaction = (allTransactions: IAllTransactionsTable[] | undefined) => {
 		if (!allTransactions) return [];
 		const sortedTransactions = allTransactions?.sort((a, b) => {
@@ -71,7 +75,10 @@ const Transactions = () => {
 				);
 			})}
 			{/* Add Transaction Floating Button */}
-			<FloatingButton handleAddTransactionOnClick={handleAddTransactionOnClick} />
+			<FloatingButton
+				handleAddTransactionOnClick={handleAddTransactionOnClick}
+				handleSettleUpOnClick={handleSettleUpOnClick}
+			/>
 		</div>
 	);
 };

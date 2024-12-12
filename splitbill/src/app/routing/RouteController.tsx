@@ -12,6 +12,7 @@ import CreateTransactionPage from "../../modules/features/groups/selected-group/
 import CreateGroupPage from "../../modules/features/groups/create-group/CreateGroupPage";
 import TransactionDetailPage from "../../modules/features/groups/selected-group/components/Transactions/transaction-details/TransactionDetailPage";
 import EditTransactionPage from "../../modules/features/groups/selected-group/components/Transactions/transaction-details/edit-transaction/EditTransactionPage";
+import SettleTransactionsPage from "../../modules/features/groups/selected-group/components/Transactions/settle-transactions/SettleTransactionsPage";
 
 export const RouteController = () => {
 	return (
@@ -69,6 +70,14 @@ export const RouteController = () => {
 				element={
 					<ProtectedRoutes>
 						<CreateTransactionPage />
+					</ProtectedRoutes>
+				}
+			/>
+			<Route
+				path='/groups/:groupId/settle-up'
+				element={
+					<ProtectedRoutes>
+						<SettleTransactionsPage />
 					</ProtectedRoutes>
 				}
 			/>

@@ -64,6 +64,7 @@ const EditGroupUsers = ({
 						<UserCardGeneric
 							userid={user.id}
 							groupUsers={groupUsers}
+							activatable={true}
 						/>
 						{selectedId === user.id && (
 							<DropdownComponent

@@ -20,11 +20,11 @@ const FriendRequestCard = ({
 	return (
 		<div className='bg-input-search-gray rounded-lg flex flex-col items-start gap-4 p-4'>
 			<div className='flex flex-row items-center gap-2 w-full'>
-				<div className='avatar w-14 '>
+				<div className='avatar w-14 h-14'>
 					<ImagePlaceholder
 						imgSrc={img_src}
 						name={name}
-						className='bg-background-black'
+						className='bg-background-black min-w-14 min-h-14 max-w-14 max-h-14'
 					/>
 				</div>
 				<div className='flex flex-col justify-center gap-2'>

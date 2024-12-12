@@ -4,13 +4,15 @@ import { supabase } from "../../../../config/Supabase";
 
 // Define the context type
 
-export const AuthContext = createContext<{
+interface IAuthContext {
 	session: Session | null;
 	user: User | null;
 	isLoading: boolean;
 	signOut: () => void;
 	googleLogin: () => void;
-}>({
+}
+
+export const AuthContext = createContext<IAuthContext>({
 	session: null,
 	user: null,
 	isLoading: true,
@@ -44,13 +46,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		};
 	}, []);
 
-	const value: {
-		session: Session | null;
-		user: User | null;
-		isLoading: boolean;
-		signOut: () => void;
-		googleLogin: () => void;
-	} = {
+	const value: IAuthContext = {
 		session,
 		user,
 		isLoading,
