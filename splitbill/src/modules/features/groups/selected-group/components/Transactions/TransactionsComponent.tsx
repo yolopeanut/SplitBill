@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IAllTransactionsTable } from "../../../../../core/interfaces/all_transactionsTable";
 import { useGroupsContext } from "../../../hooks/useGroupsContext";
 import FloatingButton from "./components/FloatingButton";
-import TransactionCard from "./components/TransactionCard";
+import TransactionCard from "./components/transaction-card/TransactionCard";
 
 interface GroupedTransactions {
 	[key: string]: IAllTransactionsTable[];
@@ -59,7 +59,7 @@ const Transactions = () => {
 									navigate={navigate}
 									amount={transaction.total_amount}
 									category={transaction.category as ExpenseCategory}
-									paidBy={paidBy?.name || ""}
+									paidBy={paidBy || undefined}
 									title={transaction.trans_title || ""}
 									remarks={transaction.remarks || ""}
 									transactionSplits={transaction.transaction_splits}

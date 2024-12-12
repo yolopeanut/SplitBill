@@ -1,10 +1,10 @@
 import { NavigateFunction } from "react-router-dom";
-import { formatCurrency } from "../../../../../../core/common/commonFunctions";
-import ExpenseCategory from "../../../../../../core/enums/ExpenseCategoryEnum";
-import { expenseCategories } from "../../../../../../core/constants/ExpenseCategories";
-import { useGroupsContext } from "../../../../hooks/useGroupsContext";
-import { ITransactionSplitsTable } from "../../../../../../core/interfaces/all_transactionsTable";
-import useAuthContext from "../../../../../../core/auth/hooks/useAuthContext";
+import { formatCurrency } from "../../../../../../../core/common/commonFunctions";
+import ExpenseCategory from "../../../../../../../core/enums/ExpenseCategoryEnum";
+import { useGroupsContext } from "../../../../../hooks/useGroupsContext";
+import { ITransactionSplitsTable } from "../../../../../../../core/interfaces/all_transactionsTable";
+import { IAllUsersTable } from "../../../../../../../core/interfaces/all_usersTable";
+import useTransactionCard from "./hooks/useTransactionCard";
 
 const handleClickTransaction = (
 	transactionId: string,
@@ -18,7 +18,7 @@ interface ITransactionCardProps {
 	transactionId: string;
 	amount: number;
 	category: ExpenseCategory;
-	paidBy: string;
+	paidBy: IAllUsersTable | undefined;
 	title: string;
 	remarks: string;
 	groupId: string;
@@ -40,18 +40,11 @@ const TransactionCard = ({
 	tax,
 }: ITransactionCardProps) => {
 	const { selectedGroup } = useGroupsContext();
-	const { user } = useAuthContext();
-	const categoryData = expenseCategories.find((categories) => categories.label === category);
-	const categoryIcon = categoryData?.icon;
-	const categoryColor = categoryData?.color;
 
-	const splitAmount = transactionSplits.find((split) => split.split_user_id === user?.id);
-	const splitAmountWithTax =
-		(splitAmount?.equal_split_amount || 0) + tax / transactionSplits.length;
+	const { getTransactionColorAndSymbol, categoryIcon, categoryColor, getSplitAmountWithTax } =
+		useTransactionCard({ transactionSplits, tax, category, paidBy, amount });
 
-	const transactionColor = paidBy === user?.id ? "text-font-green-is-owed" : "text-font-red-owes";
-	const transactionSymbol = paidBy === user?.id ? "+" : "-";
-
+	const { transactionColor, transactionSymbol } = getTransactionColorAndSymbol();
 	return (
 		<>
 			<div
@@ -67,7 +60,7 @@ const TransactionCard = ({
 					<div className='flex flex-col justify-center items-start w-[80%]'>
 						<span className='text-font-white text-base font-semibold'>{title}</span>
 						<span className='text-font-text-gray text-sm w-full overflow-x-auto whitespace-wrap'>
-							{paidBy} paid {formatCurrency(amount, selectedGroup?.currency || "RM")}
+							{paidBy?.name} paid {formatCurrency(amount, selectedGroup?.currency || "RM")}
 						</span>
 						{remarks && (
 							<div className='overflow-x-auto whitespace-nowrap w-full text-xs text-font-text-gray'>
@@ -79,7 +72,7 @@ const TransactionCard = ({
 
 				<span className={`text-sm font-bold w-[30%] text-right ${transactionColor}`}>
 					{transactionSymbol}
-					{formatCurrency(splitAmountWithTax, selectedGroup?.currency || "RM")}
+					{formatCurrency(getSplitAmountWithTax(), selectedGroup?.currency || "RM")}
 				</span>
 			</div>
 		</>

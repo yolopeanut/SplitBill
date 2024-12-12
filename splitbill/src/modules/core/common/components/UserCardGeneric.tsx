@@ -14,9 +14,9 @@ const UserCardGeneric = ({ userid, groupUsers }: UserCardGenericProps) => {
 				<img
 					alt='user'
 					src={user?.profile_img_url || getInitials(user?.name || "")}
-					className='w-10 h-10 rounded-full'
+					className='object-cover min-w-10 min-h-10 max-w-10 max-h-10 w-10 h-10 rounded-full'
 				/>
-				<div className='flex flex-col max-w-44 min-w-44'>
+				<div className='flex flex-col max-w-32 min-w-32 overflow-x-auto whitespace-normal'>
 					<span className='text-font-white font-bold leading-tight'>{user?.name}</span>
 					<span className='text-font-text-gray text-sm'>@{user?.unique_username}</span>
 				</div>
