@@ -26,7 +26,7 @@ const SplitByUsersComponent = ({
 						groupUsers={groupUsers}
 					/>
 
-					<div className='bg-card-gray-dark rounded-lg px-4 py-[0.3rem] w-32 flex items-center justify-center font-bold'>
+					<div className='bg-card-gray-dark rounded-lg px-4 py-[0.3rem] min-w-32 flex items-center justify-center font-bold'>
 						{splitByType === "Percentage"
 							? `${user.percentage_split_amount}%`
 							: `RM ${getUserNetAmountOwed(user.split_user_id)}`}

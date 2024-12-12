@@ -1,10 +1,12 @@
-import { Controller, ControllerRenderProps, Control, FieldErrors } from "react-hook-form";
+import { Controller, Control, FieldErrors } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGetGroupUsers } from "./hooks/useGetGroupUsers";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import CommonDrawer from "../../../../../../../../core/common/components/CommonDrawer";
+import useFilterKickedGroupUsers from "../../../../../../../../core/common/hooks/useFilterKickedGroupUsers";
+import UserCard from "./components/UserCard";
 
 interface PaidByInputProps {
 	control: Control<ICreateTransactionForm>;
@@ -18,6 +20,8 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 	const { selectedGroupId } = useGroupsContext();
 
 	const { data: groupUsers } = useGetGroupUsers({ group_id: selectedGroupId || "" });
+
+	const filteredGroupUsers = useFilterKickedGroupUsers(groupUsers);
 
 	const handleDrawerOpen = () => {
 		setIsDrawerOpen(!isDrawerOpen);
@@ -85,7 +89,7 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 							</div>
 
 							{/* User Cards */}
-							{groupUsers?.map((user) => (
+							{filteredGroupUsers?.map((user) => (
 								<UserCard
 									user={user}
 									key={user.id}
@@ -103,41 +107,3 @@ export const PaidByInput = ({ control, errors }: PaidByInputProps) => {
 };
 
 export default PaidByInput;
-
-const UserCard = ({
-	user,
-	field,
-	setSelectedUser,
-	setIsDrawerOpen,
-}: {
-	user: IAllUsersTable;
-	field: ControllerRenderProps<ICreateTransactionForm, "paidBy"> | undefined;
-	setSelectedUser: Dispatch<SetStateAction<IAllUsersTable | null>> | undefined;
-	setIsDrawerOpen: Dispatch<SetStateAction<boolean>> | undefined;
-}) => {
-	return (
-		<>
-			<div
-				className='flex flex-row justify-between items-center w-full gap-4 cursor-pointer'
-				onClick={() => {
-					field?.onChange(user.id);
-					setSelectedUser?.(user);
-					setIsDrawerOpen?.(false);
-				}}
-			>
-				<div className='flex flex-row items-center gap-6'>
-					{user.profile_img_src ? (
-						<img
-							src={user.profile_img_url || ""}
-							alt='user profile'
-							className='w-12 h-12 rounded-full'
-						/>
-					) : (
-						<span className='text-font-black text-lg font-semibold'>{user.name.charAt(0)}</span>
-					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
-				</div>
-			</div>
-		</>
-	);
-};
