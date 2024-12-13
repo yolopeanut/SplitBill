@@ -20,28 +20,32 @@ const OwedUserCards = ({ owes_users, groupUsers, selectedGroup, userId }: IOwedU
 	return (
 		<>
 			<div className='px-10 flex flex-col gap-4 py-4'>
-				{Object.entries(owes_users).map(([oweUserId, amount]) => (
-					<div key={oweUserId}>
-						<div className='flex flex-row items-center gap-2'>
-							<img
-								src={
-									getUser(oweUserId)?.profile_img_url || getInitials(getUser(oweUserId)?.name || "")
-								}
-								alt={getUser(oweUserId)?.name || ""}
-								className='w-9 h-9 rounded-full'
-							/>
-							<div>
-								<OwedUserCard
-									oweUserId={oweUserId}
-									amount={amount}
-									selectedGroup={selectedGroup}
-									getUser={getUser}
-									OwedUser={OwedUser}
+				{Object.entries(owes_users).map(([oweUserId, amount]) => {
+					if (Math.round(amount * 100) === 0) return null;
+					return (
+						<div key={oweUserId}>
+							<div className='flex flex-row items-center gap-2'>
+								<img
+									src={
+										getUser(oweUserId)?.profile_img_url ||
+										getInitials(getUser(oweUserId)?.name || "")
+									}
+									alt={getUser(oweUserId)?.name || ""}
+									className='w-9 h-9 rounded-full'
 								/>
+								<div>
+									<OwedUserCard
+										oweUserId={oweUserId}
+										amount={amount}
+										selectedGroup={selectedGroup}
+										getUser={getUser}
+										OwedUser={OwedUser}
+									/>
+								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					);
+				})}
 			</div>
 		</>
 	);

@@ -5,6 +5,9 @@ import SettleProfiles from "./components/settle-profiles/SettleProfiles";
 import useSettleTransactionBody from "./hooks/useSettleTransactionBody";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { formatCurrency } from "../../../../../../../../core/common/commonFunctions";
+import { useAddExpense } from "../../../create-transaction/hooks/useAddExpense";
+import ExpenseCategory from "../../../../../../../../core/enums/ExpenseCategoryEnum";
 
 const SettleTransactionsPageBody = () => {
 	const { currentUser } = useUserContext();
@@ -18,13 +21,42 @@ const SettleTransactionsPageBody = () => {
 
 	const [error, setError] = useState("");
 
-	const handleSettleUp = () => {
+	const { addExpense } = useAddExpense();
+
+	const handleSettleUp = async () => {
 		if (amount <= 0) {
 			setError("Enter a valid amount");
 			return;
 		}
 
-		console.log("Settle up");
+		try {
+			await addExpense({
+				group_id: groupId!,
+				paid_by: currentUser!.id,
+				expense_title: `Settle up`,
+				category: ExpenseCategory.SettleUp,
+				amount: amount,
+				remarks: null,
+				split_by: {
+					value: {
+						type: "Equal",
+						users: [
+							{
+								user: selectedRepayingUser!,
+								amount: amount,
+							},
+						],
+					},
+				},
+				tax: 0,
+			});
+
+			// Navigate back or show success message
+			navigate(`/groups/${groupId}`);
+		} catch (error) {
+			setError("Failed to settle up. Please try again.");
+			console.error("Settlement error:", error);
+		}
 	};
 
 	useEffect(() => {
@@ -53,6 +85,15 @@ const SettleTransactionsPageBody = () => {
 								</span>
 								<span className='text-font-text-gray text-sm font-bold'>
 									@{selectedRepayingUser?.unique_username}
+								</span>
+								<span className='text-font-white text-sm font-base'>
+									You owe them{" "}
+									<span className='text-brand-orange font-bold'>
+										{formatCurrency(
+											Math.abs(owesUsers?.[selectedRepayingUser?.id] || 0),
+											selectedGroup?.currency || ""
+										)}
+									</span>
 								</span>
 							</div>
 

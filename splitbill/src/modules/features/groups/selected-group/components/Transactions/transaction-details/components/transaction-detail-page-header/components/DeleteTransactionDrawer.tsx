@@ -28,7 +28,9 @@ const DeleteTransactionDrawer = ({
 	return (
 		<CommonDrawer
 			isOpen={isDeleteTransactionDrawerOpen}
-			toggleDrawer={() => setIsDeleteTransactionDrawerOpen(false)}
+			toggleDrawer={() => {
+				setIsDeleteTransactionDrawerOpen(false);
+			}}
 		>
 			<div className='flex flex-col items-center justify-center gap-8 w-full h-full'>
 				<div className='text-center text-white text-2xl font-semibold flex flex-col items-center justify-center gap-2 w-full'>

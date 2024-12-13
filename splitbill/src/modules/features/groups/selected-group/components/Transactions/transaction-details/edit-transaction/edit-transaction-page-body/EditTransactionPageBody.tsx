@@ -14,6 +14,7 @@ import AmountInput from "./components/amount-input/AmountInput";
 import { useGetGroupUsers } from "./components/paid-by-input/hooks/useGetGroupUsers";
 import { IAllUsersTable } from "../../../../../../../../core/interfaces/all_usersTable";
 import { useEditExpense } from "./hooks/useEditExpense";
+import { useEffect } from "react";
 
 const EditTransactionBody = () => {
 	const navigate = useNavigate();
@@ -108,6 +109,12 @@ const EditTransactionBody = () => {
 
 		navigate(`/groups/${groupId}`);
 	};
+
+	useEffect(() => {
+		if (!groupUsers) {
+			navigate(`/groups/${groupId}`);
+		}
+	}, [groupUsers, navigate, groupId]);
 
 	return (
 		<>

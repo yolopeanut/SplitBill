@@ -88,15 +88,18 @@ export const CategoryInput = ({ control, errors }: ICategoryInputProps) => {
 							</div>
 
 							{/* Category Cards */}
-							{Object.values(ExpenseCategory).map((category) => (
-								<CategoryCard
-									category={category}
-									key={category}
-									field={field}
-									setSelectedCategory={setSelectedCategory}
-									setIsDrawerOpen={setIsDrawerOpen}
-								/>
-							))}
+							{Object.values(ExpenseCategory).map((category) => {
+								if (category === ExpenseCategory.SettleUp) return null;
+								return (
+									<CategoryCard
+										category={category}
+										key={category}
+										field={field}
+										setSelectedCategory={setSelectedCategory}
+										setIsDrawerOpen={setIsDrawerOpen}
+									/>
+								);
+							})}
 						</div>
 					</CommonDrawer>
 				)}

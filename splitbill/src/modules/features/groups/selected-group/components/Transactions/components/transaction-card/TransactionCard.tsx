@@ -39,7 +39,7 @@ const TransactionCard = ({
 	transactionSplits,
 	tax,
 }: ITransactionCardProps) => {
-	const { selectedGroup } = useGroupsContext();
+	const { selectedGroup, groupUsers } = useGroupsContext();
 
 	const { getTransactionColorAndSymbol, categoryIcon, categoryColor, getSplitAmountWithTax } =
 		useTransactionCard({ transactionSplits, tax, category, paidBy, amount });
@@ -49,34 +49,66 @@ const TransactionCard = ({
 		<>
 			<div
 				className='flex flex-row justify-between items-center w-full gap-4'
-				onClick={() => handleClickTransaction(transactionId, groupId, navigate)}
+				onClick={() => {
+					if (category === ExpenseCategory.SettleUp) return;
+					handleClickTransaction(transactionId, groupId, navigate);
+				}}
 			>
-				<div className='flex flex-row items-center gap-4 w-[70%]'>
-					<div
-						className={`flex justify-center items-center rounded-full min-w-10 min-h-10 text-font-white ${categoryColor}`}
-					>
-						{categoryIcon}
-					</div>
-					<div className='flex flex-col justify-center items-start w-[80%]'>
-						<span className='text-font-white text-base font-semibold'>{title}</span>
-						<span className='text-font-text-gray text-sm w-full overflow-x-auto whitespace-wrap'>
-							{paidBy?.name} paid{" "}
-							<span className=' font-bold'>
-								{formatCurrency(amount, selectedGroup?.currency || "RM")}
-							</span>
-						</span>
-						{remarks && (
-							<div className='overflow-x-auto whitespace-nowrap w-full text-xs text-font-text-gray'>
-								Remarks: {remarks}
+				{category !== ExpenseCategory.SettleUp && (
+					<>
+						<div className='flex flex-row items-center gap-4 w-[70%]'>
+							<div
+								className={`flex justify-center items-center rounded-full min-w-10 min-h-10 text-font-white ${categoryColor}`}
+							>
+								{categoryIcon}
 							</div>
-						)}
-					</div>
-				</div>
+							<div className='flex flex-col justify-center items-start w-[80%]'>
+								<span className='text-font-white text-base font-semibold'>{title}</span>
+								<span className='text-font-text-gray text-sm w-full overflow-x-auto whitespace-wrap'>
+									{paidBy?.name} paid{" "}
+									<span className=' font-bold'>
+										{formatCurrency(amount, selectedGroup?.currency || "RM")}
+									</span>
+								</span>
+								{remarks && (
+									<div className='overflow-x-auto whitespace-nowrap w-full text-xs text-font-text-gray'>
+										Remarks: {remarks}
+									</div>
+								)}
+							</div>
+						</div>
 
-				<span className={`text-sm font-bold w-[30%] text-right ${transactionColor}`}>
-					{transactionSymbol}
-					{formatCurrency(getSplitAmountWithTax(), selectedGroup?.currency || "RM")}
-				</span>
+						<span className={`text-sm font-bold w-[30%] text-right ${transactionColor}`}>
+							{transactionSymbol}
+							{formatCurrency(getSplitAmountWithTax(), selectedGroup?.currency || "RM")}
+						</span>
+					</>
+				)}
+				{category === ExpenseCategory.SettleUp && (
+					<div className='flex flex-row items-center gap-4 w-[100%]'>
+						<div
+							className={`flex justify-center items-center rounded-full min-w-10 min-h-10 text-font-white ${categoryColor}`}
+						>
+							{categoryIcon}
+						</div>
+						<div className='flex flex-col justify-center items-start w-full'>
+							<span className='text-font-white text-base font-semibold'>{title}</span>
+							<span className='text-font-text-gray text-sm w-full overflow-x-auto whitespace-wrap'>
+								{paidBy?.name} paid{" "}
+								<span className=' font-bold'>
+									{formatCurrency(amount, selectedGroup?.currency || "RM")}
+								</span>{" "}
+								to{" "}
+								{groupUsers?.find((user) => user.id === transactionSplits[0].split_user_id)?.name}
+							</span>
+							{remarks && (
+								<div className='overflow-x-auto whitespace-nowrap w-full text-xs text-font-text-gray'>
+									Remarks: {remarks}
+								</div>
+							)}
+						</div>
+					</div>
+				)}
 			</div>
 		</>
 	);

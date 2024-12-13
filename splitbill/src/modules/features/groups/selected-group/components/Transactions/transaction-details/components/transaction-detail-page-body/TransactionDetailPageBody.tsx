@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import useAuthContext from "../../../../../../../../core/auth/hooks/useAuthContext";
 import UserCardGeneric from "../../../../../../../../core/common/components/UserCardGeneric";
 import { IAllTransactionsTable } from "../../../../../../../../core/interfaces/all_transactionsTable";
@@ -5,6 +6,8 @@ import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
 import useTransactionDetails from "../../hooks/useTransactionDetails";
 import NumericDetails from "./components/NumericDetailsComponent";
 import SplitByUsersComponent from "./components/SplitByUsersComponent";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface TransactionDetailPageBodyProps {
 	data: IAllTransactionsTable | null | undefined;
@@ -14,6 +17,15 @@ const TransactionDetailPageBody = ({ data }: TransactionDetailPageBodyProps) => 
 	const { paidBy, amount, tax, splitBy, getUserNetAmountOwed } = useTransactionDetails(data);
 	const { groupUsers } = useGroupsContext();
 	const { user } = useAuthContext();
+	const { groupId } = useParams();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!groupUsers) {
+			navigate(`/groups/${groupId}`);
+		}
+	}, [groupUsers, navigate, groupId]);
+
 	return (
 		<>
 			<div className='flex flex-col w-full p-4 gap-4 pb-32'>
