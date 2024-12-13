@@ -29,6 +29,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import LeaveGroupDrawer from "./components/leave-group-drawer/LeaveGroupDrawer";
+import AnalyticsTimeframeDrawer from "./components/analytics-timeframe-drawer/AnalyticsTimeframeDrawer";
+import AnalyticsGroupOrOwnerDrawer from "./components/analytics-group-or-owner-drawer/AnalyticsGroupOrOwnerDrawer";
 
 interface handleEditGroupDropDownProps {
 	navigate: NavigateFunction;
@@ -209,7 +211,7 @@ const SelectedGroupBody = ({
 				/>
 			</div>
 			<div
-				className='flex flex-col gap-4 px-4 w-full h-[calc(100vh-9.75rem)] overflow-y-auto'
+				className='flex flex-col gap-4 px-4 w-full h-[calc(100vh-16.75rem)] overflow-y-auto'
 				onScroll={handleScroll}
 				ref={scrollContainerRef}
 			>
@@ -251,6 +253,8 @@ const SelectedGroupBody = ({
 				isLeaveGroupDrawerOpen={isLeaveGroupDrawerOpen}
 				setIsLeaveGroupDrawerOpen={setIsLeaveGroupDrawerOpen}
 			/>
+			<AnalyticsTimeframeDrawer />
+			<AnalyticsGroupOrOwnerDrawer />
 		</>
 	);
 };

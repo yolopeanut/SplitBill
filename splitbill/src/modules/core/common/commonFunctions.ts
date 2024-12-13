@@ -3,6 +3,11 @@ import ExpenseCategory from "../enums/ExpenseCategoryEnum";
 import { expenseCategories } from "../constants/ExpenseCategories";
 import { IUserBalance } from "../interfaces/user_balances";
 import { Area } from "react-easy-crop";
+import {
+	IAllTransactionsTable,
+	ITransactionSplitsTable,
+} from "../interfaces/all_transactionsTable";
+import { AnalyticsTimeframeEnum } from "../enums/AnalyticsTimeframeEnum";
 export function getFirstLetter(name: string) {
 	return name.charAt(0).toUpperCase();
 }
@@ -144,3 +149,76 @@ export async function getCroppedImg(
 		}, "image/jpeg");
 	});
 }
+
+export const calculateSplitAmount = (
+	transaction: IAllTransactionsTable,
+	split: ITransactionSplitsTable
+) => {
+	if (split.equal_split_amount !== null) {
+		return split.equal_split_amount;
+	}
+	if (split.unequal_split_amount !== null) {
+		return split.unequal_split_amount;
+	}
+	if (split.percentage_split_amount !== null) {
+		return (split.percentage_split_amount / 100) * transaction.total_amount;
+	}
+	return 0;
+};
+
+export const filterTransactionsByTimeframe = (
+	transactions: IAllTransactionsTable[],
+	selectedTimeFrame: AnalyticsTimeframeEnum
+) => {
+	const now = new Date();
+
+	switch (selectedTimeFrame) {
+		case AnalyticsTimeframeEnum.CURRENT_MONTH: {
+			const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+			return transactions.filter((transaction) => new Date(transaction.created_at) >= startOfMonth);
+		}
+		case AnalyticsTimeframeEnum.LAST_MONTH: {
+			const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+			const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+			return transactions.filter((transaction) => {
+				const transactionDate = new Date(transaction.created_at);
+				return transactionDate >= startOfLastMonth && transactionDate < startOfCurrentMonth;
+			});
+		}
+		case AnalyticsTimeframeEnum.THIS_YEAR: {
+			const startOfYear = new Date(now.getFullYear(), 0, 1);
+			return transactions.filter((transaction) => new Date(transaction.created_at) >= startOfYear);
+		}
+		case AnalyticsTimeframeEnum.ALL_TIME: {
+			return transactions;
+		}
+		default:
+			return transactions;
+	}
+};
+
+// Convert Tailwind classes to hex colors
+export const tailwindToHex: { [key: string]: string } = {
+	"bg-green-500": "#22C55E",
+	"bg-red-700": "#B91C1C",
+	"bg-blue-800": "#1E40AF",
+	"bg-yellow-600": "#CA8A04",
+	"bg-blue-600": "#2563EB",
+	"bg-pink-600": "#DB2777",
+	"bg-green-600": "#16A34A",
+	"bg-orange-700": "#C2410C",
+	"bg-purple-700": "#7E22CE",
+	"bg-pink-300": "#F9A8D4",
+	"bg-indigo-600": "#4F46E5",
+	"bg-teal-600": "#0D9488",
+	"bg-orange-300": "#FDBA74",
+	"bg-lime-500": "#84CC16",
+	"bg-purple-500": "#A855F7",
+	"bg-amber-700": "#B45309",
+	"bg-emerald-600": "#059669",
+	"bg-blue-300": "#93C5FD",
+	"bg-yellow-500": "#EAB308",
+	"bg-gray-600": "#4B5563",
+	"bg-red-900": "#7F1D1D",
+	"bg-red-800": "#991B1B",
+};
