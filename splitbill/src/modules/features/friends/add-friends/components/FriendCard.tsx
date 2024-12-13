@@ -53,7 +53,7 @@ const FriendCard = ({ id, imgSrc, name, uniqueUsername }: IFriendCardProps) => {
 					<ImagePlaceholder
 						imgSrc={imgSrc}
 						name={name}
-						className='bg-input-search-gray'
+						className='bg-input-search-gray min-w-14 min-h-14 max-w-14 max-h-14'
 					/>
 				</div>
 

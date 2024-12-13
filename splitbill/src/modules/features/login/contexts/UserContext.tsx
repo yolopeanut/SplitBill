@@ -6,11 +6,13 @@ import { User } from "@supabase/supabase-js";
 import getPublicUrl from "../../../core/database_functions/getPublicUrl";
 import getAllUsersById from "../../../core/database_functions/getUserArraybyId";
 
-export const UserContext = createContext<{
+interface IUserContext {
 	currentUser: IAllUsersTable | null;
 	hasCreatedProfile: boolean;
 	getUserById: UseQueryResult<IAllUsersTable[]>;
-}>({
+}
+
+export const UserContext = createContext<IUserContext>({
 	currentUser: null,
 	hasCreatedProfile: false,
 	getUserById: {} as UseQueryResult<IAllUsersTable[]>,

@@ -32,8 +32,14 @@ import {
 	FaCalendar,
 	FaCreditCard,
 } from "react-icons/fa6";
+import { IoMdCheckmark } from "react-icons/io";
 
 export const expenseCategories = [
+	{
+		label: ExpenseCategory.SettleUp,
+		icon: <IoMdCheckmark size={20} />,
+		color: "bg-green-500", // Adjusted for better contrast with white text
+	},
 	{
 		label: ExpenseCategory.Food,
 		icon: <FaUtensils size={20} />,

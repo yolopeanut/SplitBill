@@ -1,5 +1,5 @@
 import { RiArrowUpSLine } from "react-icons/ri";
-import OwedUserCards from "./OwedUserCards";
+import OwedUserCards from "./owe-user-cards/OwedUserCards";
 import UserCard from "./UserCard";
 import { useState } from "react";
 import { IAllGroupsTable } from "../../../../../../core/interfaces/all_GroupsTable";

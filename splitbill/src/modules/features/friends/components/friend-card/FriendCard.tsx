@@ -18,11 +18,11 @@ const FriendCard = ({ imgSrc, name, uniqueUsername, isFavourite, friend_id }: IF
 	return (
 		<div className='flex flex-row justify-between gap-4 bg-background-black h-16 outline-background-black border-none w-full'>
 			<div className='flex flex-row gap-4'>
-				<div className='avatar w-14'>
+				<div className='avatar w-14 h-14'>
 					<ImagePlaceholder
 						imgSrc={imgSrc}
 						name={name}
-						className='bg-input-search-gray'
+						className='bg-input-search-gray min-w-14 min-h-14 max-w-14 max-h-14'
 					/>
 				</div>
 

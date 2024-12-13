@@ -24,7 +24,7 @@ const DropdownComponent = ({ position, onKick }: DropdownComponentProps) => {
 						size={20}
 						className='text-font-red-dark'
 					/>
-					Kick
+					<span className='select-none'>Kick</span>
 				</div>
 			</div>
 		</div>

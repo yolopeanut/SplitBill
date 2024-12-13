@@ -4,13 +4,18 @@ import { getInitials } from "../commonFunctions";
 interface UserCardGenericProps {
 	userid: string;
 	groupUsers: IAllUsersTable[] | undefined;
+	activatable?: boolean;
 }
 
-const UserCardGeneric = ({ userid, groupUsers }: UserCardGenericProps) => {
+const UserCardGeneric = ({ userid, groupUsers, activatable = false }: UserCardGenericProps) => {
 	const user = groupUsers?.find((user) => user.id === userid);
 	return (
 		<>
-			<div className='flex flex-row gap-4 items-center active:bg-gray-800 active:border active:border-gray-700 rounded-lg p-2 transition-all duration-200 min-h-16'>
+			<div
+				className={`flex flex-row gap-4 items-center rounded-lg p-2 transition-all duration-200 min-h-16 ${
+					activatable ? "active:bg-gray-800 active:border active:border-gray-700" : ""
+				}`}
+			>
 				<img
 					alt='user'
 					src={user?.profile_img_url || getInitials(user?.name || "")}

@@ -20,17 +20,20 @@ const Balances = () => {
 	if (isLoading) return <Loading />;
 
 	// If not loading, show balances
+
 	return (
 		<div className='flex flex-col gap-4 h-[63vh] overflow-y-auto pb-40'>
-			{Object.entries(userBalances).map(([userId, { owes_users }]) => (
-				<BalanceCard
-					key={userId}
-					userId={userId}
-					owes_users={owes_users}
-					groupUsers={groupUsers}
-					selectedGroup={selectedGroup}
-				/>
-			))}
+			{Object.entries(userBalances).map(([userId, { owes_users }]) => {
+				return (
+					<BalanceCard
+						key={userId}
+						userId={userId}
+						owes_users={owes_users}
+						groupUsers={groupUsers}
+						selectedGroup={selectedGroup}
+					/>
+				);
+			})}
 		</div>
 	);
 };
