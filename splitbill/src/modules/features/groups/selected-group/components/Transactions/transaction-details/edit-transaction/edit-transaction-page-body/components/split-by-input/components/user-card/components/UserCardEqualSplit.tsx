@@ -59,7 +59,8 @@ const UserCardEqualSplit = ({
 									...selectedUsersArray,
 									{
 										user: user,
-										amount: 0,
+										amount:
+											(getValues().amount || 0) / (getValues().splitBy?.value.users.length || 1),
 										transaction_split_id: originalUserData?.transaction_split_id || null,
 									},
 							  ];
