@@ -44,6 +44,7 @@ const Balances = () => {
 					owes_users={currentUserBalance[1].owes_users}
 					groupUsers={groupUsers}
 					selectedGroup={selectedGroup}
+					isDefaultExpanded={true}
 				/>
 			)}
 
@@ -57,11 +58,12 @@ const Balances = () => {
 							owes_users={owes_users}
 							groupUsers={groupUsers}
 							selectedGroup={selectedGroup}
+							isDefaultExpanded={false}
 						/>
 					))}
 					<button
 						onClick={() => setShowAll(false)}
-						className='mt-2 text-blue-600 hover:text-blue-800 font-medium'
+						className='mt-2 text-brand-orange font-medium'
 					>
 						Hide Balances
 					</button>
@@ -69,9 +71,9 @@ const Balances = () => {
 			) : (
 				<button
 					onClick={() => setShowAll(true)}
-					className='mt-2 text-blue-600 hover:text-blue-800 font-medium'
+					className='mt-2 text-brand-orange font-bold'
 				>
-					Show More Balances ({otherBalances.length})
+					See your friends' balances ({otherBalances.length})
 				</button>
 			)}
 		</div>
