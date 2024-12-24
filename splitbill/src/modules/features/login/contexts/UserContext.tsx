@@ -42,17 +42,19 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 	return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
+interface IGetUserProps {
+	user: User | null;
+	isLoading: boolean;
+	setCurrentUser: React.Dispatch<React.SetStateAction<IAllUsersTable | null>>;
+	hasCreatedProfile: React.MutableRefObject<boolean>;
+}
+
 const GetUser = ({
 	user,
 	isLoading,
 	setCurrentUser,
 	hasCreatedProfile,
-}: {
-	user: User | null;
-	isLoading: boolean;
-	setCurrentUser: React.Dispatch<React.SetStateAction<IAllUsersTable | null>>;
-	hasCreatedProfile: React.MutableRefObject<boolean>;
-}): UseQueryResult<IAllUsersTable[]> => {
+}: IGetUserProps): UseQueryResult<IAllUsersTable[]> => {
 	const getUserById = useQuery({
 		queryKey: ["created_profile", "getUserById"],
 		queryFn: async () => {
@@ -73,13 +75,12 @@ const GetUser = ({
 	return getUserById;
 };
 
-const GetProfileImg = ({
-	hasCreatedProfile,
-	currentUser,
-}: {
+interface IGetProfileImgProps {
 	hasCreatedProfile: React.MutableRefObject<boolean>;
 	currentUser: IAllUsersTable | null;
-}): void => {
+}
+
+const GetProfileImg = ({ hasCreatedProfile, currentUser }: IGetProfileImgProps): void => {
 	const getProfileImg = useQuery({
 		queryKey: ["created_profile", "getProfileImg"],
 		queryFn: async () => {

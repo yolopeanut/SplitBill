@@ -7,18 +7,22 @@ import { getTotalOwed } from "../../../../../../core/common/commonFunctions";
 import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
 import { IUserBalance } from "../../../../../../core/interfaces/user_balances";
 
+interface IBalanceCardProps {
+	userId: string;
+	owes_users: IUserBalance["owes_users"];
+	groupUsers: IAllUsersTable[] | undefined;
+	selectedGroup: IAllGroupsTable | null;
+	isDefaultExpanded: boolean;
+}
+
 const BalanceCard = ({
 	userId,
 	owes_users,
 	groupUsers,
 	selectedGroup,
-}: {
-	userId: string;
-	owes_users: IUserBalance["owes_users"];
-	groupUsers: IAllUsersTable[] | undefined;
-	selectedGroup: IAllGroupsTable | null;
-}) => {
-	const [isExpanded, setIsExpanded] = useState(false);
+	isDefaultExpanded,
+}: IBalanceCardProps) => {
+	const [isExpanded, setIsExpanded] = useState(isDefaultExpanded);
 
 	return (
 		<div
