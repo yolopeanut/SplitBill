@@ -51,6 +51,7 @@ const SelectedGroupPage = () => {
 		isLoadingBalances,
 	} = useSelectedGroup();
 	const [isLeaveGroupDrawerOpen, setIsLeaveGroupDrawerOpen] = useState(false);
+
 	// If loading, show loading screen
 	if (isLoading || isLoadingAllTransactions || isLoadingGroupUsers || isLoadingBalances) {
 		return <Loading />;
@@ -58,7 +59,7 @@ const SelectedGroupPage = () => {
 
 	return (
 		<>
-			<div className='flex flex-col gap-4 relative h-[calc(100vh-4rem)]'>
+			<div className='flex flex-col relative h-[calc(100vh-4rem)]'>
 				<SelectedGroupHeader
 					selectedGroup={selectedGroup}
 					setIsLeaveGroupDrawerOpen={setIsLeaveGroupDrawerOpen}
@@ -203,7 +204,7 @@ const SelectedGroupBody = ({
 
 	return (
 		<>
-			<div className='flex flex-row justify-between items-center px-4'>
+			<div className='flex flex-row justify-between items-center px-4 pt-4'>
 				<Badges
 					selectedBadge={selectedBadge}
 					setSelectedBadge={setSelectedBadge}
@@ -211,7 +212,7 @@ const SelectedGroupBody = ({
 				/>
 			</div>
 			<div
-				className='flex flex-col gap-4 px-4 w-full h-[calc(100vh-16.75rem)] overflow-y-auto'
+				className='flex flex-col gap-4 px-4 w-full h-[calc(100vh-16.75rem)] overflow-y-auto '
 				onScroll={handleScroll}
 				ref={scrollContainerRef}
 			>
