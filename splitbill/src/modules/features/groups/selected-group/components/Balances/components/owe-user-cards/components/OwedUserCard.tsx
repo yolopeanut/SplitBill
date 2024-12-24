@@ -22,14 +22,14 @@ const OwedUserCard = ({
 		<>
 			<div className='flex flex-col'>
 				{amount > 0 ? (
-					<span className='text-font-red text-sm'>
+					<span className='text-sm'>
 						{owedUser?.name || ""} owes {OwedUser?.name}{" "}
 						<span className='text-font-red-owes inline font-bold'>
 							{formatCurrency(Math.abs(amount), selectedGroup?.currency || "RM")}
 						</span>{" "}
 					</span>
 				) : (
-					<span className='text-green-500 text-sm'>
+					<span className=' text-sm'>
 						{OwedUser?.name} owes {owedUser?.name}{" "}
 						<span className='text-font-green-is-owed font-bold'>
 							{formatCurrency(Math.abs(amount), selectedGroup?.currency || "RM")}

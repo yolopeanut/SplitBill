@@ -30,7 +30,7 @@ const AnalyticsBody = () => {
 						/>
 					</div>
 					<div className='w-full h-full flex flex-col justify-center items-center gap-4'>
-						<div className='w-[60%] '>
+						<div className='w-[60%] flex flex-col justify-center items-center '>
 							<ChartComponent />
 						</div>
 						<div className='w-full h-full'>

@@ -3,9 +3,12 @@ import { IBalances } from "../../../../../core/interfaces/user_balances";
 import { useGroupsContext } from "../../../hooks/useGroupsContext";
 import useGetBalances from "./hooks/useGetBalances";
 import BalanceCard from "./components/BalanceCard";
+import useAuthContext from "../../../../../core/auth/hooks/useAuthContext";
+import { useState } from "react";
 
 const Balances = () => {
 	const { selectedGroup, allTransactions, groupUsers } = useGroupsContext();
+	const { user } = useAuthContext();
 	const {
 		userBalances,
 		isLoading,
@@ -14,6 +17,8 @@ const Balances = () => {
 		groupUsers,
 	});
 
+	const [showAll, setShowAll] = useState(false);
+
 	if (!userBalances) return <div>No balances found</div>;
 
 	// If loading, show loading
@@ -21,19 +26,56 @@ const Balances = () => {
 
 	// If not loading, show balances
 
+	// Sort balance entries to put current user first
+	const sortedBalances = Object.entries(userBalances).sort(([userId]) =>
+		userId === user?.id ? -1 : 1
+	);
+
+	// Separate current user's balance and others
+	const [currentUserBalance, ...otherBalances] = sortedBalances;
+
 	return (
 		<div className='flex flex-col gap-4 h-[63vh] overflow-y-auto pb-40'>
-			{Object.entries(userBalances).map(([userId, { owes_users }]) => {
-				return (
-					<BalanceCard
-						key={userId}
-						userId={userId}
-						owes_users={owes_users}
-						groupUsers={groupUsers}
-						selectedGroup={selectedGroup}
-					/>
-				);
-			})}
+			{/* Always show current user's balance */}
+			{currentUserBalance && (
+				<BalanceCard
+					key={currentUserBalance[0]}
+					userId={currentUserBalance[0]}
+					owes_users={currentUserBalance[1].owes_users}
+					groupUsers={groupUsers}
+					selectedGroup={selectedGroup}
+					isDefaultExpanded={true}
+				/>
+			)}
+
+			{/* Show other balances based on showAll state */}
+			{showAll ? (
+				<>
+					{otherBalances.map(([userId, { owes_users }]) => (
+						<BalanceCard
+							key={userId}
+							userId={userId}
+							owes_users={owes_users}
+							groupUsers={groupUsers}
+							selectedGroup={selectedGroup}
+							isDefaultExpanded={false}
+						/>
+					))}
+					<button
+						onClick={() => setShowAll(false)}
+						className='mt-2 text-brand-orange font-medium'
+					>
+						Hide Balances
+					</button>
+				</>
+			) : (
+				<button
+					onClick={() => setShowAll(true)}
+					className='mt-2 text-brand-orange font-bold'
+				>
+					See your friends' balances ({otherBalances.length})
+				</button>
+			)}
 		</div>
 	);
 };
