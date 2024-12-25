@@ -60,7 +60,7 @@ const TransactionDetailPageHeader = ({ data }: TransactionDetailPageHeaderProps)
 			</div>
 			<DeleteTransactionDrawer
 				isDeleteTransactionDrawerOpen={isDeleteTransactionDrawerOpen}
-				setIsDeleteTransactionDrawerOpen={() => setIsDeleteTransactionDrawerOpen}
+				setIsDeleteTransactionDrawerOpen={setIsDeleteTransactionDrawerOpen}
 				selectedId={data?.transaction_id ?? ""}
 			/>
 		</>
