@@ -9,7 +9,7 @@ const ProfilePage = () => {
 		return null;
 	}
 
-	console.log(user);
+	// console.log(user);
 
 	return (
 		<div className='flex flex-col gap-6 w-full h-full pt-6 px-10 items-center'>

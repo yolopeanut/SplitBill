@@ -1,23 +1,19 @@
 import { UseFormGetValues } from "react-hook-form";
 import { ControllerRenderProps } from "react-hook-form";
-import { IAllUsersTable } from "../../../../../../../../../../../../../core/interfaces/all_usersTable";
-import { ICreateTransactionForm } from "../../../../../../../../../../../../../core/interfaces/createTransactionForm";
-import { getInitials } from "../../../../../../../../../../../../../core/common/commonFunctions";
-import NumericInput from "./NumericInput";
+import { getInitials } from "../../../../../../../../../../../../core/common/commonFunctions";
+import { IAllUsersTable } from "../../../../../../../../../../../../core/interfaces/all_usersTable";
+import { ICreateTransactionForm } from "../../../../../../../../../../../../core/interfaces/createTransactionForm";
+import NumericInput from "../numeric-input/NumericInput";
 
-interface UserCardCustomSplitProps {
+interface IUserCardCustomSplitProps {
 	user: IAllUsersTable;
 	field: ControllerRenderProps<ICreateTransactionForm, "splitBy"> | undefined;
 	getValues: UseFormGetValues<ICreateTransactionForm>;
-	originalSplitBy: ICreateTransactionForm["splitBy"] | undefined;
 }
 
-const UserCardCustomSplit = ({
-	user,
-	field,
-	getValues,
-	originalSplitBy,
-}: UserCardCustomSplitProps) => {
+const UserCardCustomSplit = ({ user, field, getValues }: IUserCardCustomSplitProps) => {
+	const currentAmount =
+		field?.value?.value?.users?.find((u) => u.user.id === user.id)?.amount?.toFixed(2) || "0.00";
 	return (
 		<>
 			<div className='flex flex-row items-center gap-6 justify-between'>
@@ -37,21 +33,12 @@ const UserCardCustomSplit = ({
 				<div className='flex flex-row items-center gap-2 min-w-[45%] max-w-[45%]'>
 					RM
 					<NumericInput
-						initialValue={
-							getValues().splitBy?.value.users.find(
-								(selectedUsers) => selectedUsers.user.id === user.id
-							)?.amount
-						}
+						field={field}
+						value={currentAmount}
 						onChange={(e) => {
 							const usersArray = getValues().splitBy?.value?.users || [];
 							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id);
-							const newAmount = parseFloat(e.target.value);
-
-							// Find the original transaction split ID
-							const originalUserData = originalSplitBy?.value.users.find(
-								(selectedUsers) => selectedUsers.user.id === user.id
-							);
-
+							const newAmount = parseFloat(e.target.value); // Convert string to number for the interface
 							let newUsersArray = null;
 
 							if (newAmount === 0) {
@@ -66,7 +53,7 @@ const UserCardCustomSplit = ({
 									{
 										user: user,
 										amount: newAmount,
-										transaction_split_id: originalUserData?.transaction_split_id || null,
+										transaction_split_id: "", // Add empty string or generate an ID if needed
 									},
 								];
 							}

@@ -5,7 +5,7 @@ import deleteGroupDB from "../../../../../../../../../../core/database_functions
 export const useDeleteGroup = () => {
 	const { mutateAsync: deleteGroup } = useMutation({
 		mutationFn: async ({ groupId }: { groupId: string }) => {
-			console.log("Delete Group", groupId);
+			// console.log("Delete Group", groupId);
 			await deleteGroupDB(groupId);
 		},
 		onSuccess: () => {

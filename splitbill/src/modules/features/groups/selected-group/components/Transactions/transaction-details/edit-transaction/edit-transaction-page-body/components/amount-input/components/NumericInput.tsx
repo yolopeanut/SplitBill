@@ -1,78 +1,92 @@
 import { useEffect, useState } from "react";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Control, Controller, useWatch } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../../../../core/interfaces/createTransactionForm";
 
-interface INumericInput {
-	register: UseFormRegister<ICreateTransactionForm>;
-	inputKey: keyof ICreateTransactionForm;
-	defaultValue: number;
-	errors: FieldErrors<ICreateTransactionForm>;
+interface NumericInputProps {
+	control: Control<ICreateTransactionForm>;
+	name: keyof ICreateTransactionForm;
+	isZeroAllowed?: boolean;
+	isRequired?: boolean;
 }
 
-const NumericInput = ({ register, inputKey, defaultValue, errors }: INumericInput) => {
-	// Convert the number to a string with proper padding
-	const formatNumberToDigits = (num: number) => {
-		const numericValue = Number(num);
-		if (isNaN(numericValue)) return ["0", "0", "0"];
-		if (numericValue === 0) return ["0", "0", "0"];
-		return numericValue
-			.toFixed(2)
-			.replace(".", "")
-			.padStart(3, "0")
-			.split("")
-			.filter((char) => /\d/.test(char));
-	};
+const NumericInput = ({
+	control,
+	name,
+	isZeroAllowed = false,
+	isRequired = true,
+}: NumericInputProps) => {
+	const [digits, setDigits] = useState([] as string[]);
 
-	const [digits, setDigits] = useState(() => formatNumberToDigits(defaultValue));
+	// Watch for external value changes (from calculator)
+	const value = useWatch({
+		control,
+		name,
+	});
 
 	useEffect(() => {
-		setDigits(formatNumberToDigits(defaultValue));
-	}, [defaultValue]);
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const event = e.nativeEvent as InputEvent;
-
-		if (event.inputType === "deleteContentBackward") {
-			setDigits(digits.slice(0, -1));
+		if (value) {
+			const numValue = parseFloat(value.toString()) * 100;
+			const newDigits = Math.round(numValue).toString().split("");
+			setDigits(newDigits);
 		}
+	}, [value]);
 
-		if (event.data?.match(/\d/)) {
-			setDigits([...digits, event.data]);
-		}
+	const handleChange =
+		(onChange: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+			const event = e.nativeEvent as InputEvent;
+
+			if (event.inputType === "deleteContentBackward") {
+				const newDigits = digits.slice(0, -1);
+				setDigits(newDigits);
+				onChange(formatValue(newDigits));
+				return;
+			}
+
+			if (event.data?.match(/\d/)) {
+				const newDigits = [...digits, event.data];
+				setDigits(newDigits);
+				onChange(formatValue(newDigits));
+			}
+		};
+
+	const formatValue = (digits: string[]) => {
+		if (digits.length === 0) return "0.00";
+		if (digits.length <= 2) return `0.${digits.join("").padStart(2, "0")}`;
+		const wholePart = digits.slice(0, -2).join("") || "0";
+		const decimalPart = digits.slice(-2).join("");
+		return `${wholePart}.${decimalPart}`;
 	};
 
-	// Format the display value
-	const displayValue = (() => {
-		if (digits.length === 0) return "0.00";
-		if (digits.length <= 2) {
-			// Always pad with zeros to ensure format like "0.XX"
-			return `0.${digits.join("").padStart(2, "0")}`;
-		}
-		const wholePart = digits.slice(0, -2).join(""); // Get the whole part
-		const decimalPart = digits.slice(-2).join(""); // Get the last two digits as decimal
-		return `${wholePart}.${decimalPart}`; // Combine them
-	})();
-
 	return (
-		<div className='w-full flex flex-col gap-2'>
-			<input
-				type='text'
-				value={displayValue}
-				className='w-full h-full px-4 text-center font-semibold text-xl border-none outline-none rounded-lg bg-input-box-gray min-h-14'
-				inputMode='numeric'
-				{...register(inputKey, {
-					onChange: handleChange,
-					required: "Amount is required",
-					validate: (value) => {
-						if (value === "0.00") return "Amount cannot be 0.00";
-						return true;
-					},
-				})}
-			/>
-			{errors[inputKey] && (
-				<span className='text-font-red text-sm'>{errors[inputKey].message}</span>
+		<Controller
+			control={control}
+			name={name}
+			rules={{
+				required: isRequired
+					? {
+							value: true,
+							message: `${name.charAt(0).toUpperCase() + name.slice(1)} is required`,
+					  }
+					: false,
+				validate: (value) => {
+					if (!isZeroAllowed && value === "0.00") {
+						return `${name.charAt(0).toUpperCase() + name.slice(1)} cannot be 0.00`;
+					}
+					return true;
+				},
+			}}
+			render={({ field }) => (
+				<div className='w-full flex flex-col gap-2'>
+					<input
+						type='text'
+						value={formatValue(digits)}
+						onChange={handleChange(field.onChange)}
+						className='w-full h-full px-4 text-center font-semibold text-xl border-none outline-none rounded-lg bg-input-box-gray min-h-14'
+						inputMode='numeric'
+					/>
+				</div>
 			)}
-		</div>
+		/>
 	);
 };
 

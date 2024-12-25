@@ -9,6 +9,7 @@ export default {
 			"brand-orange": "#FF9A34",
 			"background-black": "#1F1F1F",
 			"background-gray": "#2A2A2A",
+			"background-gray-dark": "#171717",
 			"background-red": "#FF2626",
 			"background-red-dark": "#E91515",
 
