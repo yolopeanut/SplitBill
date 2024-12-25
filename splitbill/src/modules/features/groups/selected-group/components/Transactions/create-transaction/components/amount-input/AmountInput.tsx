@@ -13,8 +13,8 @@ interface AmountInputProps {
 
 const AmountInput = ({ control, setValue }: AmountInputProps) => {
 	const { selectedGroup } = useGroupsContext();
-	const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
-	const [calculatorField, setCalculatorField] = useState<"amount" | "tax">("amount");
+	const [isAmountCalculatorOpen, setIsAmountCalculatorOpen] = useState(false);
+	const [isTaxCalculatorOpen, setIsTaxCalculatorOpen] = useState(false);
 
 	return (
 		<>
@@ -24,17 +24,18 @@ const AmountInput = ({ control, setValue }: AmountInputProps) => {
 					<div className='flex flex-col justify-center pl-4 w-[35%] max-w-xs outline-none border-none bg-input-box-gray rounded-lg min-h-14 max-h-14'>
 						<span className='text-font-white'>{selectedGroup?.currency}</span>
 					</div>
-					<NumericInput
-						control={control}
-						name='amount'
-						isZeroAllowed={false}
-					/>
+					<div className='flex flex-row gap-2 items-center'>
+						<NumericInput
+							control={control}
+							name='amount'
+							isZeroAllowed={false}
+						/>
+					</div>
 					<button
 						className='btn border-none p-0'
 						type='button'
 						onClick={() => {
-							setCalculatorField("amount");
-							setIsCalculatorOpen(true);
+							setIsAmountCalculatorOpen(true);
 						}}
 					>
 						<IoIosCalculator
@@ -52,13 +53,13 @@ const AmountInput = ({ control, setValue }: AmountInputProps) => {
 						control={control}
 						name='tax'
 						isZeroAllowed={true}
+						isRequired={false}
 					/>
 					<button
 						className='btn border-none p-0'
 						type='button'
 						onClick={() => {
-							setCalculatorField("tax");
-							setIsCalculatorOpen(true);
+							setIsTaxCalculatorOpen(true);
 						}}
 					>
 						<IoIosCalculator
@@ -69,9 +70,15 @@ const AmountInput = ({ control, setValue }: AmountInputProps) => {
 				</div>
 			</div>
 			<Calculator
-				isOpen={isCalculatorOpen}
-				onClose={() => setIsCalculatorOpen(false)}
-				name={calculatorField}
+				isOpen={isAmountCalculatorOpen}
+				onClose={() => setIsAmountCalculatorOpen(false)}
+				name='amount'
+				setValue={setValue}
+			/>
+			<Calculator
+				isOpen={isTaxCalculatorOpen}
+				onClose={() => setIsTaxCalculatorOpen(false)}
+				name='tax'
 				setValue={setValue}
 			/>
 		</>

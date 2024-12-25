@@ -1,34 +1,45 @@
-import { useState } from "react";
-import { Control, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Control, Controller, useWatch } from "react-hook-form";
 import { ICreateTransactionForm } from "../../../../../../../../../core/interfaces/createTransactionForm";
 
 interface NumericInputProps {
 	control: Control<ICreateTransactionForm>;
 	name: keyof ICreateTransactionForm;
 	isZeroAllowed?: boolean;
+	isRequired?: boolean;
 }
 
-const NumericInput = ({ control, name, isZeroAllowed = false }: NumericInputProps) => {
+const NumericInput = ({
+	control,
+	name,
+	isZeroAllowed = false,
+	isRequired = true,
+}: NumericInputProps) => {
 	const [digits, setDigits] = useState([] as string[]);
+
+	// Watch for external value changes (from calculator)
+	const value = useWatch({
+		control,
+		name,
+	});
+
+	useEffect(() => {
+		if (value) {
+			const numValue = parseFloat(value.toString()) * 100;
+			const newDigits = Math.round(numValue).toString().split("");
+			setDigits(newDigits);
+		}
+	}, [value]);
 
 	const handleChange =
 		(onChange: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
 			const event = e.nativeEvent as InputEvent;
 
-			// Handle calculator input
-			if (typeof e.target.value === "string" && e.target.value.includes(".")) {
-				const numValue = parseFloat(e.target.value) * 100;
-				const newDigits = Math.round(numValue).toString().split("");
-				setDigits(newDigits);
-				onChange(e.target.value);
-				return;
-			}
-
-			// Handle regular input
 			if (event.inputType === "deleteContentBackward") {
 				const newDigits = digits.slice(0, -1);
 				setDigits(newDigits);
 				onChange(formatValue(newDigits));
+				return;
 			}
 
 			if (event.data?.match(/\d/)) {
@@ -51,9 +62,16 @@ const NumericInput = ({ control, name, isZeroAllowed = false }: NumericInputProp
 			control={control}
 			name={name}
 			rules={{
-				required: "Amount is required",
+				required: isRequired
+					? {
+							value: true,
+							message: `${name.charAt(0).toUpperCase() + name.slice(1)} is required`,
+					  }
+					: false,
 				validate: (value) => {
-					if (value === "0.00" && !isZeroAllowed) return "Amount cannot be 0.00";
+					if (!isZeroAllowed && value === "0.00") {
+						return `${name.charAt(0).toUpperCase() + name.slice(1)} cannot be 0.00`;
+					}
 					return true;
 				},
 			}}
