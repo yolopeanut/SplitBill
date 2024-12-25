@@ -2,8 +2,8 @@ import { UseFormGetValues } from "react-hook-form";
 import { ControllerRenderProps } from "react-hook-form";
 import { IAllUsersTable } from "../../../../../../../../../../../../../core/interfaces/all_usersTable";
 import { ICreateTransactionForm } from "../../../../../../../../../../../../../core/interfaces/createTransactionForm";
-import NumericInput from "./NumericInput";
 import { getInitials } from "../../../../../../../../../../../../../core/common/commonFunctions";
+import NumericInput from "./NumericInput";
 
 interface UserCardCustomSplitProps {
 	user: IAllUsersTable;
@@ -31,41 +31,36 @@ const UserCardCustomSplit = ({
 					) : (
 						<span className='text-font-black text-lg font-semibold'>{getInitials(user.name)}</span>
 					)}
-					<span className='text-font-white text-lg font-semibold'>{user.name}</span>
+					<span className='text-font-white text-base font-semibold'>{user.name}</span>
 				</div>
 
-				<div className='flex flex-row items-center gap-2 min-w-[40%] max-w-[40%]'>
+				<div className='flex flex-row items-center gap-2 min-w-[45%] max-w-[45%]'>
 					RM
 					<NumericInput
 						initialValue={
 							getValues().splitBy?.value.users.find(
 								(selectedUsers) => selectedUsers.user.id === user.id
-							)?.amount || 0 // Add default value of 0
+							)?.amount
 						}
 						onChange={(e) => {
-							const usersArray = getValues().splitBy?.value.users || []; // Get all users
-							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id); // Check if user is already in array
+							const usersArray = getValues().splitBy?.value?.users || [];
+							const isUserInArray = usersArray.some((addedUsers) => addedUsers.user.id === user.id);
+							const newAmount = parseFloat(e.target.value);
 
-							// Find the original transaction split ID from originalSplitBy
+							// Find the original transaction split ID
 							const originalUserData = originalSplitBy?.value.users.find(
 								(selectedUsers) => selectedUsers.user.id === user.id
 							);
 
-							const newAmount = e.target.value; // Get new amount
-							let newUsersArray = null; // Initialize new users array
+							let newUsersArray = null;
 
-							// Remove user if amount is 0.00
-							if (newAmount === "0.00") {
+							if (newAmount === 0) {
 								newUsersArray = usersArray.filter((addedUsers) => addedUsers.user.id !== user.id);
-							}
-							// Update existing user's amount
-							else if (isUserInArray) {
+							} else if (isUserInArray) {
 								newUsersArray = usersArray.map((addedUsers) =>
 									addedUsers.user.id === user.id ? { ...addedUsers, amount: newAmount } : addedUsers
 								);
-							}
-							// Add new user
-							else {
+							} else {
 								newUsersArray = [
 									...usersArray,
 									{
