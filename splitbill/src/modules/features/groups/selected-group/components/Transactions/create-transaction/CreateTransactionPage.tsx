@@ -80,6 +80,7 @@ const CreateTransactionBody = () => {
 		handleSubmit,
 		control,
 		getValues,
+		setValue,
 		formState: { errors },
 	} = useForm<ICreateTransactionForm>({
 		defaultValues: {
@@ -132,8 +133,8 @@ const CreateTransactionBody = () => {
 							errors={errors}
 						/>
 						<AmountInput
-							register={register}
-							errors={errors}
+							control={control}
+							setValue={setValue}
 						/>
 						<CategoryInput
 							control={control}
