@@ -75,7 +75,7 @@ const NumericInput = ({
 					return true;
 				},
 			}}
-			render={({ field, fieldState: { error } }) => (
+			render={({ field }) => (
 				<div className='w-full flex flex-col gap-2'>
 					<input
 						type='text'
@@ -84,7 +84,6 @@ const NumericInput = ({
 						className='w-full h-full px-4 text-center font-semibold text-xl border-none outline-none rounded-lg bg-input-box-gray min-h-14'
 						inputMode='numeric'
 					/>
-					{error && <span className='text-font-red text-sm'>{error.message}</span>}
 				</div>
 			)}
 		/>

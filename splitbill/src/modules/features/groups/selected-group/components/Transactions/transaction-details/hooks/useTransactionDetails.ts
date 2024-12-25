@@ -24,7 +24,7 @@ const useTransactionDetails = (data: IAllTransactionsTable | null | undefined) =
 				? amount * (currentUserSplit.percentage_split_amount! / 100)
 				: 0;
 
-		console.log({ amountOwedBeforeTax });
+		// console.log({ amountOwedBeforeTax });
 
 		const netAmountOwed = (
 			isPayingForOthers

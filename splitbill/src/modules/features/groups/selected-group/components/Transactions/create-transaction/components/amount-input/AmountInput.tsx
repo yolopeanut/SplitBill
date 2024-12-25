@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Control, UseFormSetValue } from "react-hook-form";
+import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { IoIosCalculator } from "react-icons/io";
 import { ICreateTransactionForm } from "../../../../../../../../core/interfaces/createTransactionForm";
 import { useGroupsContext } from "../../../../../../hooks/useGroupsContext";
@@ -9,19 +9,20 @@ import Calculator from "../../../../../../../../core/common/components/Calculato
 interface AmountInputProps {
 	control: Control<ICreateTransactionForm>;
 	setValue: UseFormSetValue<ICreateTransactionForm>;
+	errors: FieldErrors<ICreateTransactionForm>;
 }
 
-const AmountInput = ({ control, setValue }: AmountInputProps) => {
+const AmountInput = ({ control, setValue, errors }: AmountInputProps) => {
 	const { selectedGroup } = useGroupsContext();
 	const [isAmountCalculatorOpen, setIsAmountCalculatorOpen] = useState(false);
 	const [isTaxCalculatorOpen, setIsTaxCalculatorOpen] = useState(false);
 
 	return (
 		<>
-			<div className='flex flex-col gap-2 pb-4'>
+			<div className='flex flex-col gap-2'>
 				<span className='text-font-white text-sm font-semibold'>Amount</span>
 				<div className='flex flex-row gap-2 items-center'>
-					<div className='flex flex-col justify-center pl-4 w-[35%] max-w-xs outline-none border-none bg-input-box-gray rounded-lg min-h-14 max-h-14'>
+					<div className='flex flex-col justify-center pl-4 min-w-[30%] max-w-[30%] outline-none border-none bg-input-box-gray rounded-lg min-h-14 max-h-14'>
 						<span className='text-font-white'>{selectedGroup?.currency}</span>
 					</div>
 					<div className='flex flex-row gap-2 items-center'>
@@ -45,8 +46,10 @@ const AmountInput = ({ control, setValue }: AmountInputProps) => {
 					</button>
 				</div>
 
+				{errors.amount && <span className='text-font-red text-sm'>{errors.amount.message}</span>}
+
 				<div className='flex flex-row gap-2 items-center'>
-					<div className='flex flex-col justify-center pl-4 w-[35%] max-w-xs outline-none border-none bg-input-box-gray rounded-lg min-h-14 max-h-14'>
+					<div className='flex flex-col justify-center pl-4 min-w-[30%] max-w-[30%] outline-none border-none bg-input-box-gray rounded-lg min-h-14 max-h-14'>
 						<span className='text-font-white'>Tax</span>
 					</div>
 					<NumericInput

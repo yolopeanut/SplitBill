@@ -37,7 +37,7 @@ export const useAddExpense = () => {
 			tax,
 		}: MutationProps) => {
 			if (!user || !session || !supabase || isLoading) return;
-			console.log({ group_id, paid_by, expense_title, category, amount, remarks, split_by, tax });
+			// console.log({ group_id, paid_by, expense_title, category, amount, remarks, split_by, tax });
 
 			const response = await postCreateNewTransactionDB(
 				group_id,

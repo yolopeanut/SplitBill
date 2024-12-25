@@ -132,10 +132,13 @@ const CreateTransactionBody = () => {
 							register={register}
 							errors={errors}
 						/>
+
 						<AmountInput
 							control={control}
 							setValue={setValue}
+							errors={errors}
 						/>
+
 						<CategoryInput
 							control={control}
 							errors={errors}
