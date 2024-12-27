@@ -1,6 +1,6 @@
 import ProfilePageHeader from "./components/profile-page-header/ProfilePageHeader";
 import ProfilePageBody from "./components/profile-page-body/ProfilePageBody";
-import { useGetUser } from "./hooks/useGetUser";
+import { useGetUser } from "../../core/common/hooks/useGetUser";
 
 const ProfilePage = () => {
 	const { data: user } = useGetUser();

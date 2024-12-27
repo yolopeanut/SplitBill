@@ -4,20 +4,17 @@ import { BiSolidWallet } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import useUserContext from "../../../../modules/features/login/hooks/useUserContext";
 import { getInitials } from "../commonFunctions";
 import { NAV_BAR_PATHS, NAV_BAR_PATHS_DISABLED } from "../../constants/NavBarSettings";
+import { useGetUser } from "../hooks/useGetUser";
 
 const BottomNav = () => {
 	const [activeTab, setActiveTab] = useState<number>(-1);
-
+	const { data: user } = useGetUser();
 	// If path is disabled, return null
 	const location = useLocation();
 	const navigate = useNavigate();
 	const isDisabled = NAV_BAR_PATHS_DISABLED.includes(location.pathname);
-
-	// Get the current user from the user context
-	const { currentUser } = useUserContext();
 
 	useEffect(() => {
 		// Set the active tab based on the current path
@@ -45,12 +42,12 @@ const BottomNav = () => {
 	}
 
 	const ProfileImg = () => {
-		if (currentUser?.profile_img_url) {
-			return <img src={currentUser.profile_img_url} />;
+		if (user?.profile_img_url) {
+			return <img src={user.profile_img_url} />;
 		}
 		return (
 			<div className='w-7 h-7 bg-card-gray rounded-full flex items-center justify-center'>
-				{getInitials(currentUser?.name ?? "")}
+				{getInitials(user?.name ?? "")}
 			</div>
 		);
 	};

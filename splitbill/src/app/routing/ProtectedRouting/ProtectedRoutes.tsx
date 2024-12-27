@@ -5,7 +5,7 @@ import useUserContext from "../../../modules/features/login/hooks/useUserContext
 
 export const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
 	const { session, isLoading } = useAuthContext();
-	const { hasCreatedProfile, getUserById } = useUserContext();
+	const { hasCreatedProfile, getUserById, currentUser } = useUserContext();
 	const location = useLocation();
 
 	if (isLoading || getUserById.isLoading) return <Loading />;
@@ -14,7 +14,7 @@ export const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => 
 		if (!hasCreatedProfile && location.pathname !== "/create-profile")
 			return <Navigate to='/create-profile' />;
 		// If user is not logged in, navigate to login page
-		else if (!session) return <Navigate to='/' />;
+		else if (!session || !currentUser) return <Navigate to='/' />;
 		// If user is logged in, return children
 		else return <>{children}</>;
 	}
