@@ -4,91 +4,87 @@ import { BiSolidWallet } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import useUserContext from "../../../../modules/features/login/hooks/useUserContext";
-import { getInitials } from "../commonFunctions";
-import { NAV_BAR_PATHS, NAV_BAR_PATHS_DISABLED } from "../../constants/NavBarSettings";
+import {
+    NAV_BAR_PATHS,
+    NAV_BAR_PATHS_DISABLED,
+} from "../../constants/NavBarSettings";
+import { useGetUser } from "../hooks/useGetUser";
+import CommonProfileImage from "./CommonProfileImage";
 
 const BottomNav = () => {
-	const [activeTab, setActiveTab] = useState<number>(-1);
+    const [activeTab, setActiveTab] = useState<number>(-1);
+    const { data: user } = useGetUser();
+    // If path is disabled, return null
+    const location = useLocation();
+    const navigate = useNavigate();
+    const isDisabled = NAV_BAR_PATHS_DISABLED.includes(location.pathname);
 
-	// If path is disabled, return null
-	const location = useLocation();
-	const navigate = useNavigate();
-	const isDisabled = NAV_BAR_PATHS_DISABLED.includes(location.pathname);
+    useEffect(() => {
+        // Set the active tab based on the current path
+        const currentPath = location.pathname;
 
-	// Get the current user from the user context
-	const { currentUser } = useUserContext();
+        // Check if the current path starts with any of the base paths
+        const activeTabIndex = NAV_BAR_PATHS.findIndex((path) =>
+            currentPath.startsWith(path)
+        );
 
-	useEffect(() => {
-		// Set the active tab based on the current path
-		const currentPath = location.pathname;
+        setActiveTab(activeTabIndex);
+    }, [location.pathname]);
 
-		// Check if the current path starts with any of the base paths
-		const activeTabIndex = NAV_BAR_PATHS.findIndex((path) => currentPath.startsWith(path));
+    if (isDisabled) return null;
 
-		setActiveTab(activeTabIndex);
-	}, [location.pathname]);
+    // On tab click, navigate to the corresponding path
+    function onTabClicked(index: number) {
+        setActiveTab(index);
+        navigate(NAV_BAR_PATHS[index]);
+    }
 
-	if (isDisabled) return null;
+    // Get the tailwind class for the tab based on the active tab index
+    function getTabClass(index: number) {
+        return activeTab === index
+            ? "active text-brand-orange bg-background-black"
+            : "text-brand-orange";
+    }
 
-	// On tab click, navigate to the corresponding path
-	function onTabClicked(index: number) {
-		setActiveTab(index);
-		navigate(NAV_BAR_PATHS[index]);
-	}
-
-	// Get the tailwind class for the tab based on the active tab index
-	function getTabClass(index: number) {
-		return activeTab === index
-			? "active text-brand-orange bg-background-black"
-			: "text-brand-orange";
-	}
-
-	const ProfileImg = () => {
-		if (currentUser?.profile_img_url) {
-			return <img src={currentUser.profile_img_url} />;
-		}
-		return (
-			<div className='w-7 h-7 bg-card-gray rounded-full flex items-center justify-center'>
-				{getInitials(currentUser?.name ?? "")}
-			</div>
-		);
-	};
-
-	return (
-		<>
-			<div className='btm-nav bg-background-black'>
-				<button
-					className={getTabClass(0)}
-					onClick={() => {
-						onTabClicked(0);
-					}}
-				>
-					<MdPeopleAlt size={24} />
-				</button>
-				<button
-					className={getTabClass(1)}
-					onClick={() => {
-						onTabClicked(1);
-					}}
-				>
-					<BiSolidWallet size={24} />
-				</button>
-				<button
-					className={getTabClass(2)}
-					onClick={() => {
-						onTabClicked(2);
-					}}
-				>
-					<div className='avatar'>
-						<div className='ring ring-brand-orange w-7 rounded-full'>
-							<ProfileImg />
-						</div>
-					</div>
-				</button>
-			</div>
-		</>
-	);
+    return (
+        <>
+            <div className='btm-nav bg-background-black'>
+                <button
+                    className={getTabClass(0)}
+                    onClick={() => {
+                        onTabClicked(0);
+                    }}
+                >
+                    <MdPeopleAlt size={24} />
+                </button>
+                <button
+                    className={getTabClass(1)}
+                    onClick={() => {
+                        onTabClicked(1);
+                    }}
+                >
+                    <BiSolidWallet size={24} />
+                </button>
+                <button
+                    className={getTabClass(2)}
+                    onClick={() => {
+                        onTabClicked(2);
+                    }}
+                >
+                    <div className='avatar'>
+                        <div className='ring ring-brand-orange min-w-7 min-h-7 max-w-7 max-h-7 rounded-full flex justify-center items-center'>
+                            <CommonProfileImage
+                                imgSrc={user?.profile_img_url ?? null}
+                                name={user?.name ?? ""}
+                                size={7}
+                                fontSize='sm'
+                            />
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </>
+    );
 };
 
 export default BottomNav;

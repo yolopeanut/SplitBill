@@ -12,7 +12,9 @@ export const useGetUser = () => {
 		queryFn: async () => {
 			if (user && !isLoading) {
 				const data = await getAllUsersById(user.id);
-				data[0].profile_img_url = getPublicUrl(data[0].profile_img_src);
+				if (data[0].profile_img_src) {
+					data[0].profile_img_url = getPublicUrl(data[0].profile_img_src);
+				}
 				return data[0] as IAllUsersTable;
 			}
 		},

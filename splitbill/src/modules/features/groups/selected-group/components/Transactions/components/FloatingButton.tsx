@@ -25,7 +25,7 @@ const FloatingButton = ({
 	};
 
 	return (
-		<div className='fixed bottom-12 right-7 flex flex-col items-end gap-4'>
+		<div className='right-6 bottom-12 fixed flex flex-col items-center gap-4'>
 			{/* Secondary FABs - only visible when isOpen is true */}
 			<div
 				className={`flex flex-col gap-4 transition-all duration-200 ${
@@ -35,7 +35,7 @@ const FloatingButton = ({
 				{/* Settle Up Button */}
 				<button
 					title='Settle Up'
-					className='btn btn-sm bg-brand-orange rounded-full h-12 w-12 flex justify-center items-center text-font-black border-none shadow-lg hover:scale-110 transition-transform'
+					className='flex justify-center items-center bg-brand-orange shadow-lg border-none rounded-full w-12 h-12 text-font-black transition-transform btn btn-sm hover:scale-110'
 					onClick={handleSettleUpButton}
 				>
 					<BsSendCheckFill size={22} />
@@ -44,7 +44,7 @@ const FloatingButton = ({
 				{/* Create Transaction Button */}
 				<button
 					title='Manual Entry'
-					className='btn btn-sm bg-brand-orange rounded-full h-12 w-12 flex justify-center items-center text-font-black border-none shadow-lg hover:scale-110 transition-transform'
+					className='flex justify-center items-center bg-brand-orange shadow-lg border-none rounded-full w-12 h-12 text-font-black transition-transform btn btn-sm hover:scale-110'
 					onClick={handleCreateTransactionButton}
 				>
 					<PiReceiptFill size={30} />

@@ -33,11 +33,12 @@ const Transactions = () => {
 	const groupTransactionsByDate = (transactions: IAllTransactionsTable[] | undefined) => {
 		if (!transactions) return {};
 		return transactions.reduce((groups: GroupedTransactions, transaction) => {
-			const date = new Date(transaction.created_at).toLocaleDateString();
-			if (!groups[date]) {
-				groups[date] = [];
+			const date = new Date(transaction.created_at);
+			const formattedDate = `${date.toLocaleDateString()} - ${date.toLocaleDateString('en-US', { weekday: 'long' })}`;
+			if (!groups[formattedDate]) {
+				groups[formattedDate] = [];
 			}
-			groups[date].push(transaction);
+			groups[formattedDate].push(transaction);
 			return groups;
 		}, {});
 	};
