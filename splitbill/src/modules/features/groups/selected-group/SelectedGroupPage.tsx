@@ -59,7 +59,7 @@ const SelectedGroupPage = () => {
 
 	return (
 		<>
-			<div className='flex flex-col relative h-[calc(100vh-4rem)]'>
+			<div className='relative flex flex-col h-[calc(100vh-4rem)]'>
 				<SelectedGroupHeader
 					selectedGroup={selectedGroup}
 					setIsLeaveGroupDrawerOpen={setIsLeaveGroupDrawerOpen}
@@ -96,15 +96,15 @@ const SelectedGroupHeader = ({
 
 	return (
 		<>
-			<div className='min-h-48 flex flex-col justify-between w-full'>
+			<div className='flex flex-col justify-between w-full min-h-48'>
 				{/* Header and bg image */}
-				<div className='flex flex-row justify-between items-center relative px-4 py-2'>
+				<div className='relative flex flex-row justify-between items-center px-4 py-2'>
 					<GroupImg
-						className='w-screen absolute left-0 object-cover h-64 -z-10 brightness-[40%]'
+						className='brightness-[40%] left-0 -z-10 absolute w-screen h-64 object-cover'
 						img_url={selectedGroup?.img_url ?? undefined}
 					/>
 					<button
-						className='btn border-none p-0'
+						className='p-0 border-none btn'
 						onClick={() => {
 							navigate("/groups");
 						}}
@@ -114,7 +114,7 @@ const SelectedGroupHeader = ({
 							className='text-brand-orange'
 						/>
 					</button>
-					<span className='text-font-white text-xl font-semibold absolute left-1/2 -translate-x-1/2'>
+					<span className='left-1/2 absolute font-semibold text-font-white text-xl -translate-x-1/2'>
 						{selectedGroup?.name}
 					</span>
 
@@ -134,20 +134,20 @@ const SelectedGroupHeader = ({
 
 				{/* Amounts Bar */}
 				<div className='px-4 pt-4'>
-					<div className='flex flex-row justify-between items-center py-2 bg-card-gray-dark px-4 h-16 rounded-xl'>
-						<div className='flex flex-col gap-2 items-center'>
+					<div className='flex flex-row justify-between items-center bg-card-gray-dark px-4 py-2 rounded-xl h-16'>
+						<div className='flex flex-col items-center gap-2'>
 							<span className={amountTitleClass}>To pay</span>
 							<span className={amountClass}>
 								{formatCurrency(Math.abs(totalToPay), selectedGroup?.currency || "")}
 							</span>
 						</div>
-						<div className='flex flex-col gap-2 items-center'>
+						<div className='flex flex-col items-center gap-2'>
 							<span className={amountTitleClass}>To receive</span>
 							<span className={amountClass}>
 								{formatCurrency(totalToReceive, selectedGroup?.currency || "")}
 							</span>
 						</div>
-						<div className='flex flex-col gap-2 items-center'>
+						<div className='flex flex-col items-center gap-2'>
 							<span className={amountTitleClass}>Total</span>
 							<span className={amountClass}>
 								{formatCurrency(totalToPay + totalToReceive, selectedGroup?.currency || "")}
@@ -212,7 +212,7 @@ const SelectedGroupBody = ({
 				/>
 			</div>
 			<div
-				className='flex flex-col gap-4 px-4 w-full h-[calc(100vh-16.75rem)] overflow-y-auto '
+				className='flex flex-col gap-4 px-4 pt-4 w-full h-[calc(100vh-16.75rem)] overflow-y-auto'
 				onScroll={handleScroll}
 				ref={scrollContainerRef}
 			>
