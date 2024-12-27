@@ -1,9 +1,10 @@
 enum ExpenseCategory {
 	SettleUp = "Settle Up",
 	Food = "Food",
+	Pool = "Pool",
 	Housing = "Housing",
 	Transportation = "Transportation",
-	// Utilities = "Utilities",
+	
 	// Health = "Health",
 	// Insurance = "Insurance",
 	Entertainment = "Entertainment",
