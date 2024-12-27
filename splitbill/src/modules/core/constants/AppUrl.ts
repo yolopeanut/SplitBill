@@ -1,0 +1,1 @@
+export const APP_URL = "splitbill-qyq.pages.dev"
