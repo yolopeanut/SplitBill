@@ -15,23 +15,32 @@ export const CategoryInput = ({ control, errors }: CategoryInputProps) => {
     const [selectedCategory, setSelectedCategory] =
         useState<ExpenseCategory | null>(null);
 
+    const [searchQuery, setSearchQuery] = useState("");
+
     const handleDrawerOpen = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
+
+    // Filter categories based on search query (contains search query)
+    const filteredCategories = Object.values(ExpenseCategory).filter(
+        (category) => {
+            return category.toLowerCase().includes(searchQuery.toLowerCase());
+        }
+    );
 
     return (
         <>
             {/* Category Input Box */}
             <div
-                className="flex flex-col gap-2 w-full pb-4 pt-4"
+                className='flex flex-col gap-2 w-full pb-4 pt-4'
                 onClick={handleDrawerOpen}
             >
-                <span className="text-font-white text-sm font-semibold">
+                <span className='text-font-white text-sm font-semibold'>
                     Category
                 </span>
-                <div className="w-full min-h-16 bg-card-gray-dark rounded-lg flex items-center px-4 text-font-text-gray">
+                <div className='w-full min-h-16 bg-card-gray-dark rounded-lg flex items-center px-4 text-font-text-gray'>
                     {selectedCategory ? (
-                        <div className="py-4">
+                        <div className='py-4'>
                             <CategoryCard
                                 category={selectedCategory}
                                 field={undefined}
@@ -44,7 +53,7 @@ export const CategoryInput = ({ control, errors }: CategoryInputProps) => {
                     )}
                 </div>
                 {errors?.category && (
-                    <span className="text-font-red text-sm">
+                    <span className='text-font-red text-sm'>
                         {errors.category.message}
                     </span>
                 )}
@@ -52,7 +61,7 @@ export const CategoryInput = ({ control, errors }: CategoryInputProps) => {
 
             {/* Category Drawer Controller */}
             <Controller
-                name="category"
+                name='category'
                 control={control}
                 rules={{
                     validate: {
@@ -69,27 +78,31 @@ export const CategoryInput = ({ control, errors }: CategoryInputProps) => {
                     <CommonDrawer
                         isOpen={isDrawerOpen}
                         toggleDrawer={handleDrawerOpen}
-                        size="80vh"
+                        size='80vh'
                     >
-                        <div className="flex flex-col gap-4 p-4 pt-4 h-full overflow-y-auto pb-20">
+                        <div className='flex flex-col gap-4 p-4 pt-4 h-full overflow-y-auto pb-20'>
                             {/* Search Input */}
-                            <div className="relative">
+                            <div className='relative'>
                                 <input
-                                    type="text"
-                                    id="floating_outlined"
-                                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-font-white bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer"
-                                    placeholder=" "
+                                    type='text'
+                                    id='floating_outlined'
+                                    className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-font-white bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
+                                    placeholder=' '
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
                                 />
                                 <label
-                                    htmlFor="floating_outlined"
-                                    className="absolute text-sm text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 "
+                                    htmlFor='floating_outlined'
+                                    className='absolute text-sm text-gray-400 duration-300 transform -translate-y-24 scale-75 top-0 z-10 origin-[0] bg-transparent px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-[0.4rem] peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 '
                                 >
                                     Search Category
                                 </label>
                             </div>
 
                             {/* Category Cards */}
-                            {Object.values(ExpenseCategory).map((category) => {
+                            {filteredCategories.map((category) => {
                                 if (category === ExpenseCategory.SettleUp)
                                     return null;
                                 return (
