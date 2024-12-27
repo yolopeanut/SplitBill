@@ -24,7 +24,7 @@ const UserCard = ({ userId, groupUsers, totalOwed }: IUserCardProps) => {
                     <CommonProfileImage
                         imgSrc={user.profile_img_url}
                         name={user.name}
-                        size={10}
+                        size={12}
                     />
                 </div>
 
