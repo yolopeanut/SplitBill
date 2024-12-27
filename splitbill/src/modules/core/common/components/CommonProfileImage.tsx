@@ -4,11 +4,16 @@ interface ICommonProfileImage {
     imgSrc: string | null;
     name: string;
     size: number;
+    fontSize?: string;
 }
 
-const CommonProfileImage = ({ imgSrc, name, size }: ICommonProfileImage) => {
+const CommonProfileImage = ({
+    imgSrc,
+    name,
+    size,
+    fontSize = "sm",
+}: ICommonProfileImage) => {
     const initials = getInitials(name);
-
     if (imgSrc) {
         return (
             <img
@@ -19,11 +24,9 @@ const CommonProfileImage = ({ imgSrc, name, size }: ICommonProfileImage) => {
         );
     } else {
         return (
-            <div
-                className={` text-font-white rounded-full flex justify-center items-center border-2 border-brand-orange min-w-${size} min-h-${size} max-w-${size} max-h-${size}`}
-            >
-                <span className='text-lg'>{initials}</span>
-            </div>
+            <span className={`text-${fontSize} text-font-white`}>
+                {initials}
+            </span>
         );
     }
 };

@@ -24,11 +24,13 @@ const UserCardEqualSplit = ({
         <>
             <div className='flex flex-row items-center justify-between'>
                 <div className='flex flex-row items-center gap-6'>
-                    <CommonProfileImage
-                        imgSrc={user.profile_img_url || ""}
-                        name={user.name}
-                        size={12}
-                    />
+                    <div className='w-12 h-12 flex justify-center items-center bg-card-gray rounded-full'>
+                        <CommonProfileImage
+                            imgSrc={user.profile_img_url || ""}
+                            name={user.name}
+                            size={12}
+                        />
+                    </div>
 
                     <span className='text-font-white text-lg font-semibold'>
                         {user.name}

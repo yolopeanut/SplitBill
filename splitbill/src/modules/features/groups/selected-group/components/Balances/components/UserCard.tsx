@@ -1,4 +1,3 @@
-import { getInitials } from "../../../../../../core/common/commonFunctions";
 import CommonProfileImage from "../../../../../../core/common/components/CommonProfileImage";
 import { IAllUsersTable } from "../../../../../../core/interfaces/all_usersTable";
 import { useGroupsContext } from "../../../../hooks/useGroupsContext";
@@ -21,11 +20,14 @@ const UserCard = ({ userId, groupUsers, totalOwed }: IUserCardProps) => {
     return (
         <>
             <div className='flex flex-row items-center gap-2'>
-                <CommonProfileImage
-                    imgSrc={user.profile_img_url || getInitials(user.name)}
-                    name={user.name}
-                    size={10}
-                />
+                <div className='w-10 h-10 flex justify-center items-center bg-card-gray rounded-full'>
+                    <CommonProfileImage
+                        imgSrc={user.profile_img_url}
+                        name={user.name}
+                        size={10}
+                    />
+                </div>
+
                 <div className='flex flex-col'>
                     <TotalOwedSpan
                         totalOwed={totalOwed}
