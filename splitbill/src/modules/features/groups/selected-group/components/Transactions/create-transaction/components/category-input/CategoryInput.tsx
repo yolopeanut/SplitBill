@@ -88,7 +88,6 @@ export const CategoryInput = ({ control, errors }: CategoryInputProps) => {
                                     id='floating_outlined'
                                     className='block px-2.5 pb-2.5 pt-4 w-full text-sm text-font-white bg-input-search-gray rounded-lg border border-input-search-gray appearance-auto focus:border-input-search-gray focus:outline-none focus:ring-0 peer'
                                     placeholder=' '
-                                    value={searchQuery}
                                     onChange={(e) =>
                                         setSearchQuery(e.target.value)
                                     }
